@@ -259,6 +259,18 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Label preEvents;
 
+    // Get user input from Date Picker
+    private void getCalenderDates(){
+        // Can make these fields global
+        int startYear = startDate.getValue().getYear();
+        int endYear = endDate.getValue().getYear();
+        
+        int startMonth = startDate.getValue().getMonthValue();
+        int endMonth = endDate.getValue().getMonthValue();
+        
+        int startDay =  startDate.getValue().getDayOfMonth();
+        int endDay =  endDate.getValue().getDayOfMonth();        
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -272,8 +284,6 @@ public class FXMLDocumentController implements Initializable {
        "Half SEM"      
     );
       
-  
-    monthSelect.setItems(months);
     termSelect.setItems(terms);
     }    
 
