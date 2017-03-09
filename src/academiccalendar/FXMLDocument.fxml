@@ -152,7 +152,7 @@
                                           <Label fx:id="eStartLabel" layoutX="161.0" layoutY="15.0" prefHeight="21.0" prefWidth="49.0" text="Starts:" />
                                           <Label fx:id="eEndLabel" layoutX="160.0" layoutY="47.0" prefHeight="21.0" prefWidth="100.0" text="Ends:" />
                                           <CheckBox fx:id="endDateCheck" layoutX="367.0" layoutY="36.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="111.0" text="1+ Days?" />
-                                          <ComboBox fx:id="yearSel" layoutX="14.0" layoutY="42.0" prefHeight="31.0" prefWidth="128.0" promptText="2017" />
+                                          <ComboBox fx:id="yearSelect" layoutX="14.0" layoutY="42.0" prefHeight="31.0" prefWidth="128.0" promptText="2017" />
                                           <TextField fx:id="eDescription" layoutX="502.0" layoutY="32.0" />
                                           <Label fx:id="eventDescLabel" layoutX="502.0" layoutY="5.0" prefHeight="21.0" prefWidth="157.0" text="Event Description" />
                                        </children>

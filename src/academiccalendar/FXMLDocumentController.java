@@ -248,7 +248,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private  ComboBox <String> termSelect = new ComboBox<String>();
     @FXML
-    private ComboBox<String> yearSelect;
+    private ComboBox<String> yearSelect = new ComboBox <String>();
     // Main Tab Labels
     @FXML
     private Label eEndLabel;
@@ -271,7 +271,17 @@ public class FXMLDocumentController implements Initializable {
         int startDay =  startDate.getValue().getDayOfMonth();
         int endDay =  endDate.getValue().getDayOfMonth();        
     }
-
+    private void getEventDescr()
+    {
+        String eDescrip;
+        eDescrip = eDescription.getText();
+    }
+    
+    private boolean isEndDateChecked(boolean checked)
+    {
+        checked = endDateCheck.isSelected();
+        return checked;
+    }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
    
@@ -285,6 +295,23 @@ public class FXMLDocumentController implements Initializable {
     );
       
     termSelect.setItems(terms);
+    
+      ObservableList<String> years = 
+    FXCollections.observableArrayList(
+       "2017",
+       "2018",
+       "2019",
+       "2020",
+       "2021",
+       "2022",
+       "2023",
+       "2024",
+       "2025"
+            
+    );
+      
+    yearSelect.setItems(years);
+    
     }    
 
 }
