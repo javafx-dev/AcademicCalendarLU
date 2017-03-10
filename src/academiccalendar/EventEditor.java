@@ -5,6 +5,9 @@
  */
 package academiccalendar;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.stage.*;
 import javafx.scene.*;
 import javafx.scene.layout.*;
@@ -27,7 +30,7 @@ public class EventEditor {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Edit Event");
-        window.setMinWidth(250);
+        window.setMinWidth(300);
         
         // Labels
         Label subjectLbl = new Label();
@@ -60,27 +63,28 @@ public class EventEditor {
             window.close();
         });
         
-        
         // Structure
-        VBox layout = new VBox();
+        GridPane grid = new GridPane();
+        grid.setHgap(10);
+        grid.setVgap(15);
         
-        HBox subjectCntrls = new HBox();
-        subjectCntrls.getChildren().addAll(subjectLbl, subjectField);
+        HBox buttons = new HBox();
+        buttons.setSpacing(10);
+        buttons.getChildren().addAll(saveButton, cancelButton);
+               
+        grid.add(subjectLbl, 0, 0);
+        grid.add(subjectField, 1, 0);
+        grid.add(termLbl, 0, 1);
+        grid.add(termField, 1, 1);
+        grid.add(descriptLbl, 0, 2);
+        grid.add(descriptField, 1, 2);
+        grid.add(buttons, 0, 3);
         
-        HBox termCntrls = new HBox();
-        termCntrls.getChildren().addAll(termLbl, termField);
-        
-        HBox descriptCntrls = new HBox();
-        descriptCntrls.getChildren().addAll(descriptLbl, descriptField);
-        
-        HBox buttonCntrls = new HBox();
-        buttonCntrls.getChildren().addAll(saveButton, cancelButton);
-        
-        layout.getChildren().addAll(subjectCntrls, termCntrls,
-        descriptCntrls, buttonCntrls);
+        // Alignments
+        grid.setAlignment(Pos.CENTER);
         
         // Set and show scene
-        Scene scene = new Scene(layout);
+        Scene scene = new Scene(grid);
         window.setScene(scene);
         window.show();
     }    
