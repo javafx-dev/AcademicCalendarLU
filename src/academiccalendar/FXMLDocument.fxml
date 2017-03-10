@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.shape.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.FXMLDocumentController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.FXMLDocumentController">
    <children>
       <MenuBar fx:id="mnuMain">
         <menus>
@@ -163,36 +173,36 @@
                                           <Rectangle fx:id="tuesday" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="34.0" layoutX="264.0" layoutY="37.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
                                           <Rectangle fx:id="monday" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="34.0" layoutX="139.0" layoutY="37.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
                                           <Rectangle fx:id="wednesday" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="34.0" layoutX="389.0" layoutY="37.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="tuesday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="wednesday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="thursday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="friday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-                                          <Rectangle fx:id="saturday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="saturday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="friday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="120.0" />
-                                          <Rectangle fx:id="thursday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="wednesday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="tuesday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="saturday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="friday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="119.0" />
-                                          <Rectangle fx:id="saturday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="thursday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="126.0" />
-                                          <Rectangle fx:id="friday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="640.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="118.0" />
-                                          <Rectangle fx:id="wednesday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="tuesday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="monday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="monday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="monday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="thursday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="wednesday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="tuesday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="monday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="monday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="sunday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="sunday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="401.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="sunday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="291.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="sunday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="181.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="sunday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="71.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="tuesday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="wednesday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="thursday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="friday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="120.0" />
+                                          <Rectangle fx:id="saturday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="saturday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="friday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="120.0" />
+                                          <Rectangle fx:id="thursday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="wednesday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="tuesday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="saturday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="friday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="119.0" />
+                                          <Rectangle fx:id="saturday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="thursday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="126.0" />
+                                          <Rectangle fx:id="friday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="640.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="118.0" />
+                                          <Rectangle fx:id="wednesday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="tuesday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="monday2" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="monday3" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="monday4" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="thursday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="wednesday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="tuesday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="monday1" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="monday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="139.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="sunday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="sunday4" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="401.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="sunday3" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="291.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="sunday2" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="181.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="sunday1" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="14.0" layoutY="71.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
                                           <Label fx:id="sun1Label" layoutX="111.0" layoutY="148.0" text="1" />
                                           <Label fx:id="monLabel1" layoutX="240.0" layoutY="148.0" text="2" />
                                           <Label fx:id="tueLabel1" layoutX="360.0" layoutY="148.0" text="3" />
@@ -223,13 +233,13 @@
                                           <Label fx:id="friLabel4" layoutX="720.0" layoutY="476.0" prefHeight="21.0" prefWidth="35.0" text="27" />
                                           <Label fx:id="satLabel4" layoutX="840.0" layoutY="477.0" prefHeight="21.0" prefWidth="35.0" text="28" />
                                           <Label fx:id="monLabel5" layoutX="227.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />
-                                          <Rectangle fx:id="wednesday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="tuesday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="wednesday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="389.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="tuesday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="264.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
                                           <Label fx:id="tueLabel5" layoutX="352.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />
                                           <Label fx:id="wedLabel5" layoutX="470.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />
-                                          <Rectangle fx:id="thursday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
-                                          <Rectangle fx:id="fiday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="122.0" />
-                                          <Rectangle fx:id="saturday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="511.0" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="thursday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="514.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
+                                          <Rectangle fx:id="fiday5" arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="110.0" layoutX="639.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="122.0" />
+                                          <Rectangle fx:id="saturday5" arcHeight="5.0" arcWidth="5.0" fill="#a2dd8c" height="110.0" layoutX="758.0" layoutY="511.0" onMouseClicked="#editEvent" stroke="BLACK" strokeType="INSIDE" width="125.0" />
                                           <Label fx:id="thuLabel5" layoutX="600.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />
                                           <Label fx:id="friLabel5" layoutX="720.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />
                                           <Label fx:id="satLabel5" layoutX="840.0" layoutY="584.0" prefHeight="21.0" prefWidth="35.0" text="30" />

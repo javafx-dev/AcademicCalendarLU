@@ -23,6 +23,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Rectangle;
 
@@ -258,9 +259,15 @@ public class FXMLDocumentController implements Initializable {
     private Label eventDescLabel;
     @FXML
     private Label preEvents;
+    
+     @FXML
+    void editEvent(MouseEvent event) {
+        EventEditor.display();
+    }
 
     // Get user input from Date Picker
-    private void getCalenderDates(){
+    private void getCalenderDates()
+    {
         // Can make these fields global
         int startYear = startDate.getValue().getYear();
         int endYear = endDate.getValue().getYear();
@@ -271,6 +278,7 @@ public class FXMLDocumentController implements Initializable {
         int startDay =  startDate.getValue().getDayOfMonth();
         int endDay =  endDate.getValue().getDayOfMonth();        
     }
+    
     private void getEventDescr()
     {
         String eDescrip;
@@ -282,10 +290,10 @@ public class FXMLDocumentController implements Initializable {
         checked = endDateCheck.isSelected();
         return checked;
     }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-   
-          
+             
           ObservableList<String> terms = 
     FXCollections.observableArrayList(
        "MBA SEM",
