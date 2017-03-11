@@ -30,7 +30,8 @@ public class EventEditor {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("Edit Event");
-        window.setMinWidth(300);
+        window.setHeight(280);
+        window.setWidth(300);
         
         // Labels
         Label subjectLbl = new Label();
@@ -86,6 +87,7 @@ public class EventEditor {
         // Set and show scene
         Scene scene = new Scene(grid);
         window.setScene(scene);
+        window.setResizable(false);
         window.show();
     }    
     
