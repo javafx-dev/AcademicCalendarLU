@@ -5,8 +5,6 @@
  */
 package academiccalendar;
 
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.*;
 import javafx.scene.*;

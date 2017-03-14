@@ -5,26 +5,21 @@
  */
 package academiccalendar;
 
+import com.jfoenix.controls.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 
@@ -32,7 +27,10 @@ public class FXMLDocumentController implements Initializable {
     
     // All Calendar Fields here
     
-    // All Mondays
+    // ***** I commented these out because I need to update them with the
+    // GUI changes I've made. *****
+    
+    /*// All Mondays
     @FXML
     private Label monLabel;
     @FXML
@@ -208,57 +206,55 @@ public class FXMLDocumentController implements Initializable {
     private Rectangle sunday4;
 
     @FXML
-    private Rectangle sunday5;    
+    private Rectangle sunday5;    */
 
     // Tabs
     @FXML
+    private TabPane mainTabPane;
+    @FXML
     private Tab tab_term;
     @FXML
-    private TabPane mainTab;
-    @FXML
     private Tab tab_rules;
+    
     //Menu
     @FXML
     private MenuBar mnuMain;
     @FXML
     private MenuItem newF;
     @FXML
-    private MenuItem quitApp;
-    @FXML
     private MenuItem saveF;
     @FXML
     private MenuItem openF;
-    //  Main Tab Controls
+    
+    //  Term Tab Controls
     @FXML
-    private AnchorPane userInputArea;
+    private Pane term_pane;
     @FXML
-    private DatePicker startDate;
+    private JFXDatePicker startDate;
     @FXML
-    private DatePicker endDate;
+    private JFXDatePicker endDate;
     @FXML
-    private CheckBox endDateCheck;
+    private JFXColorPicker eventColor;
     @FXML
-    private TextField eDescription;
+    private JFXCheckBox endDateCheck; 
     @FXML
-    private ColorPicker eventColor;
-    @FXML
-    private Button addEBtn;
+    private JFXTextField eDescription;
     
     // Combo/Select Boxes
+    @FXML
+    private JFXComboBox<String> termSelect = new JFXComboBox<String>();
+    @FXML
+    private JFXComboBox<String> yearSelect = new JFXComboBox <String>();
     
-    @FXML
-    private  ComboBox <String> termSelect = new ComboBox<String>();
-    @FXML
-    private ComboBox<String> yearSelect = new ComboBox <String>();
     // Main Tab Labels
     @FXML
     private Label eEndLabel;
     @FXML
     private Label eStartLabel;
+    
+    // Grid
     @FXML
-    private Label eventDescLabel;
-    @FXML
-    private Label preEvents;
+    private GridPane calendarGrid;
     
      @FXML
     void editEvent(MouseEvent event) {
