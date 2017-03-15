@@ -24,3 +24,7 @@ and open the template in the editor.
     -fx-border-width: .5;
     -fx-border-color: gray;
 }
+
+.month-select-pane {
+    -fx-font:16px "Courier New";
+}
