@@ -8,18 +8,24 @@ package academiccalendar;
 import com.jfoenix.controls.*;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
 
@@ -245,6 +251,8 @@ public class FXMLDocumentController implements Initializable {
     private JFXComboBox<String> termSelect = new JFXComboBox<String>();
     @FXML
     private JFXComboBox<String> yearSelect = new JFXComboBox <String>();
+    @FXML
+    private JFXListView<Pane> monthSelect;
     
     // Main Tab Labels
     @FXML
@@ -287,9 +295,51 @@ public class FXMLDocumentController implements Initializable {
         return checked;
     }
     
+    private void LoadMonthSelector(ObservableList<String> months)
+    {
+        double labelHeight = monthSelect.getPrefHeight() / months.size();
+        
+        Image image = new Image(getClass().getResourceAsStream("images/month_icon.png"));
+        
+        for (int i = 0; i < months.size(); i++) {
+            
+            // Calendar icon fitted into view 75% size of the label
+            ImageView imgView = new ImageView(image);
+            imgView.setFitHeight(labelHeight*(.75));
+            imgView.setFitWidth(labelHeight*(.75));
+            
+            Label lbl = new Label(months.get(i), imgView);
+            Pane pane = new Pane();
+            pane.getChildren().add(lbl);
+            
+            pane.getStyleClass().add("month-select-pane");            
+            
+            pane.setMaxWidth(monthSelect.getWidth());
+            pane.setPrefSize(monthSelect.getWidth(), labelHeight*(1.25));
+            pane.minHeight(labelHeight);
+            monthSelect.getItems().add(pane);
+        }
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-             
+        
+        ObservableList<String> months = 
+    FXCollections.observableArrayList(
+       "January",
+       "February",
+       "March",
+       "April",
+       "May",
+       "June",
+       "July",
+       "August",
+       "September",
+       "October",
+       "November",
+       "December"
+    );
+    
           ObservableList<String> terms = 
     FXCollections.observableArrayList(
        "MBA SEM",
@@ -315,6 +365,8 @@ public class FXMLDocumentController implements Initializable {
     );
       
     yearSelect.setItems(years);
+    
+    LoadMonthSelector(months);
     
     }    
 

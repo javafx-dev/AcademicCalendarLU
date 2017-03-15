@@ -5,6 +5,7 @@
  */
 package academiccalendar;
 
+import com.jfoenix.controls.*;
 import javafx.geometry.Pos;
 import javafx.stage.*;
 import javafx.scene.*;
@@ -40,13 +41,13 @@ public class EventEditor {
         descriptLbl.setText("Description:");
         
         // Text fields
-        TextField subjectField = new TextField();
-        TextField termField = new TextField();
-        TextField descriptField = new TextField();
+        JFXTextField subjectField = new JFXTextField();
+        JFXTextField termField = new JFXTextField();
+        JFXTextField descriptField = new JFXTextField();
         
         // Buttons
-        Button saveButton = new Button("Save");
-        Button cancelButton = new Button("Cancel");
+        JFXButton saveButton = new JFXButton("Save");
+        JFXButton cancelButton = new JFXButton("Cancel");
         
         // Save event information when user clicks save button and close window
         saveButton.setOnAction (e -> {
