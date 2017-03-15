@@ -309,7 +309,7 @@ public class FXMLDocumentController implements Initializable {
             imgView.setFitWidth(labelHeight*(.75));
             
             Label lbl = new Label(months.get(i), imgView);
-            Pane pane = new Pane();      
+            Pane pane = new Pane();
             pane.getChildren().add(lbl);
             
             pane.getStyleClass().add("month-select-pane");            
