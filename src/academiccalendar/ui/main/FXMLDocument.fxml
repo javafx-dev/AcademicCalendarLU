@@ -17,8 +17,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@style/mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.FXMLDocumentController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
       <MenuBar fx:id="mnuMain" layoutY="4.0" prefHeight="25.0" prefWidth="1192.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -146,18 +147,36 @@
          <top>
             <Pane fx:id="term_pane" prefHeight="118.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXComboBox fx:id="termSelect" focusColor="#eee5b5" layoutX="52.0" layoutY="14.0" prefHeight="35.0" prefWidth="119.0" promptText="MBA" />
-                  <JFXComboBox fx:id="yearSelect" focusColor="#eee5b5" layoutX="52.0" layoutY="64.0" prefHeight="32.0" prefWidth="119.0" promptText="2017" />
-                  <Label fx:id="eStartLabel" layoutX="215.0" layoutY="33.0" text="Start Date:" />
-                  <Label fx:id="eEndLabel" layoutX="215.0" layoutY="79.0" prefHeight="17.0" prefWidth="57.0" text="End Date:" />
+                  <JFXComboBox fx:id="termSelect" focusColor="#eee5b5" labelFloat="true" layoutX="52.0" layoutY="14.0" prefHeight="35.0" prefWidth="119.0" promptText="MBA" />
+                  <JFXComboBox fx:id="yearSelect" focusColor="#eee5b5" labelFloat="true" layoutX="52.0" layoutY="64.0" prefHeight="32.0" prefWidth="119.0" promptText="2017" />
+                  <Label fx:id="eStartLabel" layoutX="215.0" layoutY="33.0" text="Start Date:">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
+                  <Label fx:id="eEndLabel" layoutX="215.0" layoutY="79.0" prefHeight="17.0" prefWidth="57.0" text="End Date:">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
                   <JFXDatePicker fx:id="startDate" defaultColor="#87867b" layoutX="278.0" layoutY="26.0" />
                   <JFXDatePicker fx:id="endDate" layoutX="279.0" layoutY="65.0" />
-                  <JFXCheckBox fx:id="endDateCheck" layoutX="481.0" layoutY="54.0" prefHeight="21.0" prefWidth="98.0" text="+1 Days?" />
+                  <JFXCheckBox fx:id="endDateCheck" layoutX="481.0" layoutY="54.0" prefHeight="21.0" prefWidth="98.0" text="+1 Days?">
+                     <font>
+                        <Font size="13.0" />
+                     </font></JFXCheckBox>
                   <JFXColorPicker fx:id="eventColor" layoutX="740.0" layoutY="75.0" prefHeight="26.0" prefWidth="100.0" />
-                  <Label layoutX="635.0" layoutY="70.0" prefHeight="37.0" prefWidth="91.0" text="Choose a color:" />
+                  <Label layoutX="635.0" layoutY="70.0" prefHeight="37.0" prefWidth="91.0" text="Choose a color:">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
                   <JFXTextField fx:id="eDescription" layoutX="740.0" layoutY="28.0" prefHeight="25.0" prefWidth="123.0" />
-                  <Label layoutX="624.0" layoutY="32.0" prefHeight="17.0" prefWidth="106.0" text="Event Description:" />
-                  <JFXButton layoutX="902.0" layoutY="27.0" prefHeight="26.0" prefWidth="109.0" ripplerFill="#fcfcfc" style="-fx-background-color: cce0e0;" text="Add Event" />
+                  <Label layoutX="624.0" layoutY="32.0" prefHeight="17.0" prefWidth="106.0" text="Event Description:">
+                     <font>
+                        <Font size="13.0" />
+                     </font></Label>
+                  <JFXButton layoutX="902.0" layoutY="27.0" prefHeight="26.0" prefWidth="109.0" ripplerFill="#fcfcfc" style="-fx-background-color: cce0e0;" text="Add Event">
+                     <font>
+                        <Font size="13.0" />
+                     </font></JFXButton>
                </children>
             </Pane>
          </top>

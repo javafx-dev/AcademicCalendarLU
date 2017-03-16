@@ -3,18 +3,15 @@
  * @owner and @author: FrumbSoftware
  * @Team Members: Paul Meyer, Karis Druckenmiller , Darick Cayton,Rudolfo Madriz
  */
-package academiccalendar;
+package academiccalendar.ui.main;
 
 import com.jfoenix.controls.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -25,8 +22,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
 
 
 public class FXMLDocumentController implements Initializable {
@@ -264,9 +259,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private GridPane calendarGrid;
     
-     @FXML
+    // Functions
+    @FXML
     void editEvent(MouseEvent event) {
-        EventEditor.display();
+        // Code for editing a single event goes here
     }
 
     // Get user input from Date Picker
@@ -299,23 +295,16 @@ public class FXMLDocumentController implements Initializable {
     {
         double labelHeight = monthSelect.getPrefHeight() / months.size();
         
-        Image image = new Image(getClass().getResourceAsStream("images/month_icon.png"));
-        
         for (int i = 0; i < months.size(); i++) {
             
-            // Calendar icon fitted into view 75% size of the label
-            ImageView imgView = new ImageView(image);
-            imgView.setFitHeight(labelHeight*(.75));
-            imgView.setFitWidth(labelHeight*(.75));
-            
-            Label lbl = new Label(months.get(i), imgView);
+            Label lbl = new Label(months.get(i));
             Pane pane = new Pane();
             pane.getChildren().add(lbl);
             
             pane.getStyleClass().add("month-select-pane");            
             
             pane.setMaxWidth(monthSelect.getWidth());
-            pane.setPrefSize(monthSelect.getWidth(), labelHeight*(1.25));
+            pane.setPrefSize(monthSelect.getWidth(), labelHeight);
             pane.minHeight(labelHeight);
             monthSelect.getItems().add(pane);
         }
