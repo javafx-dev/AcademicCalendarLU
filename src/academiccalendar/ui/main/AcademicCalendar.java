@@ -3,7 +3,7 @@
  * @owner and @author: FrumbSoftware
  * @Team Members: Paul Meyer, Karis Druckenmiller , Darick Cayton,Rudolfo Madriz
  */
-package academiccalendar;
+package academiccalendar.ui.main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +22,6 @@ public class AcademicCalendar extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
         Scene scene = new Scene(root);
-        
         stage.setScene(scene);
         stage.show();
     }
