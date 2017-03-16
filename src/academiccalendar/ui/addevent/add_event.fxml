@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="252.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
+   <children>
+      <VBox prefHeight="103.0" prefWidth="337.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <JFXTextField prefHeight="40.0" prefWidth="337.0" promptText="Event Name">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXTextField>
+            <JFXTextField promptText="Event Description">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXTextField>
+            <JFXComboBox prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
+            <JFXDatePicker promptText="Event Date" />
+         </children>
+      </VBox>
+      <HBox layoutY="181.0" prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
+         <children>
+            <JFXButton prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Save">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXButton>
+            <JFXButton prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Cancel">
+               <font>
+                  <Font size="13.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
