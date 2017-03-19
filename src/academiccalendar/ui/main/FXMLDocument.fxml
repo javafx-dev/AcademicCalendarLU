@@ -147,8 +147,8 @@
          <top>
             <Pane fx:id="term_pane" prefHeight="118.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXComboBox fx:id="termSelect" focusColor="#eee5b5" labelFloat="true" layoutX="52.0" layoutY="14.0" prefHeight="35.0" prefWidth="119.0" promptText="MBA" />
-                  <JFXComboBox fx:id="yearSelect" focusColor="#eee5b5" labelFloat="true" layoutX="52.0" layoutY="64.0" prefHeight="32.0" prefWidth="119.0" promptText="2017" />
+                  <JFXComboBox fx:id="termSelect" focusColor="#eee5b5" layoutX="52.0" layoutY="14.0" prefHeight="35.0" prefWidth="119.0" promptText="MBA" />
+                  <JFXComboBox fx:id="yearSelect" focusColor="#eee5b5" layoutX="52.0" layoutY="64.0" prefHeight="32.0" prefWidth="119.0" promptText="2017" />
                   <Label fx:id="eStartLabel" layoutX="215.0" layoutY="33.0" text="Start Date:">
                      <font>
                         <Font size="13.0" />
