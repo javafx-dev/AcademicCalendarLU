@@ -9,21 +9,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="252.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
+<AnchorPane id="AnchorPane" prefHeight="276.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
-      <VBox prefHeight="103.0" prefWidth="337.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <VBox prefHeight="103.0" prefWidth="337.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
          <children>
-            <JFXTextField prefHeight="40.0" prefWidth="337.0" promptText="Event Name">
+            <JFXTextField labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Event Name">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <JFXTextField promptText="Event Description">
+            <JFXTextField labelFloat="true" promptText="Event Description">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <JFXComboBox prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
+            <JFXComboBox labelFloat="true" prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
             <JFXDatePicker promptText="Event Date" />
          </children>
       </VBox>
