@@ -6,12 +6,19 @@
 package academiccalendar.ui.main;
 
 import com.jfoenix.controls.*;
+import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -22,193 +29,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 
 public class FXMLDocumentController implements Initializable {
     
-    // All Calendar Fields here
-    
-    // ***** I commented these out because I need to update them with the
-    // GUI changes I've made. *****
-    
-    /*// All Mondays
-    @FXML
-    private Label monLabel;
-    @FXML
-    private Label monLabel1;
-    @FXML
-    private Label monLabel2;
-    @FXML
-    private Label monLabel3;
-    @FXML
-    private Label monLabel4;
-    @FXML
-    private Label monLabel5;
-    @FXML
-    private Rectangle monday1;
-    @FXML
-    private Rectangle monday2;
-    @FXML
-    private Rectangle monday3;
-    @FXML
-    private Rectangle monday4;
-    // monday5 should only be shown if month actually has 5 Mondays
-    @FXML
-    private Rectangle monday5;
-    
-    
-    
-    // All Tuedays
-    @FXML
-    private Label tueLabel;
-    @FXML
-    private Label tueLabel1;
-    @FXML
-    private Label tueLabel2;
-    @FXML
-    private Label tueLabel3;
-    @FXML
-    private Label tueLabel4;
-    @FXML
-    private Label tueLabel5;
-    @FXML
-    private Rectangle tuesday1;
-    @FXML
-    private Rectangle tuesday2;
-    @FXML
-    private Rectangle tuesday3;
-    @FXML
-    private Rectangle tuesday4;
-    // tuesday5 should only be shown if month has 5 tuedsdays
-    @FXML
-    private Rectangle tuesday5;
-    
-    // All Wednesdays
-    @FXML
-    private Label wedLabel;
-    @FXML
-    private Label wedLabel1;
-    @FXML
-    private Label wedLabel2;
-    @FXML
-    private Label wedLabel3;
-    @FXML
-    private Label wedLabel4;
-    @FXML
-    private Label wedLabel5;
-    @FXML
-    private Rectangle wednesday1; 
-    @FXML
-    private Rectangle wednesday2;
-    @FXML
-    private Rectangle wednesday3;
-    @FXML
-    private Rectangle wednesday4;
-    @FXML
-    private Rectangle wednesday5;
-    
-    //All Thursdays
-    @FXML
-    private Label thLabel;
-    @FXML
-    private Label thLabel1;
-    @FXML
-    private Label thLabel2;
-    @FXML
-    private Label thLabel3;
-    @FXML
-    private Label thLabel4;
-    @FXML
-    private Label thLabel5;
-    @FXML
-    private Rectangle thursday1;
-    @FXML
-    private Rectangle thursday3;
-    @FXML
-    private Rectangle thursday2;
-    @FXML
-    private Rectangle thursday4;
-    @FXML
-    private Rectangle thursday5;
-    
-    //All Fridays
-    @FXML
-    private Label frLabel;
-    @FXML
-    private Label frLabel1;
-    @FXML
-    private Label frLabel2;
-    @FXML
-    private Label frLabel3;
-    @FXML
-    private Label frLabel4;
-    @FXML
-    private Label frLabel5;
-    @FXML
-    private Rectangle friday1;    
-    @FXML
-    private Rectangle friday2;
-    @FXML
-    private Rectangle friday3;
-    @FXML
-    private Rectangle friday4;    
-    @FXML
-    private Rectangle friday5;  
-    
-    //All Saturdays
-     @FXML
-    private Label satLabel;
-    @FXML
-    private Label satLabel1;
-    @FXML
-    private Label satLabel2;
-    @FXML
-    private Label satLabel3;
-    @FXML
-    private Label satLabel4;
-    @FXML
-    private Label satLabel5;
-   
-    @FXML
-    private Rectangle saturday1;
-    @FXML
-    private Rectangle saturday2;
-    @FXML
-    private Rectangle saturday3;
-    @FXML
-    private Rectangle saturday4;
-    @FXML
-    private Rectangle saturday5;
-    
-    //All Sundays
-    @FXML
-    private Label sunLabel;
-    @FXML
-    private Label sunLabel1;
-    @FXML
-    private Label sunLabel2;
-    @FXML
-    private Label sunLabel3;
-    @FXML
-    private Label sunLabel4;
-    @FXML
-    private Label sunLabel5;
-    
-    @FXML
-    private Rectangle sunday1;
-
-    @FXML
-    private Rectangle sunday2;
-
-    @FXML
-    private Rectangle sunday3;
-
-    @FXML
-    private Rectangle sunday4;
-
-    @FXML
-    private Rectangle sunday5;    */
-
     // Tabs
     @FXML
     private TabPane mainTabPane;
@@ -262,7 +88,8 @@ public class FXMLDocumentController implements Initializable {
     // Functions
     @FXML
     void editEvent(MouseEvent event) {
-        // Code for editing a single event goes here
+        // When user clicks on any date in the calendar, event editor window opens
+        loadWindow("/academiccalendar/ui/addevent/add_event.fxml", "Event");
     }
 
     // Get user input from Date Picker
@@ -276,7 +103,10 @@ public class FXMLDocumentController implements Initializable {
         int endMonth = endDate.getValue().getMonthValue();
         
         int startDay =  startDate.getValue().getDayOfMonth();
-        int endDay =  endDate.getValue().getDayOfMonth();        
+        int endDay =  endDate.getValue().getDayOfMonth();   
+        
+        String test = startDate.getValue().format(DateTimeFormatter.ISO_DATE);
+        System.out.println(test);
     }
     
     private void getEventDescr()
@@ -291,7 +121,20 @@ public class FXMLDocumentController implements Initializable {
         return checked;
     }
     
-    private void LoadMonthSelector(ObservableList<String> months)
+    private void loadWindow(String loc, String title) {
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource(loc));
+            Stage stage = new Stage(StageStyle.DECORATED);
+            stage.setTitle(title);
+            stage.setScene(new Scene(parent));
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void loadMonthSelector(ObservableList<String> months)
     {
         double labelHeight = monthSelect.getPrefHeight() / months.size();
         
@@ -355,7 +198,7 @@ public class FXMLDocumentController implements Initializable {
       
     yearSelect.setItems(years);
     
-    LoadMonthSelector(months);
+    loadMonthSelector(months);
     
     }    
 
