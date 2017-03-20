@@ -124,7 +124,7 @@ public class FXMLDocumentController implements Initializable {
     private void loadWindow(String loc, String title) {
         try {
             Parent parent = FXMLLoader.load(getClass().getResource(loc));
-            Stage stage = new Stage(StageStyle.DECORATED);
+            Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.setTitle(title);
             stage.setScene(new Scene(parent));
             stage.show();
