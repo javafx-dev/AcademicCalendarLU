@@ -1,40 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="276.0" prefWidth="340.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="336.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
-      <VBox prefHeight="103.0" prefWidth="337.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+      <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: #EFEFEF;">
          <children>
-            <JFXTextField labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Event Name">
+            <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Edit Event">
+               <font>
+                  <Font size="15.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="5.0" />
+               </HBox.margin>
+               <graphic>
+                  <ImageView fitHeight="18.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/drag_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0" styleClass="exit-label" stylesheets="@addEvent.css">
+               <graphic>
+                  <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/exit_icon.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+         </children>
+      </HBox>
+      <VBox layoutX="10.0" layoutY="57.0" prefHeight="222.0" prefWidth="320.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.0">
+         <children>
+            <JFXTextField focusColor="#4d4d4d" labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Name">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <JFXTextField labelFloat="true" promptText="Event Description">
+            <JFXTextField focusColor="#4d4d4d" labelFloat="true" promptText="Description">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <JFXComboBox labelFloat="true" prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
-            <JFXDatePicker promptText="Event Date" />
+            <JFXComboBox fx:id="termSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
+            <JFXDatePicker promptText="Date of Event" />
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <JFXDatePicker disable="true" promptText="Ending Date" />
+                  <JFXCheckBox fx:id="checkbox" checkedColor="#d0c9ab" prefHeight="29.0" prefWidth="150.0" text="Span?" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <HBox layoutY="181.0" prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
          <children>
-            <JFXButton prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Save">
+            <JFXButton fx:id="saveButton" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Save">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Cancel">
+            <JFXButton fx:id="cancelButton" onMouseClicked="#cancel" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Cancel">
                <font>
                   <Font size="13.0" />
                </font>
