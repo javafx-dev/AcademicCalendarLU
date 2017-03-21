@@ -15,6 +15,8 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -76,7 +78,6 @@ public class AddEventController implements Initializable {
             
         termSelect.setItems(terms);
         
-        
         // Set up Mouse Dragging for the Event pop up window
         topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -93,6 +94,25 @@ public class AddEventController implements Initializable {
                 Stage stage = (Stage) rootPane.getScene().getWindow();
                 stage.setX(event.getScreenX() + xOffset);
                 stage.setY(event.getScreenY() + yOffset);
+            }
+        });
+        // Change cursor when hover over draggable area
+        topLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                Scene scene = stage.getScene();
+                scene.setCursor(Cursor.HAND); //Change cursor to hand
+            }
+        });
+        
+        // Change cursor when hover over draggable area
+        topLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                Scene scene = stage.getScene();
+                scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
             }
         });
     }    
