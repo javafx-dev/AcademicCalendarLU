@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package academiccalendar.ui.addevent;
+package academiccalendar.ui.addcalendar;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -27,57 +27,55 @@ import javafx.stage.Stage;
  *
  * @author Karis
  */
-public class AddEventController implements Initializable {
+public class AddCalendarController implements Initializable {
 
     @FXML
     private Label topLabel;
     @FXML
-    private AnchorPane rootPane;
+    private Label exit;
     @FXML
-    private JFXComboBox<String> termSelect;
-    
-    // Buttons
+    private JFXTextField calendarName;
     @FXML
-    private JFXButton saveButton;
+    private JFXComboBox<String> startMonth;
     @FXML
-    private JFXButton cancelButton;
-    
-    // Span check box
+    private JFXComboBox<String> endMonth;
     @FXML
-    private JFXCheckBox checkbox;
+    private JFXButton generate;
+    @FXML
+    private JFXButton cancel;
     
     // These fields are for mouse dragging of window
     private double xOffset;
     private double yOffset;
-    
     @FXML
-    void exit(MouseEvent event) {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
-    }
-    
-    @FXML
-    void cancel(MouseEvent event) {
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
-    }
-    
+    private AnchorPane rootPane;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-            ObservableList<String> terms = 
+            ObservableList<String> months = 
         FXCollections.observableArrayList(
-           "MBA SEM",
-           "Undergraduate SEM",
-           "Quarter SEM",
-           "Half SEM"      
+           "January",
+           "February",
+           "March",
+           "April",
+           "May",
+           "June",
+           "July",
+           "August",
+           "September",
+           "October",
+           "November",
+           "December"
         );
             
-        termSelect.setItems(terms);
+        startMonth.setItems(months);
+        endMonth.setItems(months);
         
+            
         // Set up Mouse Dragging for the Event pop up window
         topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -116,5 +114,17 @@ public class AddEventController implements Initializable {
             }
         });
     }    
+
+    @FXML
+    private void exit(MouseEvent event) {
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    private void cancel(MouseEvent event) {
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
+    }
     
 }

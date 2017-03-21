@@ -9,7 +9,7 @@ and open the template in the editor.
 */
 
 .weekday-pane {
-    -fx-font: 16px "Monospace";
+    -fx-font: 16px "Lucida Console";
     -fx-font-style: normal;
     -fx-background-color:  #cce0e0;
     -fx-border-style: solid;
@@ -26,5 +26,9 @@ and open the template in the editor.
 }
 
 .month-select-pane {
-    -fx-font:16px "Courier New";
+    -fx-font: 14px "Lucida Console";
+}
+
+.menu-labels:hover {
+     -fx-background-color:   #ecedf7;
 }
