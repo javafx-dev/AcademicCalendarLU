@@ -55,9 +55,9 @@
             </JFXTextField>
             <HBox prefHeight="63.0" prefWidth="320.0">
                <children>
-                  <JFXComboBox fx:id="startMonth" prefHeight="25.0" prefWidth="148.0" promptText="Starting Month" />
+                  <JFXComboBox fx:id="startYear" prefHeight="25.0" prefWidth="148.0" promptText="Starting Year" />
                   <Label text="to" />
-                  <JFXComboBox fx:id="endMonth" prefHeight="25.0" prefWidth="143.0" promptText="Ending Month">
+                  <JFXComboBox fx:id="endYear" prefHeight="25.0" prefWidth="143.0" promptText="Ending Year">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>

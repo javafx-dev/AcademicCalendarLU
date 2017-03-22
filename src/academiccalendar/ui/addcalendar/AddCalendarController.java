@@ -36,9 +36,9 @@ public class AddCalendarController implements Initializable {
     @FXML
     private JFXTextField calendarName;
     @FXML
-    private JFXComboBox<String> startMonth;
+    private JFXComboBox<String> startYear;
     @FXML
-    private JFXComboBox<String> endMonth;
+    private JFXComboBox<String> endYear;
     @FXML
     private JFXButton generate;
     @FXML
@@ -56,24 +56,20 @@ public class AddCalendarController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-            ObservableList<String> months = 
+            ObservableList<String> years = 
         FXCollections.observableArrayList(
-           "January",
-           "February",
-           "March",
-           "April",
-           "May",
-           "June",
-           "July",
-           "August",
-           "September",
-           "October",
-           "November",
-           "December"
+           "2017",
+           "2018",
+           "2019",
+           "2020",
+           "2021",
+           "2022",
+           "2023",
+           "2024"
         );
             
-        startMonth.setItems(months);
-        endMonth.setItems(months);
+        startYear.setItems(years);
+        endYear.setItems(years);
         
             
         // Set up Mouse Dragging for the Event pop up window
