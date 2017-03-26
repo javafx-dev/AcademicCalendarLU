@@ -68,7 +68,7 @@
       </VBox>
       <HBox prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
          <children>
-            <JFXButton fx:id="generate" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Generate New Calendar">
+            <JFXButton fx:id="generate" onMouseClicked="#generateNewCalendar" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Generate New Calendar">
                <font>
                   <Font size="13.0" />
                </font>
