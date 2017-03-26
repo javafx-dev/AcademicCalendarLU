@@ -67,14 +67,21 @@ public class FXMLDocumentController implements Initializable {
         
         // Get the day that was clicked on
         Pane p = (Pane) event.getSource();
-        Label lbl = (Label) p.getChildren().get(0);
-        System.out.println(lbl.getText());
         
-        // Store event day in data singleton
-        Model.getInstance().event_day = Integer.parseInt(lbl.getText());
-        
-        // When user clicks on any date in the calendar, event editor window opens
-        loadWindow("/academiccalendar/ui/addevent/add_event.fxml", "Event");
+        // ONLY for days that have labels
+        if(!p.getChildren().isEmpty()) {
+            
+            // Get the day label
+            Label lbl = (Label) p.getChildren().get(0);
+            System.out.println(lbl.getText());
+            
+            // Store event day and month in data singleton
+            Model.getInstance().event_day = Integer.parseInt(lbl.getText());
+            Model.getInstance().event_month = Model.getInstance().getMonthIndex(selectedMonth.getSelectionModel().getSelectedItem());        
+
+            // When user clicks on any date in the calendar, event editor window opens
+            loadWindow("/academiccalendar/ui/addevent/add_event.fxml", "Event");
+        }
     }    
     
     @FXML
@@ -94,7 +101,6 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
     
     private void loadMonthSelector()
@@ -118,42 +124,11 @@ public class FXMLDocumentController implements Initializable {
                     selectedMonth.getSelectionModel().select(newValue);
                     
                     // Change labels based on month selected
-                    loadCalendarLabels(2017, getMonthIndex(newValue));
+                    loadCalendarLabels(2017, Model.getInstance().getMonthIndex(newValue));
                     
                     
                 }
             });
-    }
-    
-    private int getMonthIndex(String month){
-        switch (month)
-        {    
-            case "January":
-                return 0;
-            case "February":
-                return 1;
-            case "March":
-                return 2;
-            case "April":
-                return 3;
-            case "May":
-                return 4;
-            case "June":
-                return 5;
-            case "July":
-                return 6;
-            case "August":
-                return 7;
-            case "September":
-                return 8;
-            case "October":
-                return 9;
-            case "November":
-                return 10;
-            case "December":
-                return 11;
-        }
-        return 0;
     }
     
     private void loadCalendarLabels(int year, int month){

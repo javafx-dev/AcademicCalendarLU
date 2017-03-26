@@ -51,14 +51,14 @@
                </font>
             </JFXTextField>
             <JFXComboBox fx:id="programSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Program" />
-            <JFXComboBox fx:id="typeSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Term" />
+            <JFXComboBox fx:id="typeSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Type" />
             <JFXDatePicker fx:id="date" promptText="Date of Event" />
             <HBox prefHeight="100.0" prefWidth="200.0" />
          </children>
       </VBox>
       <HBox layoutY="181.0" prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
          <children>
-            <JFXButton fx:id="saveButton" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Save">
+            <JFXButton fx:id="saveButton" onMouseClicked="#save" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@addEvent.css" text="Save">
                <font>
                   <Font size="13.0" />
                </font>
