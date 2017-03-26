@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
@@ -14,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="336.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="295.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
       <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: #EFEFEF;">
          <children>
@@ -46,24 +45,15 @@
       </HBox>
       <VBox layoutX="10.0" layoutY="57.0" prefHeight="222.0" prefWidth="320.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.0">
          <children>
-            <JFXTextField focusColor="#4d4d4d" labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Name">
+            <JFXTextField fx:id="subject" focusColor="#4d4d4d" labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Subject">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <JFXTextField focusColor="#4d4d4d" labelFloat="true" promptText="Description">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </JFXTextField>
-            <JFXComboBox fx:id="termSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Choose Term" />
-            <JFXDatePicker promptText="Date of Event" />
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <JFXDatePicker disable="true" promptText="Ending Date" />
-                  <JFXCheckBox fx:id="checkbox" checkedColor="#d0c9ab" prefHeight="29.0" prefWidth="150.0" text="Span?" />
-               </children>
-            </HBox>
+            <JFXComboBox fx:id="programSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Program" />
+            <JFXComboBox fx:id="typeSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Term" />
+            <JFXDatePicker fx:id="date" promptText="Date of Event" />
+            <HBox prefHeight="100.0" prefWidth="200.0" />
          </children>
       </VBox>
       <HBox layoutY="181.0" prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
