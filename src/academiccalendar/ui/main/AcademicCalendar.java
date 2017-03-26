@@ -17,21 +17,20 @@ import javafx.stage.Stage;
  * @author Paul, Karis, Darick and Rudolfo #Frumbug 4 life
  */
 public class AcademicCalendar extends Application {
-    
+        
     @Override
     public void start(Stage stage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
         
+        // Set main window icon
         stage.getIcons().add(
-        new Image( "academiccalendar/ui/icons/app_icon.png" )); 
+        new Image( "academiccalendar/ui/icons/app_icon.png" ));
         
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        
-        // Testing comment
     }
-
+   
     /**
      * @param args the command line arguments
      */

@@ -5,9 +5,10 @@
  */
 package academiccalendar.ui.addevent;
 
+import academiccalendar.data.model.Model;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -29,12 +30,17 @@ import javafx.stage.Stage;
  */
 public class AddEventController implements Initializable {
 
+    // Structure
     @FXML
     private Label topLabel;
     @FXML
     private AnchorPane rootPane;
+    
+    // Combo boxes
     @FXML
-    private JFXComboBox<String> termSelect;
+    private JFXComboBox<String> programSelect;
+    @FXML
+    private JFXComboBox<String> typeSelect;
     
     // Buttons
     @FXML
@@ -42,9 +48,9 @@ public class AddEventController implements Initializable {
     @FXML
     private JFXButton cancelButton;
     
-    // Span check box
+    // Date picker
     @FXML
-    private JFXCheckBox checkbox;
+    private JFXDatePicker date;
     
     // These fields are for mouse dragging of window
     private double xOffset;
@@ -52,14 +58,21 @@ public class AddEventController implements Initializable {
     
     @FXML
     void exit(MouseEvent event) {
+        // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
     
     @FXML
     void cancel(MouseEvent event) {
+        // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
+    }
+    
+    void autofillDatePicker() {
+       // Get selected day, month, and year and autofill date selection
+       System.out.print(Model.getInstance().event_day);
     }
     
     /**
@@ -68,15 +81,28 @@ public class AddEventController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-            ObservableList<String> terms = 
+        autofillDatePicker();
+        
+            ObservableList<String> types = 
         FXCollections.observableArrayList(
-           "MBA SEM",
-           "Undergraduate SEM",
-           "Quarter SEM",
-           "Half SEM"      
+           "Academic",
+           "Holiday",
+           "Sports",
+           "Campus"      
         );
             
-        termSelect.setItems(terms);
+           ObservableList<String> programs = 
+        FXCollections.observableArrayList(
+           "Undergraduate",
+           "Graduate (MBA)",
+           "Online",
+           "Accelerate Program"      
+        );
+            
+        typeSelect.setItems(types);
+        programSelect.setItems(programs);
+        
+        // ************* Everything below is for Draggable Window ********
         
         // Set up Mouse Dragging for the Event pop up window
         topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
