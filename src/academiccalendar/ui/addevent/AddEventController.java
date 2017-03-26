@@ -9,7 +9,10 @@ import academiccalendar.data.model.Model;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,6 +38,10 @@ public class AddEventController implements Initializable {
     private Label topLabel;
     @FXML
     private AnchorPane rootPane;
+    
+    // Text fields
+    @FXML
+    private JFXTextField subject;
     
     // Combo boxes
     @FXML
@@ -70,9 +77,33 @@ public class AddEventController implements Initializable {
         stage.close();
     }
     
+     @FXML
+    void save(MouseEvent event) {
+    
+        // Subject for the event
+        String eventSubject = subject.getText();
+        
+        // Define date format
+        DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        
+        // Get the date value from the date picker
+        String calendarDate = date.getValue().format(myFormat);
+        
+        // RODOLFO - ^^^ this is in the format you will need ^^^
+        
+        // Close the window
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
+    }
+    
     void autofillDatePicker() {
        // Get selected day, month, and year and autofill date selection
-       System.out.print(Model.getInstance().event_day);
+       int day = Model.getInstance().event_day;
+       int month = Model.getInstance().event_month + 1;
+       
+       // Set default value for datepicker
+       // Note: get Year from Model
+       date.setValue(LocalDate.of(2017, month, day));
     }
     
     /**
