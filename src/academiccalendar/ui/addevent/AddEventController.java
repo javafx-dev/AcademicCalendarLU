@@ -104,12 +104,8 @@ public class AddEventController implements Initializable {
      @FXML
     void save(MouseEvent event) {
         
-        // Subject for the event
-        String eventSubject = subject.getText();
-        // Get program, type, and term
-        String program = programSelect.getValue();
-        String type = typeSelect.getValue();
-        String term = termSelect.getValue();
+        // Get the calendar name
+        String calendarName = Model.getInstance().calendar_name;
         
         // Define date format
         DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -118,13 +114,22 @@ public class AddEventController implements Initializable {
         String calendarDate = date.getValue().format(myFormat);
         
         
-        if(eventSubject.isEmpty()||program.isEmpty()||type.isEmpty()||term.isEmpty()){
+        if(subject.getText().isEmpty()||programSelect.getSelectionModel().isEmpty()
+                ||typeSelect.getSelectionModel().isEmpty()||termSelect.getSelectionModel().isEmpty()){
             Alert alertMessage = new Alert(Alert.AlertType.ERROR);
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Please fill out all fields");
             alertMessage.showAndWait();
             return;
         }
+        
+        // Subject for the event
+        String eventSubject = subject.getText();
+        
+        // Get program, type, and term
+        String program = programSelect.getValue();
+        String type = typeSelect.getValue();
+        String term = termSelect.getValue();
         
         int chosenTermID = 0;
         int chosenProgramID = 0;
@@ -202,6 +207,8 @@ public class AddEventController implements Initializable {
         }
         
         
+        // Get calendar name from calendar table
+        
         //---------------------------------------------------------
         //Insert new event into the EVENTS table in the database
         
@@ -212,7 +219,7 @@ public class AddEventController implements Initializable {
                 + chosenProgramID + ", "
                 + "'" + eventSubject + "', "
                 + "'" + calendarDate + "', "
-                + "'Test Name'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
+                + "'" + calendarName + "'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
                 + ")";
         
         System.out.println(insertQuery);
