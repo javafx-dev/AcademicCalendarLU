@@ -56,6 +56,8 @@ public class AddEventController implements Initializable {
     private JFXComboBox<String> programSelect;
     @FXML
     private JFXComboBox<String> typeSelect;
+    @FXML
+    private JFXComboBox<String> termSelect;
     
     // Buttons
     @FXML
@@ -90,6 +92,10 @@ public class AddEventController implements Initializable {
         
         // Subject for the event
         String eventSubject = subject.getText();
+        // Get program, type, and term
+        String program = programSelect.getValue();
+        String type = typeSelect.getValue();
+        String term = termSelect.getValue();
         
         // Define date format
         DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -98,10 +104,16 @@ public class AddEventController implements Initializable {
         String calendarDate = date.getValue().format(myFormat);
         
         // RODOLFO - ^^^ this is in the format you will need ^^^
+        saveToDatabase(calendarDate, eventSubject, program, type, term);
         
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
+    }
+    
+    private void saveToDatabase(String calendarDate, String eventSubect, String program, String type, String term) {
+        // Database handler function here
+        // This is where you add it to the database
     }
     
     void autofillDatePicker() {
@@ -137,9 +149,22 @@ public class AddEventController implements Initializable {
            "Online",
            "Accelerate Program"      
         );
+           
+           ObservableList<String> terms = 
+        FXCollections.observableArrayList(
+           "FA SEM","SP SEM", "SU SEM", 
+           "FA I MBA", "FA II MBA", "SP I MBA", "SP II MBA", "SU MBA",
+           "FA QTR", "WIN QTR", "SP QTR", "SU QTR",
+           "FA 1st Half", "FA 2nd Half", "SP 1st Half", "SP 2nd Half",
+           "Campus General", "Campus STC", "Campus BV",
+           "Holiday"
+        );
+           
+          
             
         typeSelect.setItems(types);
         programSelect.setItems(programs);
+        termSelect.setItems(terms);
         
         // ************* Everything below is for Draggable Window ********
         
