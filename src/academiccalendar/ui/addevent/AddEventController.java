@@ -6,15 +6,20 @@
 package academiccalendar.ui.addevent;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.database.DBHandler;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -22,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +42,14 @@ public class AddEventController implements Initializable {
     
     // Controllers
      private FXMLDocumentController mainController ;
+     
+     
+    //--------------------------------------------------------------------
+    //---------Database Object -------------------------------------------
+    DBHandler databaseHandler;
+    //--------------------------------------------------------------------
+    
+    
 
     public void setMainController(FXMLDocumentController mainController) {
         this.mainController = mainController ;
@@ -103,8 +117,123 @@ public class AddEventController implements Initializable {
         // Get the date value from the date picker
         String calendarDate = date.getValue().format(myFormat);
         
+        
+        if(eventSubject.isEmpty()||program.isEmpty()||type.isEmpty()||term.isEmpty()){
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Please fill out all fields");
+            alertMessage.showAndWait();
+            return;
+        }
+        
+        int chosenTermID = 0;
+        int chosenProgramID = 0;
+        int chosenEventTypeID = 0;
+        
+        System.out.println("---------------------");
+        System.out.println(term);
+        System.out.println("Getting ID for selected Term");
+        
+        //Query to get ID for the selected Term
+        String getIDQuery = "SELECT TermID From TERMS "
+                + "WHERE TERMS.TermName='" + term + "' ";
+        
+        System.out.println(getIDQuery);
+
+        //Variable that stores the results from executing the Query
+        ResultSet result = databaseHandler.executeQuery(getIDQuery);
+        //Try-catch statements that will get the ID if a result was actually gotten back from the database
+        try {
+             while(result.next()){
+                 //store ID into the corresponding variable
+                 chosenTermID = Integer.parseInt(result.getString("TermID"));
+                 System.out.println(chosenTermID);
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println("---------------------");
+        System.out.println(program);
+        System.out.println("Getting ID for selected PROGRAM");
+        
+        
+        //Query to get ID for the selected Term
+        getIDQuery = "SELECT ProgramID From PROGRAMS "
+                + "WHERE PROGRAMS.ProgramName='" + program + "' ";
+        
+        System.out.println(getIDQuery);
+
+        //Variable that stores the results from executing the Query
+        result = databaseHandler.executeQuery(getIDQuery);
+        //Try-catch statements that will get the ID if a result was actually gotten back from the database
+        try {
+             while(result.next()){
+                 //store ID into the corresponding variable
+                 chosenProgramID = Integer.parseInt(result.getString("ProgramID"));
+                 System.out.println(chosenProgramID);
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        System.out.println("---------------------");
+        System.out.println(type);
+        System.out.println("Getting ID for selected EVENT TYPE");
+        
+        //Query to get ID for the selected Term
+        getIDQuery = "SELECT EventTypeID From EVENT_TYPES "
+                + "WHERE EVENT_TYPES.EventTypeName='" + type + "' ";
+        
+        System.out.println(getIDQuery);
+
+        //Variable that stores the results from executing the Query
+        result = databaseHandler.executeQuery(getIDQuery);
+        //Try-catch statements that will get the ID if a result was actually gotten back from the database
+        try {
+             while(result.next()){
+                 //store ID into the corresponding variable
+                 chosenEventTypeID = Integer.parseInt(result.getString("EventTypeID"));
+                 System.out.println(chosenEventTypeID);
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        //---------------------------------------------------------
+        //Insert new event into the EVENTS table in the database
+        
+        //Query to get ID for the selected Term
+        String insertQuery = "INSERT INTO EVENTS VALUES ("
+                + chosenEventTypeID + ", "
+                + chosenTermID + ", "
+                + chosenProgramID + ", "
+                + "'" + eventSubject + "', "
+                + "'" + calendarDate + "', "
+                + "'Test Name'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
+                + ")";
+        
+        System.out.println(insertQuery);
+        
+        if(databaseHandler.executeAction(insertQuery)) {
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Event was added successfully");
+            alertMessage.showAndWait();
+        }
+        else //if there is an error
+        {
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Adding Event Failed!");
+            alertMessage.showAndWait();
+        }
+        
+
         // RODOLFO - ^^^ this is in the format you will need ^^^
-        saveToDatabase(calendarDate, eventSubject, program, type, term);
+        //saveToDatabase(calendarDate, eventSubject, program, type, term);
         
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -131,6 +260,13 @@ public class AddEventController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        
+        //*** Instantiate DBHandler object *******************
+        databaseHandler = new DBHandler();
+        //****************************************************
+        
+        
         
         autofillDatePicker();
         
