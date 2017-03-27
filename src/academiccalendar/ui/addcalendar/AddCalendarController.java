@@ -6,6 +6,7 @@
 package academiccalendar.ui.addcalendar;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
@@ -32,6 +33,13 @@ import javafx.stage.Stage;
  */
 public class AddCalendarController implements Initializable {
     
+    // Controllers
+     private FXMLDocumentController mainController ;
+
+    public void setMainController(FXMLDocumentController mainController) {
+        this.mainController = mainController ;
+    }
+    
     @FXML
     private Label topLabel;
     @FXML
@@ -57,12 +65,13 @@ public class AddCalendarController implements Initializable {
     @FXML
     void generateNewCalendar(MouseEvent event) {
         
-        // Get the starting and ending years
-        //Model.getInstance().calendar_end = Integer.parseInt(endYear.getValue());
-        //Model.getInstance().calendar_start = Integer.parseInt(startYear.getValue());
-        
         if ( (!startYear.getSelectionModel().isEmpty()) && (!endYear.getSelectionModel().isEmpty())
                 && (!calendarName.getText().isEmpty())) {
+            
+            // Set the starting and ending years
+            Model.getInstance().calendar_end = Integer.parseInt(endYear.getValue());
+            Model.getInstance().calendar_start = Integer.parseInt(startYear.getValue());
+            Model.getInstance().calendar_name = calendarName.getText();
             
             String startingYear = startYear.getSelectionModel().getSelectedItem();
             String endingYear = endYear.getSelectionModel().getSelectedItem();
@@ -72,7 +81,8 @@ public class AddCalendarController implements Initializable {
             // You have the variables above (startingYear, endingYear, calName)
             // Let me know if you need more/ different fields.
             
-            
+            // Load the calendar in the main window
+            mainController.calendarGenerate();
             
             // Close the window
             Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -84,7 +94,11 @@ public class AddCalendarController implements Initializable {
             Alert alert = new Alert(AlertType.WARNING, "Please fill out all fields.");
             alert.showAndWait();
         }
+        
+        
     }
+   
+    
     /**
      * Initializes the controller class.
      */
