@@ -41,7 +41,7 @@ public class DBHandler {
     public DBHandler(){
         createConnection(); //call to createConnection method
         createCalendarTable();
-        createDatesTable();
+        //createDatesTable();  //it is commented out because we may not need this table anymore
         createTermsTable();
         createProgramsTable();
         createEventTypesTable();
@@ -228,11 +228,13 @@ public class DBHandler {
                         + "ProgramID integer not null,\n"
                         + "EventDescription varchar(200) not null,\n"
                         + "EventDate date not null,\n"
-                        + "constraint " + TableName + "_PK primary key(EventTypeID, TermID, ProgramID, EventDescription, EventDate),\n"
+                        + "CalendarName varchar(200) not null,\n"
+                        + "constraint " + TableName + "_PK primary key(EventTypeID, TermID, ProgramID, EventDescription, EventDate, CalendarName),\n"
                         + "constraint " + TableName + "_FK1 foreign key (EventTypeID) references EVENT_TYPES(EventTypeID),\n"
                         + "constraint " + TableName + "_FK2 foreign key (TermID) references TERMS(TermID),\n"
                         + "constraint " + TableName + "_FK3 foreign key (ProgramID) references PROGRAMS(ProgramID),\n"
-                        + "constraint " + TableName + "_FK4 foreign key (EventDate) references DATES(DateInCalendar)"
+                        + "constraint " + TableName + "_FK4 foreign key (CalendarName) references CALENDARS(CalendarName)"
+                        //+ "constraint " + TableName + "_FK4 foreign key (EventDate) references DATES(DateInCalendar)"
                         + ")";
                 stmt.execute(query1);
             }
@@ -371,6 +373,48 @@ public class DBHandler {
             System.err.println(e.getMessage() + "--- setupDatabase");
         } finally {
         }
+        
+        
+        
+        TableName = "CALENDARS";
+        try {
+            stmt = conn.createStatement();
+            
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
+            
+            if (listOfTables.next()) {
+                
+                boolean dataExistsInTable = checkIfTableIsEmpty(TableName);
+                if (!dataExistsInTable)
+                {
+                    /*
+                    int id = 1;
+                    for(int i=0; i < terms.length; i++)
+                    {
+                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"')";
+                        stmt.execute(query2);
+                        id++;
+                    }
+                    */
+                    String query2 = "INSERT INTO " + TableName + " VALUES('Test Name', 2017, 2018)";
+                    stmt.execute(query2);
+                    System.out.println("Default values SUCCESSFULLY inserted Table " + TableName + "!!!");
+                }
+                else {
+                    System.out.println("Default values already exist in Table " + TableName);
+                }
+                
+            }
+            else {
+                System.out.println("Table " + TableName + " does not exist");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage() + "--- setupDatabase");
+        } finally {
+        }
+        
            
     }
     
