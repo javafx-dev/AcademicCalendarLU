@@ -18,7 +18,7 @@ public class Model {
     
     public int event_day;
     public int event_month;
-    public int event_subject;
+    public String event_subject;
     
     public int calendar_start;
     public int calendar_end;  
