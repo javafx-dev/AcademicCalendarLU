@@ -6,6 +6,7 @@
 package academiccalendar.ui.main;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.database.DBHandler;
 import com.jfoenix.controls.*;
 import java.io.IOException;
 import java.net.URL;
@@ -60,6 +61,12 @@ public class FXMLDocumentController implements Initializable {
     // Grid (has all the dates)
     @FXML
     private GridPane calendarGrid;
+    
+    //--------------------------------------------------------------------
+    //---------Database Object -------------------------------------------
+    DBHandler databaseHandler;
+    //--------------------------------------------------------------------
+    
     
     // Functions
     @FXML
@@ -190,6 +197,13 @@ public class FXMLDocumentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
         
+    //*** Instantiate DBHandler object *******************
+    databaseHandler = new DBHandler();
+    //****************************************************
+    
+
+
+    
     loadMonthSelector();
     
     // ******** Everything below here is for Draggable Windows *******
