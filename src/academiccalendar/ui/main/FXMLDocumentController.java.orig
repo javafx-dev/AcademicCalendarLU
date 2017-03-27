@@ -6,9 +6,12 @@
 package academiccalendar.ui.main;
 
 import academiccalendar.data.model.Model;
-import academiccalendar.database.DBHandler;
+<<<<<<< HEAD
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
+=======
+import academiccalendar.database.DBHandler;
+>>>>>>> master
 import com.jfoenix.controls.*;
 import com.sun.javaws.Main;
 import java.io.IOException;
@@ -249,7 +252,9 @@ public class FXMLDocumentController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
-
+<<<<<<< HEAD
+=======
+        
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
     //****************************************************
@@ -258,6 +263,7 @@ public class FXMLDocumentController implements Initializable {
 
     
     loadMonthSelector();
+>>>>>>> master
     
     /*// ******** Everything below here is for Styling Windows *******
     
