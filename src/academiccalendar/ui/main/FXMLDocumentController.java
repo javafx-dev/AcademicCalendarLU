@@ -6,7 +6,10 @@
 package academiccalendar.ui.main;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.ui.addcalendar.AddCalendarController;
+import academiccalendar.ui.addevent.AddEventController;
 import com.jfoenix.controls.*;
+import com.sun.javaws.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormatSymbols;
@@ -17,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +35,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -48,12 +53,14 @@ public class FXMLDocumentController implements Initializable {
     private Label saveBtn;
     @FXML
     private Label helpBtn;
+    @FXML
+    private Label monthLabel;
+    @FXML
+    private Label calendarNameLabel;
     
     // Combo/Select Boxes
     @FXML
     private JFXComboBox<String> selectedYear;
-    @FXML
-    private JFXComboBox<String> selectedMonth;
     @FXML
     private JFXListView<String> monthSelect;
     
@@ -77,26 +84,46 @@ public class FXMLDocumentController implements Initializable {
             
             // Store event day and month in data singleton
             Model.getInstance().event_day = Integer.parseInt(lbl.getText());
-            Model.getInstance().event_month = Model.getInstance().getMonthIndex(selectedMonth.getSelectionModel().getSelectedItem());        
-
+            Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());          
+            
             // When user clicks on any date in the calendar, event editor window opens
-            loadWindow("/academiccalendar/ui/addevent/add_event.fxml", "Event");
+            try {
+               // Load root layout from fxml file.
+               FXMLLoader loader = new FXMLLoader();
+               loader.setLocation(getClass().getResource("/academiccalendar/ui/addevent/add_event.fxml"));
+               AnchorPane rootLayout = (AnchorPane) loader.load();
+               Stage stage = new Stage(StageStyle.UNDECORATED);
+               stage.initModality(Modality.APPLICATION_MODAL); 
+
+               AddEventController eventController = loader.getController();
+               eventController.setMainController(this);
+               // Show the scene containing the root layout.
+               Scene scene = new Scene(rootLayout);
+               stage.setScene(scene);
+               stage.show();
+           } catch (IOException ex) {
+               Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+           }
+            
         }
     }    
     
     @FXML
-    private void newCalendarEvent(MouseEvent event) {
+    private void newCalendarEvent(ActionEvent event) {
         // When the user clicks "New Calendar" pop up window that let's them enter dates
-        loadWindow("/academiccalendar/ui/addcalendar/add_calendar.fxml", "Calendar");
-    }
-    
-    private void loadWindow(String loc, String title) {
-        try {
-            // Create new stage from FXML given its location
-            Parent parent = FXMLLoader.load(getClass().getResource(loc));
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/addcalendar/add_calendar.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.setTitle(title);
-            stage.setScene(new Scene(parent));
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            AddCalendarController calendarController = loader.getController();
+            calendarController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,24 +136,19 @@ public class FXMLDocumentController implements Initializable {
         DateFormatSymbols dateFormat = new DateFormatSymbols();
         String months[] = dateFormat.getMonths();
         
-        // Add all months to the selection combo box
-        selectedMonth.getItems().addAll(months);
-        
         // Add each to month selector
-        monthSelect.getItems().addAll(months);
-        
+        monthSelect.getItems().addAll(months);        
         
         monthSelect.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     
-                    // New month has been selected
-                    selectedMonth.getSelectionModel().select(newValue);
+                    // Show selected month above calendar
+                    monthLabel.setText(newValue + " " + selectedYear.getSelectionModel().getSelectedItem());
                     
                     // Change labels based on month selected
-                    loadCalendarLabels(2017, Model.getInstance().getMonthIndex(newValue));
-                    
-                    
+                    loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
+                            , Model.getInstance().getMonthIndex(newValue));
                 }
             });
     }
@@ -157,6 +179,7 @@ public class FXMLDocumentController implements Initializable {
                dayCount++;
             } else {
                 p.getChildren().clear();
+                p.setStyle("-fx-backgroud-color: white");
             }
         }
        
@@ -183,16 +206,44 @@ public class FXMLDocumentController implements Initializable {
             if (labelCount == daysInMonth) { System.out.print("Reached max for the month."); break;}
             labelCount++;           
            }
-           
        }
+       
+       // Darken calendar pane's with no labels
+        for (Node node: calendarGrid.getChildren()) {
+            Pane p = (Pane) node;
+            
+            if (dayCount <= numWeekDays) {
+               dayCount++;
+            } else {
+                if (p.getChildren().isEmpty()) {
+                    p.setStyle("-fx-background-color: #E9F2F5");
+                }
+                
+            }
+        }
+    }
+    
+    public void calendarGenerate(){
+        // Load the combo box with years for that calendar (always ending and starting year)
+        selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_start));
+        selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_end));
+        
+        selectedYear.getSelectionModel().selectFirst();
+        
+        // Enable year selection box
+        selectedYear.setDisable(false);
+        
+        // Set calendar name to calendar label
+        //calendarNameLabel.setText(Model.getInstance().calendar_name);
+        
+        // Load months
+        loadMonthSelector();
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
-        
-    loadMonthSelector();
     
-    // ******** Everything below here is for Draggable Windows *******
+    /*// ******** Everything below here is for Styling Windows *******
     
       // Change cursor when hover over draggable area
         newCalendarBtn.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -252,7 +303,7 @@ public class FXMLDocumentController implements Initializable {
                 Scene scene = stage.getScene();
                 scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
             }
-        });
+        });*/
     
     }    
 
