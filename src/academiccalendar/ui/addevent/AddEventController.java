@@ -6,6 +6,7 @@
 package academiccalendar.ui.addevent;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -32,6 +33,13 @@ import javafx.stage.Stage;
  * @author Karis
  */
 public class AddEventController implements Initializable {
+    
+    // Controllers
+     private FXMLDocumentController mainController ;
+
+    public void setMainController(FXMLDocumentController mainController) {
+        this.mainController = mainController ;
+    }
 
     // Structure
     @FXML
@@ -79,7 +87,7 @@ public class AddEventController implements Initializable {
     
      @FXML
     void save(MouseEvent event) {
-    
+        
         // Subject for the event
         String eventSubject = subject.getText();
         
