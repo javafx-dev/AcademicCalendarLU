@@ -1,7 +1,15 @@
 
+.month-label { 
+    -fx-font: bold 25px "Arial";
+    -fx-text-fill: #555;
+}
+
+.weekday-label {
+    -fx-text-fill: #666;
+}
 
 .weekday-pane {
-    -fx-font: 16px "Open Sans";
+    -fx-font: bold 17px "Arial";
     -fx-font-style: normal;
     -fx-background-color:  #cce0e0;
     -fx-border-style: solid;
@@ -17,10 +25,47 @@
     -fx-border-color: gray;
 }
 
-.month-select-pane {
-    -fx-font: 14px "Lucida Console";
+.menu-bar {
+     -fx-background-color:#ecedf7;
 }
 
-.menu-labels:hover {
-     -fx-background-color:   #ecedf7;
+.menu:hover {
+    -fx-background-color:#ecedf7;
+}
+
+.menu .label {
+    -fx-text-fill: black;
+}
+
+.menu-item {
+    -fx-background-color:white;
+}
+
+.menu-item:hover {
+    -fx-background-color:#ecedf7;
+}
+
+.menu:showing {
+    -fx-background-color:#ecedf7;
+}
+
+
+
+.list-cell {
+    -fx-alignment: center;
+    -fx-font: 17px "Lucida Console";
+    -fx-text-fill: black;
+}
+
+.list-cell:selected {
+    -fx-background-color:#ecedf7;
+}
+
+.list-cell:selected .label{
+    -fx-text-fill: black;
+}
+
+.list-view {
+ -fx-background-insets: 0;
+ -fx-background-color:#ecedf7;
 }
