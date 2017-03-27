@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXScrollPane?>
+<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -39,6 +40,15 @@
                         <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../icons/calendar_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem mnemonicParsing="false" onAction="#newCalendarEvent" text="Save Calendar">
+                     <graphic>
+                        <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/save_icon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -82,16 +92,7 @@
          <top>
             <Pane fx:id="term_pane" prefHeight="118.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="monthLabel" alignment="CENTER" layoutX="426.0" layoutY="70.0" prefHeight="42.0" prefWidth="200.0" styleClass="month-label">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="calendarNameLabel" alignment="CENTER" layoutX="28.0" layoutY="70.0" prefHeight="42.0" prefWidth="200.0" styleClass="month-label">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                  </Label>
+                  <JFXTabPane prefHeight="119.0" prefWidth="1200.0" />
                </children>
             </Pane>
          </top>
@@ -99,8 +100,19 @@
             <Pane prefHeight="24.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
          </bottom>
          <right>
-            <VBox prefHeight="621.0" prefWidth="161.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
+            <VBox prefHeight="621.0" prefWidth="198.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
+                  <Label fx:id="monthLabel" prefHeight="42.0" prefWidth="199.0" styleClass="month-label" text="July">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets left="15.0" />
+                     </padding>
+                  </Label>
                   <JFXComboBox fx:id="selectedYear" disable="true" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year">
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
@@ -111,12 +123,12 @@
                      </VBox.margin></JFXListView>
                </children>
                <BorderPane.margin>
-                  <Insets left="10.0" />
+                  <Insets />
                </BorderPane.margin>
             </VBox>
          </right>
          <center>
-            <JFXScrollPane prefHeight="621.0" prefWidth="1056.0" BorderPane.alignment="CENTER">
+            <JFXScrollPane prefHeight="621.0" prefWidth="997.0" BorderPane.alignment="CENTER">
                <children>
                   <GridPane fx:id="calendarGrid" prefHeight="1000.0" prefWidth="1000.0">
                     <columnConstraints>
@@ -221,7 +233,7 @@
             </JFXScrollPane>
          </center>
          <left>
-            <Pane prefHeight="621.0" prefWidth="18.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
+            <Pane prefHeight="621.0" prefWidth="48.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
          </left>
       </BorderPane>
    </children>

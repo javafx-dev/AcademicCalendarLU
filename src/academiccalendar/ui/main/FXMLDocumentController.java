@@ -151,7 +151,7 @@ public class FXMLDocumentController implements Initializable {
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     
                     // Show selected month above calendar
-                    monthLabel.setText(newValue + " " + selectedYear.getSelectionModel().getSelectedItem());
+                    monthLabel.setText(newValue);
                     
                     // Change labels based on month selected
                     loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
@@ -254,10 +254,6 @@ public class FXMLDocumentController implements Initializable {
     databaseHandler = new DBHandler();
     //****************************************************
     
-
-
-    
-    loadMonthSelector();
     
     /*// ******** Everything below here is for Styling Windows *******
     
