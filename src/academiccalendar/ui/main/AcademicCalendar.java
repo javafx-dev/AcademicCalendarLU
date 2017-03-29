@@ -26,6 +26,9 @@ public class AcademicCalendar extends Application {
         stage.getIcons().add(
         new Image( "academiccalendar/ui/icons/app_icon.png" ));
         
+        // Maximize window at launch
+        //stage.setMaximized(true);
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
