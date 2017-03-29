@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXListView?>
-<?import com.jfoenix.controls.JFXScrollPane?>
-<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
@@ -15,14 +15,16 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
-      <MenuBar prefHeight="38.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar prefHeight="15.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -88,31 +90,13 @@
           </Menu>
         </menus>
       </MenuBar>
-      <BorderPane layoutX="350.0" layoutY="37.0" prefHeight="763.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="37.0">
-         <top>
-            <Pane fx:id="term_pane" prefHeight="118.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
-               <children>
-                  <JFXTabPane prefHeight="119.0" prefWidth="1200.0" />
-               </children>
-            </Pane>
-         </top>
+      <BorderPane layoutX="350.0" layoutY="29.0" prefHeight="771.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
          <bottom>
-            <Pane prefHeight="24.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
+            <Pane prefHeight="39.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
          </bottom>
          <right>
-            <VBox prefHeight="621.0" prefWidth="198.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
+            <VBox prefHeight="739.0" prefWidth="160.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="monthLabel" prefHeight="42.0" prefWidth="199.0" styleClass="month-label" text="July">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <padding>
-                        <Insets left="15.0" />
-                     </padding>
-                  </Label>
                   <JFXComboBox fx:id="selectedYear" disable="true" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year">
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
@@ -127,10 +111,27 @@
                </BorderPane.margin>
             </VBox>
          </right>
-         <center>
-            <JFXScrollPane prefHeight="621.0" prefWidth="997.0" BorderPane.alignment="CENTER">
+         <left>
+            <HBox prefHeight="681.0" prefWidth="160.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane fx:id="calendarGrid" prefHeight="1000.0" prefWidth="1000.0">
+                  <JFXDrawer fx:id="drawer" prefHeight="681.0" prefWidth="89.0">
+                     <HBox.margin>
+                        <Insets left="5.0" />
+                     </HBox.margin>
+                  </JFXDrawer>
+                  <Pane prefHeight="681.0" prefWidth="123.0">
+                     <children>
+                        <JFXHamburger fx:id="hamburglar" alignment="TOP_RIGHT" layoutX="55.0" layoutY="4.0" prefHeight="31.0" prefWidth="33.0" />
+                     </children>
+                  </Pane>
+               </children>
+            </HBox>
+         </left>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox fx:id="weekdayHeader" prefHeight="60.0" prefWidth="880.0" />
+                  <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="880.0" styleClass="calendar_pane" VBox.vgrow="ALWAYS">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -141,100 +142,31 @@
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="43.33332824707031" minHeight="10.0" prefHeight="36.0" vgrow="NEVER" />
-                      <RowConstraints maxHeight="98.0" minHeight="10.0" prefHeight="98.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
-                     <children>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane">
-                           <children>
-                              <Label layoutX="55.0" layoutY="8.0" styleClass="weekday-label" text="SUN" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="1">
-                           <children>
-                              <Label layoutX="53.0" layoutY="8.0" styleClass="weekday-label" text="MON" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="2">
-                           <children>
-                              <Label layoutX="56.0" layoutY="8.0" styleClass="weekday-label" text="TUE" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="3">
-                           <children>
-                              <Label layoutX="52.0" layoutY="8.0" styleClass="weekday-label" text="WED" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="4">
-                           <children>
-                              <Label layoutX="55.0" layoutY="8.0" styleClass="weekday-label" text="THU" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="5">
-                           <children>
-                              <Label layoutX="58.0" layoutY="8.0" styleClass="weekday-label" text="FRI" />
-                           </children>
-                        </Pane>
-                        <Pane prefHeight="200.0" prefWidth="200.0" styleClass="weekday-pane" GridPane.columnIndex="6">
-                           <children>
-                              <Label layoutX="55.0" layoutY="8.0" styleClass="weekday-label" text="SAT" />
-                           </children>
-                        </Pane>
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="1" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="2" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="3" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="5" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="3" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="4" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-                        <Pane onMouseClicked="#editEvent" prefHeight="200.0" prefWidth="200.0" styleClass="calendar_pane" GridPane.columnIndex="6" GridPane.rowIndex="6" />
-                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </GridPane>
                </children>
-            </JFXScrollPane>
+            </VBox>
          </center>
-         <left>
-            <Pane prefHeight="621.0" prefWidth="48.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
-         </left>
+         <top>
+            <StackPane prefHeight="51.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" text="October" textAlignment="CENTER">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+         </top>
       </BorderPane>
    </children>
 </AnchorPane>

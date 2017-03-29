@@ -1,20 +1,20 @@
 
 .month-label { 
-    -fx-font: bold 25px "Arial";
+    -fx-font: bold 25px "System";
     -fx-text-fill: #555;
 }
 
-.weekday-label {
+.label {
     -fx-text-fill: #666;
 }
 
-.weekday-pane {
-    -fx-font: bold 17px "Arial";
+.weekday-header {
+    -fx-font: bold 17px "System";
     -fx-font-style: normal;
     -fx-background-color:  #cce0e0;
     -fx-border-style: solid;
     -fx-border-insets: 1;
-    -fx-border-width: .5;
+    -fx-border-width: .2;
     -fx-border-color: white;
 }
 
