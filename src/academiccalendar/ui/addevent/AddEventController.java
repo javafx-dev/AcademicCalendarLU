@@ -241,10 +241,12 @@ public class AddEventController implements Initializable {
 
         // RODOLFO - ^^^ this is in the format you will need ^^^
         //saveToDatabase(calendarDate, eventSubject, program, type, term);
-        
+                
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
+        
+         mainController.populateMonthWithDates();
     }
     
     private void saveToDatabase(String calendarDate, String eventSubect, String program, String type, String term) {
