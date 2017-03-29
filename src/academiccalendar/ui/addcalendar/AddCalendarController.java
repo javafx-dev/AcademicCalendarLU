@@ -6,6 +6,7 @@
 package academiccalendar.ui.addcalendar;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.database.DBHandler;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -33,6 +34,12 @@ import javafx.stage.Stage;
  */
 public class AddCalendarController implements Initializable {
     
+    
+    //--------------------------------------------------------------------
+    //---------Database Object -------------------------------------------
+    DBHandler databaseHandler;
+    //--------------------------------------------------------------------
+
     // Controllers
      private FXMLDocumentController mainController ;
 
@@ -80,6 +87,33 @@ public class AddCalendarController implements Initializable {
             // RODOLFO - This is where you can put the Calendar name, Starting Year, and Ending Year into the Database.
             // You have the variables above (startingYear, endingYear, calName)
             // Let me know if you need more/ different fields.
+            
+            //*** Instantiate DBHandler object *******************
+            databaseHandler = new DBHandler();
+            //****************************************************
+            String calendarQuery = "INSERT INTO CALENDARS VALUES ("
+                    + "'" + calName + "', " + startingYear + ", " + endingYear + ")";
+            
+            System.out.println(calendarQuery);
+            
+            //Insert the new calendar into the database and show a message wheher the insertion was successful or not
+            if(databaseHandler.executeAction(calendarQuery)) 
+            {
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Calendar was created successfully");
+                alertMessage.showAndWait();
+            }
+            else //if there is an error
+            {
+                Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Creating Calendar Failed!");
+                alertMessage.showAndWait();
+            }
+            
+            
+            
             
             // Load the calendar in the main window
             mainController.calendarGenerate();
