@@ -25,6 +25,7 @@ public class DBHandler {
     private static Connection conn = null;
     private static Statement stmt = null;
     
+    //Arrays that contain the default programs, terms, and event type of the University
     private static String[] eventTypes = {"Academic", "Holiday", "Campus", "Sports"}; 
     private static String[] programs = {"Undergraduate", "Graduate (MBA)", "Online", "Accelerated Program"};
     private static String[] terms = {"FA SEM","SP SEM", "SU SEM", 
@@ -35,20 +36,38 @@ public class DBHandler {
                                     "Holiday"};
     private static String defaultColor = "#000000";  //black is the default color
     
+    //Variable that controls whether or not the tables have to be created and populated
+    private static boolean tablesAlreadyExist = false;
     
     
     //Constructor
-    public DBHandler(){
-        createConnection(); //call to createConnection method
-        createCalendarTable();
-        //createDatesTable();  //it is commented out because we may not need this table anymore
-        createTermsTable();
-        createProgramsTable();
-        createEventTypesTable();
-        createEventsTable();
+    public DBHandler() {
         
-        insertDefaultValuesIntoTables();
-        printAllDefaultRecords();
+        //call to createConnection method that creates the connection between the database and the Java application
+        createConnection();
+        
+        //checks if tables have been already created by an instantatiation of another object in the program, and if
+        //the tables have not being created, then they are created and filled with the correspondent default records
+        if (tablesAlreadyExist)
+        {
+            System.out.println("Tables already exist, so connection was the only thing created and now you are ready to go!");
+        }
+        else {
+            
+            createCalendarTable();
+            //createDatesTable();  //it is commented out because we may not need this table anymore
+            createTermsTable();
+            createProgramsTable();
+            createEventTypesTable();
+            createEventsTable();
+        
+            insertDefaultValuesIntoTables();
+            printAllDefaultRecords();
+            tablesAlreadyExist = true;
+            System.out.println("the static variable tablesAlreadyExist was changed to true. THEREFORE, NO other table should try to be created");
+        }
+        
+        
     }
     
     //Create Connection between Java Application and the JDBC
