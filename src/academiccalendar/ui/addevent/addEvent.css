@@ -11,14 +11,3 @@
     -fx-background-color: ghostwhite;
 }
 
-.exit-label:hover {
-    -fx-background-color: gainsboro;
-}
-
-.header {
-    -fx-background-color: #26a65a;
-}
-.header .label {
-    -fx-text-fill: white;
-}
-

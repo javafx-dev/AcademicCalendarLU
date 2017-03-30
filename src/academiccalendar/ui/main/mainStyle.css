@@ -1,3 +1,14 @@
+.event-label {
+    -fx-font: 13px "System";
+    -fx-background-color: white;
+    -fx-border-width:1.5;
+    -fx-padding: 2px;
+    -fx-border-radius: 4px;
+    -fx-border-color: #26a65a;
+    -fx-padding: 2px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
 
 .month-label { 
     -fx-font: bold 25px "System";
@@ -11,11 +22,15 @@
 .weekday-header {
     -fx-font: bold 17px "System";
     -fx-font-style: normal;
-    -fx-background-color:  #cce0e0;
+    -fx-background-color:  #26A69A;
     -fx-border-style: solid;
     -fx-border-insets: 1;
     -fx-border-width: .2;
     -fx-border-color: white;
+}
+
+.weekday-header .label{
+    -fx-text-fill: white;
 }
 
 .calendar_pane {

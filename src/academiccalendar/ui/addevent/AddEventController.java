@@ -108,20 +108,20 @@ public class AddEventController implements Initializable {
         String calendarName = Model.getInstance().calendar_name;
         
         // Define date format
-        DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        
-        // Get the date value from the date picker
-        String calendarDate = date.getValue().format(myFormat);
-        
+        DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
         
         if(subject.getText().isEmpty()||programSelect.getSelectionModel().isEmpty()
-                ||typeSelect.getSelectionModel().isEmpty()||termSelect.getSelectionModel().isEmpty()){
+                ||typeSelect.getSelectionModel().isEmpty()||termSelect.getSelectionModel().isEmpty()
+                ||date.getValue() == null){
             Alert alertMessage = new Alert(Alert.AlertType.ERROR);
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Please fill out all fields");
             alertMessage.showAndWait();
             return;
         }
+        
+        // Get the date value from the date picker
+        String calendarDate = date.getValue().format(myFormat);
         
         // Subject for the event
         String eventSubject = subject.getText();
@@ -238,6 +238,7 @@ public class AddEventController implements Initializable {
             alertMessage.showAndWait();
         }
         
+        mainController.showDate(date.getValue().getDayOfMonth(), eventSubject);
 
         // RODOLFO - ^^^ this is in the format you will need ^^^
         //saveToDatabase(calendarDate, eventSubject, program, type, term);
@@ -245,8 +246,10 @@ public class AddEventController implements Initializable {
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
+    }
+    
+    private void addEventLabel(){
         
-         mainController.populateMonthWithDates();
     }
     
     private void saveToDatabase(String calendarDate, String eventSubect, String program, String type, String term) {
@@ -258,10 +261,10 @@ public class AddEventController implements Initializable {
        // Get selected day, month, and year and autofill date selection
        int day = Model.getInstance().event_day;
        int month = Model.getInstance().event_month + 1;
+       int year = Model.getInstance().event_year;
        
        // Set default value for datepicker
-       // Note: get Year from Model
-       date.setValue(LocalDate.of(2017, month, day));
+       date.setValue(LocalDate.of(year, month, day));
     }
     
     /**

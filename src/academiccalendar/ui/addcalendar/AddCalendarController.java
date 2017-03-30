@@ -10,12 +10,14 @@ import academiccalendar.database.DBHandler;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -58,6 +60,8 @@ public class AddCalendarController implements Initializable {
     @FXML
     private JFXComboBox<String> endYear;
     @FXML
+    private JFXDatePicker date;
+    @FXML
     private JFXButton generate;
     @FXML
     private JFXButton cancel;
@@ -72,16 +76,15 @@ public class AddCalendarController implements Initializable {
     @FXML
     void generateNewCalendar(MouseEvent event) {
         
-        if ( (!startYear.getSelectionModel().isEmpty()) && (!endYear.getSelectionModel().isEmpty())
-                && (!calendarName.getText().isEmpty())) {
+        if ( (date.getValue() != null) && (!calendarName.getText().isEmpty())) {            
             
             // Set the starting and ending years
-            Model.getInstance().calendar_end = Integer.parseInt(endYear.getValue());
-            Model.getInstance().calendar_start = Integer.parseInt(startYear.getValue());
+            Model.getInstance().calendar_start = date.getValue().getYear();
+            Model.getInstance().calendar_end = date.getValue().getYear() + 1;
             Model.getInstance().calendar_name = calendarName.getText();
             
-            String startingYear = startYear.getSelectionModel().getSelectedItem();
-            String endingYear = endYear.getSelectionModel().getSelectedItem();
+            String startingYear = Integer.toString(Model.getInstance().calendar_start);
+            String endingYear = Integer.toString(Model.getInstance().calendar_end);
             String calName = calendarName.getText();
             
             // RODOLFO - This is where you can put the Calendar name, Starting Year, and Ending Year into the Database.
@@ -103,6 +106,9 @@ public class AddCalendarController implements Initializable {
                 alertMessage.setHeaderText(null);
                 alertMessage.setContentText("Calendar was created successfully");
                 alertMessage.showAndWait();
+                
+                // Load the calendar in the main window
+                mainController.calendarGenerate();
             }
             else //if there is an error
             {
@@ -111,12 +117,6 @@ public class AddCalendarController implements Initializable {
                 alertMessage.setContentText("Creating Calendar Failed!");
                 alertMessage.showAndWait();
             }
-            
-            
-            
-            
-            // Load the calendar in the main window
-            mainController.calendarGenerate();
             
             // Close the window
             Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -127,9 +127,7 @@ public class AddCalendarController implements Initializable {
             
             Alert alert = new Alert(AlertType.WARNING, "Please fill out all fields.");
             alert.showAndWait();
-        }
-        
-        
+        }        
     }
    
     
@@ -138,23 +136,6 @@ public class AddCalendarController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-         Model.getInstance();
-        
-            ObservableList<String> years = 
-        FXCollections.observableArrayList(
-           "2017",
-           "2018",
-           "2019",
-           "2020",
-           "2021",
-           "2022",
-           "2023",
-           "2024"
-        );
-            
-        startYear.setItems(years);
-        endYear.setItems(years);
         
         // ******** Code below is for Draggable windows **********    
         

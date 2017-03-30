@@ -1,7 +1,6 @@
 /*
  * Empty Stylesheet file.
  */
-
-.mainFxmlClass {
-
+.calendar {
+    -fx-background-color: white;
 }

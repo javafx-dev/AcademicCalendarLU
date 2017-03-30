@@ -40,6 +40,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -94,6 +96,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private GridPane calendarGrid;
     
+    @FXML
+    private VBox centerArea;
+    
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
@@ -112,7 +117,8 @@ public class FXMLDocumentController implements Initializable {
             
             // Store event day and month in data singleton
             Model.getInstance().event_day = Integer.parseInt(lbl.getText());
-            Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());          
+            Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());      
+            Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
             
             // When user clicks on any date in the calendar, event editor window opens
             try {
@@ -136,8 +142,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }    
     
-    @FXML
-    private void newCalendarEvent(ActionEvent event) {
+    public void newCalendarEvent() {
         // When the user clicks "New Calendar" pop up window that let's them enter dates
          try {
             // Load root layout from fxml file.
@@ -182,6 +187,23 @@ public class FXMLDocumentController implements Initializable {
                     // Change calendar day labels based on month selected
                     loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
                             , Model.getInstance().getMonthIndex(newValue));
+                    
+                    // Now, populate calendar view with the events for that month
+                    populateMonthWithEvents();
+                }
+            });
+        
+              // Add event listener to each month list item, allowing user to change months
+        selectedYear.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    
+                    // Change calendar day labels based on month selected
+                    loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
+                            , Model.getInstance().getMonthIndex(newValue));
+                    
+                    // Now, populate calendar view with the events for that month
+                    populateMonthWithEvents();
                 }
             });
     }
@@ -251,15 +273,22 @@ public class FXMLDocumentController implements Initializable {
         
         // Show first month automatically after Calendar is created
         loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem()), 0);
+        
+        // Show all events for that calendar (on the month user has selected)
+        populateMonthWithEvents();
     }
     
-    public void populateMonthWithDates(){
+    public void populateMonthWithEvents(){
+        
+        String calendarName = Model.getInstance().calendar_name;
         
         String currentMonth = monthLabel.getText();
         int currentMonthIndex = Model.getInstance().getMonthIndex(currentMonth) + 1;
         
-        // Query to get ALL Events for the selected Month!!
-        String getMonthEventsQuery = "SELECT * From EVENTS";
+        int currentYear = Integer.parseInt(selectedYear.getValue());
+        
+        // Query to get ALL Events from the selected calendar!!
+        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";
         
         // Store the results here
         ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
@@ -271,15 +300,18 @@ public class FXMLDocumentController implements Initializable {
                  Date eventDate = result.getDate("EventDate");
                  String eventDescript = result.getString("EventDescription");
                  
-                 // Check for the month we already have selected (we are viewing)
-                 if (currentMonthIndex == eventDate.toLocalDate().getMonthValue()){
-                     
-                     // Get day for the month
-                     int day = eventDate.toLocalDate().getDayOfMonth();
-                     
-                     // Display decription of the event given it's day
-                     showDate(day, eventDescript);
-                 }                 
+                 // Check for year we have selected
+                 if (currentYear == eventDate.toLocalDate().getYear()){
+                     // Check for the month we already have selected (we are viewing)
+                    if (currentMonthIndex == eventDate.toLocalDate().getMonthValue()){
+
+                        // Get day for the month
+                        int day = eventDate.toLocalDate().getDayOfMonth();
+
+                        // Display decription of the event given it's day
+                        showDate(day, eventDescript);
+                    }         
+                 }
              }
         } catch (SQLException ex) {
              Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
@@ -287,6 +319,10 @@ public class FXMLDocumentController implements Initializable {
     }
     
     public void showDate(int dayNumber, String descript){
+        
+        Image img = new Image(getClass().getClassLoader().getResourceAsStream("academiccalendar/ui/icons/event_icon.png"));
+        ImageView imgView = new ImageView();
+        imgView.setImage(img);
         
         for (Node node: calendarGrid.getChildren()) {
                 
@@ -306,7 +342,9 @@ public class FXMLDocumentController implements Initializable {
                 if (currentNumber == dayNumber) {
                     
                     // Add an event label with the given description
-                    Label eventLbl = new Label(descript);                        
+                    Label eventLbl = new Label(descript); 
+                    eventLbl.setGraphic(imgView);
+                    eventLbl.getStyleClass().add("event-label");
                     day.getChildren().add(eventLbl);
                 }
             }
@@ -319,6 +357,23 @@ public class FXMLDocumentController implements Initializable {
             VBox vox = FXMLLoader.load(getClass().getResource("DrawerContent.fxml"));
             JFXDepthManager.setDepth(drawer, 1);
             drawer.setSidePane(vox);
+            
+            for (Node node: vox.getChildren()){
+                if (node.getAccessibleText() != null) {
+                    node.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)-> {
+                        switch(node.getAccessibleText()) {
+                            case "New_Calendar" : newCalendarEvent();
+                                break;
+                            case "Load_Calendar" :
+                                break;
+                            case "Tools" :
+                                break;
+                            case "Views":
+                                break;
+                        }
+                    } );
+                }
+            }
             
             HamburgerBackArrowBasicTransition burgerTask = new HamburgerBackArrowBasicTransition(hamburglar);
             burgerTask.setRate(-1);
@@ -347,7 +402,7 @@ public class FXMLDocumentController implements Initializable {
         int cols = 7;
         for (int i = 0; i < rows; i++){
             for (int j = 0; j < cols; j++){
-              
+                
                 // Add VBox and style it
                 VBox vPane = new VBox();
                 vPane.getStyleClass().add("calendar_pane");
@@ -383,6 +438,10 @@ public class FXMLDocumentController implements Initializable {
             HBox.setHgrow(pane, Priority.ALWAYS);
             pane.setMaxWidth(Double.MAX_VALUE);
             
+            // Note: After adding a label to this, it tries to resize itself..
+            // So I'm setting a minimum width.
+            pane.setMinWidth(weekdayHeader.getPrefWidth()/7);
+            
             // Add it to the header
             weekdayHeader.getChildren().add(pane);
             
@@ -403,8 +462,7 @@ public class FXMLDocumentController implements Initializable {
     initializeCalendarWeekdayHeader();
     
     // Set Depths
-    JFXDepthManager.setDepth(calendarGrid, 1);
-    JFXDepthManager.setDepth(weekdayHeader, 1);
+    JFXDepthManager.setDepth(centerArea, 1);
 
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
