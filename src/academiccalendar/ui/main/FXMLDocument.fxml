@@ -31,7 +31,7 @@
          <right>
             <VBox prefHeight="739.0" prefWidth="160.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <JFXComboBox fx:id="selectedYear" disable="true" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year">
+                  <JFXComboBox fx:id="selectedYear" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year" visible="false">
                      <VBox.margin>
                         <Insets left="20.0" right="20.0" />
                      </VBox.margin></JFXComboBox>
