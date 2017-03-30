@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="248.0" prefWidth="340.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addcalendar.AddCalendarController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="248.0" prefWidth="340.0" styleClass="calendar" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addcalendar.AddCalendarController">
     <stylesheets>
         <URL value="@add_calendar.css" />
     </stylesheets>
    <children>
-      <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: #EFEFEF;">
+      <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
          <children>
-            <Label fx:id="topLabel" prefHeight="30.0" prefWidth="312.0" text=" Create Calendar">
+            <Label fx:id="topLabel" prefHeight="30.0" prefWidth="312.0" style="-fx-background-color: whitesmoke;" text=" Create Calendar">
                <font>
                   <Font size="15.0" />
                </font>
@@ -53,17 +53,7 @@
                   <Font size="13.0" />
                </font>
             </JFXTextField>
-            <HBox prefHeight="63.0" prefWidth="320.0">
-               <children>
-                  <JFXComboBox fx:id="startYear" prefHeight="25.0" prefWidth="148.0" promptText="Starting Year" />
-                  <Label text="to" />
-                  <JFXComboBox fx:id="endYear" prefHeight="25.0" prefWidth="143.0" promptText="Ending Year">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </JFXComboBox>
-               </children>
-            </HBox>
+            <JFXDatePicker fx:id="date" promptText="Day Classes Start" />
          </children>
       </VBox>
       <HBox prefHeight="41.0" prefWidth="340.0" AnchorPane.bottomAnchor="0.0">
