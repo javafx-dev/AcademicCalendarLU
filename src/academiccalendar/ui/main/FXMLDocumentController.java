@@ -9,6 +9,7 @@ import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
+import academiccalendar.ui.listcalendar.ListCalendarController;
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
@@ -163,6 +164,28 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+    public void loadCalendarList() {
+        // When the user clicks "New Calendar" pop up window that let's them enter dates
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/listcalendar/list_calendar.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+            
+            ListCalendarController listController = loader.getController();
+            listController.setMainController(this);
+            
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void loadMonthSelector()
     {
         // Get a list of all the months (1-12) in a year
@@ -266,7 +289,7 @@ public class FXMLDocumentController implements Initializable {
         selectedYear.getSelectionModel().selectFirst();
         
         // Enable year selection box
-        selectedYear.setDisable(false);
+        selectedYear.setVisible(true);
         
         // Load months
         loadMonthSelector();
@@ -364,7 +387,7 @@ public class FXMLDocumentController implements Initializable {
                         switch(node.getAccessibleText()) {
                             case "New_Calendar" : newCalendarEvent();
                                 break;
-                            case "Load_Calendar" :
+                            case "Load_Calendar" : loadCalendarList();
                                 break;
                             case "Tools" :
                                 break;
