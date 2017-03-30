@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="332.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
-      <HBox prefHeight="35.0" prefWidth="340.0" styleClass="header">
+      <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
          <children>
             <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Edit Event">
                <font>
@@ -32,7 +32,7 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0" styleClass="exit-label" stylesheets="@addEvent.css">
+            <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0" stylesheets="@addEvent.css">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
