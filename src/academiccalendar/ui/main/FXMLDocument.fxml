@@ -6,11 +6,6 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -24,73 +19,12 @@
 
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
-      <MenuBar prefHeight="15.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#newCalendarEvent" text="New Calendar">
-                     <graphic>
-                        <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/plus_icon1.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#newCalendarEvent" text="Load Calendar">
-                     <graphic>
-                        <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/calendar_icon.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#newCalendarEvent" text="Save Calendar">
-                     <graphic>
-                        <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../icons/save_icon.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </MenuItem>
-            </items>
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/menu_icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Tools">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/tools_icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-          </Menu>
-          <Menu mnemonicParsing="false" text="Help">
-            <items>
-              <MenuItem mnemonicParsing="false" text="About" />
-            </items>
-               <graphic>
-                  <ImageView fitHeight="21.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../icons/info_icon.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <BorderPane layoutX="350.0" layoutY="29.0" prefHeight="771.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="29.0">
+      <AnchorPane prefHeight="45.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXHamburger fx:id="hamburglar" alignment="TOP_RIGHT" layoutX="14.0" layoutY="11.0" prefHeight="23.0" prefWidth="33.0" />
+         </children>
+      </AnchorPane>
+      <BorderPane layoutX="350.0" layoutY="45.0" prefHeight="755.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
          <bottom>
             <Pane prefHeight="39.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
          </bottom>
@@ -119,16 +53,12 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </JFXDrawer>
-                  <Pane prefHeight="681.0" prefWidth="123.0">
-                     <children>
-                        <JFXHamburger fx:id="hamburglar" alignment="TOP_RIGHT" layoutX="55.0" layoutY="4.0" prefHeight="31.0" prefWidth="33.0" />
-                     </children>
-                  </Pane>
+                  <Pane prefHeight="681.0" prefWidth="123.0" />
                </children>
             </HBox>
          </left>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="centerArea" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
                   <HBox fx:id="weekdayHeader" prefHeight="60.0" prefWidth="880.0" />
                   <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="880.0" styleClass="calendar_pane" VBox.vgrow="ALWAYS">
@@ -159,7 +89,7 @@
          <top>
             <StackPane prefHeight="51.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" text="October" textAlignment="CENTER">
+                  <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" textAlignment="CENTER">
                      <font>
                         <Font size="21.0" />
                      </font>
