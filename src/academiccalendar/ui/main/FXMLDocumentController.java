@@ -389,7 +389,7 @@ public class FXMLDocumentController implements Initializable {
                                 break;
                             case "Load_Calendar" : loadCalendarList();
                                 break;
-                            case "Tools" :
+                            case "Export_To_PDF" : exportCalendar();
                                 break;
                             case "Views":
                                 break;
