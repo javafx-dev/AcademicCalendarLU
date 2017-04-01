@@ -373,7 +373,10 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
-    
+    public void exportCalendar()
+    {
+        System.out.println("I am supposed to export you to PDF");
+       }
     public void initializeHamburgerMenu(){
         
         try {

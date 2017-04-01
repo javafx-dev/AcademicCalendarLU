@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="319.0" prefWidth="128.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="319.0" prefWidth="128.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <StackPane prefHeight="86.0" prefWidth="116.0">
          <children>
@@ -28,7 +28,7 @@
             <Font size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton accessibleText="Tools" prefHeight="47.0" prefWidth="129.0" ripplerFill="#5df87a" text="Tools">
+      <JFXButton accessibleText="Tools" prefHeight="47.0" prefWidth="129.0" ripplerFill="#5df87a" text="Export To PDF">
          <font>
             <Font size="14.0" />
          </font>
