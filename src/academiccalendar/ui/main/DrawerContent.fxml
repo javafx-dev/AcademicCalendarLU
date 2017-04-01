@@ -28,7 +28,7 @@
             <Font size="14.0" />
          </font>
       </JFXButton>
-      <JFXButton accessibleText="Tools" prefHeight="47.0" prefWidth="129.0" ripplerFill="#5df87a" text="Export To PDF">
+      <JFXButton accessibleText="Export_To_PDF" prefHeight="47.0" prefWidth="129.0" ripplerFill="#5df87a" text="Export To PDF">
          <font>
             <Font size="14.0" />
          </font>

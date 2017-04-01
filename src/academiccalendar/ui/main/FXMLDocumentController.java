@@ -36,11 +36,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.print.PrinterJob;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -375,7 +378,18 @@ public class FXMLDocumentController implements Initializable {
     }
     public void exportCalendar()
     {
-        System.out.println("I am supposed to export you to PDF");
+        TableView table = new TableView();
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        TableColumn eventCol = new TableColumn("Event");
+        TableColumn dateCol = new TableColumn("Date");
+        eventCol.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
+        dateCol.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
+        table.getColumns().addAll(eventCol, dateCol);
+        PrinterJob job = PrinterJob.createPrinterJob();
+        if(job != null){
+          job.printPage(table);
+          job.endJob();
+        }
        }
     public void initializeHamburgerMenu(){
         
