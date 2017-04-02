@@ -379,12 +379,25 @@ public class FXMLDocumentController implements Initializable {
     public void exportCalendar()
     {
         TableView table = new TableView();
+        double w = table.getWidth();
+        double h = table.getHeight();
+        w = 500.00;
+       
+        table.setPrefWidth(w);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        TableColumn eventCol = new TableColumn("Event");
-        TableColumn dateCol = new TableColumn("Date");
-        eventCol.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
-        dateCol.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
-        table.getColumns().addAll(eventCol, dateCol);
+        TableColumn termCol = new TableColumn("Term");
+        TableColumn subjectCol = new TableColumn("Subject");
+        TableColumn year1Col = new TableColumn("Year 1");
+        TableColumn year2Col = new TableColumn("Year 2");
+
+        
+        termCol.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
+        subjectCol.setMaxWidth( 1f * Integer.MAX_VALUE * 55 ); // 50% width
+        year1Col.setMaxWidth( 1f * Integer.MAX_VALUE * 12.5 ); // 50% width
+        year2Col.setMaxWidth( 1f * Integer.MAX_VALUE * 12.5 ); // 50% width
+        
+        table.getColumns().addAll(termCol, subjectCol, year1Col, year2Col);
+        
         PrinterJob job = PrinterJob.createPrinterJob();
         if(job != null){
           job.printPage(table);
