@@ -10,6 +10,7 @@ import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
 import academiccalendar.ui.listcalendar.ListCalendarController;
+
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
@@ -19,16 +20,22 @@ import java.net.URL;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.DateFormatSymbols;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -44,6 +51,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -378,25 +386,86 @@ public class FXMLDocumentController implements Initializable {
     }
     public void exportCalendar()
     {
-        TableView table = new TableView();
-        double w = table.getWidth();
-        double h = table.getHeight();
-        w = 500.00;
-       
+          TableView<Event> table = new TableView<Event>();
+         ObservableList<Event> data =FXCollections.observableArrayList();  
+   
+        
+        double w = 500.00;
+        // set width of table view
         table.setPrefWidth(w);
+        // set resize policy
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        TableColumn termCol = new TableColumn("Term");
-        TableColumn subjectCol = new TableColumn("Subject");
-        TableColumn year1Col = new TableColumn("Year 1");
-        TableColumn year2Col = new TableColumn("Year 2");
-
+        // intialize columns
+        TableColumn<Event,String> term  = new TableColumn<Event,String>("Term");
+        TableColumn<Event,String> subject  = new TableColumn<Event,String>("Subject");
+        TableColumn<Event,String> date = new TableColumn<Event,String>("Date");
+        // set width of columns
+        term.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
+        subject.setMaxWidth( 1f * Integer.MAX_VALUE * 60 ); // 50% width
+        date.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
+        // 
+        term.setCellValueFactory(new PropertyValueFactory<Event,String>("term"));
+        subject.setCellValueFactory( new PropertyValueFactory<Event,String>("subject"));
+        date.setCellValueFactory(new PropertyValueFactory<Event,String>("date"));
         
-        termCol.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
-        subjectCol.setMaxWidth( 1f * Integer.MAX_VALUE * 55 ); // 50% width
-        year1Col.setMaxWidth( 1f * Integer.MAX_VALUE * 12.5 ); // 50% width
-        year2Col.setMaxWidth( 1f * Integer.MAX_VALUE * 12.5 ); // 50% width
         
-        table.getColumns().addAll(termCol, subjectCol, year1Col, year2Col);
+       
+        
+        
+        String calendarName = Model.getInstance().calendar_name;
+        // Query to get ALL Events from the selected calendar!!
+        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
+        // intialize size to keep track of the total amount of events
+        
+        // Store the results here
+        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
+        
+         try {
+             
+             
+             while(result.next()){
+                //initalize temporarily strings
+                 String tempTerm="";
+                 String tempProgram="";
+                 // Get term, program, Event Description and Date
+                 
+                 String eventDescript = result.getString("EventDescription");
+                 int termID = result.getInt("TermID");
+                 
+                 
+                 Date dDate=result.getDate("EventDate");
+                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+                 String eventDate = df.format(dDate);
+                 
+                 int programID = result.getInt("ProgramID");
+                 String getProgramQuery = "SELECT ProgramName FROM PROGRAMS WHERE ProgramID=" + programID + "";
+                 String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
+                 ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
+                 ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
+                 
+                 while(termResult.next())
+                 {
+                      tempTerm=termResult.getString(1);
+                     
+                      while(programResult.next())
+                        {
+                           tempProgram = programResult.getString(1);
+                        }
+                      tempTerm+=" "+tempProgram;
+                 }
+                 
+               
+                data.add(new Event(tempTerm,eventDescript,eventDate));
+             
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+         
+         
+       
+        table.getItems().setAll(data);
+        
         
         PrinterJob job = PrinterJob.createPrinterJob();
         if(job != null){
