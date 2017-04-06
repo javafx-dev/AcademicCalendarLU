@@ -197,33 +197,28 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    private void loadMonthSelector()
-    {
-        // Get a list of all the months (1-12) in a year
-        DateFormatSymbols dateFormat = new DateFormatSymbols();
-        String months[] = dateFormat.getMonths();
-        
-        // Add months to side selector
-        monthSelect.getItems().addAll(months);   
-        
-        // Select the first month as default
-        monthSelect.getSelectionModel().selectFirst();
-        monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem());
-        
+    private void initializeMonthSelector(){
         // Add event listener to each month list item, allowing user to change months
         monthSelect.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     
-                    // Show selected/current month above calendar
-                    monthLabel.setText(newValue);
+                    // Note: The line of code "monthSelect.getItems().clear()" invokes this change listener
+                    // and the newValue becomes NULL. When that happens, we will just skip the following instructions
+                    // as if nothing happened.
+                    // See method calendarGenerate() for that call.
+                    if (newValue != null) {
+                        // Show selected/current month above calendar
+                        monthLabel.setText(newValue);
+
+                        // Change calendar day labels based on month selected
+                        loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
+                                , Model.getInstance().getMonthIndex(newValue));
+
+                        // Now, populate calendar view with the events for that month
+                        populateMonthWithEvents();
+                    }
                     
-                    // Change calendar day labels based on month selected
-                    loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
-                            , Model.getInstance().getMonthIndex(newValue));
-                    
-                    // Now, populate calendar view with the events for that month
-                    populateMonthWithEvents();
                 }
             });
         
@@ -232,12 +227,14 @@ public class FXMLDocumentController implements Initializable {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     
-                    // Change calendar day labels based on month selected
-                    loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
-                            , Model.getInstance().getMonthIndex(newValue));
-                    
-                    // Now, populate calendar view with the events for that month
-                    populateMonthWithEvents();
+                    if (newValue != null){
+                        // Change calendar day labels based on month selected
+                        loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
+                                , Model.getInstance().getMonthIndex(newValue));
+
+                        // Now, populate calendar view with the events for that month
+                        populateMonthWithEvents();
+                    }
                 }
             });
     }
@@ -292,18 +289,28 @@ public class FXMLDocumentController implements Initializable {
     
     public void calendarGenerate(){
         
-        // Load year selection for that calendar
+        // Load year selection for calendar
+        selectedYear.getItems().clear(); // Invokes our change listener
         selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_start));
         selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_end));
 
-        // Select the first year by default     
+        // Select the first YEAR as default     
         selectedYear.getSelectionModel().selectFirst();
         
         // Enable year selection box
         selectedYear.setVisible(true);
         
-        // Load months
-        loadMonthSelector();
+        // Get a list of all the months (1-12) in a year
+        DateFormatSymbols dateFormat = new DateFormatSymbols();
+        String months[] = dateFormat.getMonths();
+        
+        // Load month section for calendar
+        monthSelect.getItems().clear();  // Invokes our change listener
+        monthSelect.getItems().addAll(months);   
+        
+        // Select the first MONTH as default
+        monthSelect.getSelectionModel().selectFirst();
+        monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem());
         
         // Show first month automatically after Calendar is created
         loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem()), 0);
@@ -384,9 +391,10 @@ public class FXMLDocumentController implements Initializable {
             }
         }
     }
+    
     public void exportCalendar()
     {
-          TableView<Event> table = new TableView<Event>();
+         TableView<Event> table = new TableView<Event>();
          ObservableList<Event> data =FXCollections.observableArrayList();  
    
         
@@ -408,20 +416,20 @@ public class FXMLDocumentController implements Initializable {
         subject.setCellValueFactory( new PropertyValueFactory<Event,String>("subject"));
         date.setCellValueFactory(new PropertyValueFactory<Event,String>("date"));
         
-        
-       
-        
+        // Add columns to the table
+        table.getColumns().add(term);
+        table.getColumns().add(subject);
+        table.getColumns().add(date);
         
         String calendarName = Model.getInstance().calendar_name;
+        
         // Query to get ALL Events from the selected calendar!!
         String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
-        // intialize size to keep track of the total amount of events
         
         // Store the results here
         ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
         
          try {
-             
              
              while(result.next()){
                 //initalize temporarily strings
@@ -466,13 +474,13 @@ public class FXMLDocumentController implements Initializable {
        
         table.getItems().setAll(data);
         
-        
         PrinterJob job = PrinterJob.createPrinterJob();
         if(job != null){
           job.printPage(table);
           job.endJob();
         }
        }
+    
     public void initializeHamburgerMenu(){
         
         try {
@@ -582,6 +590,7 @@ public class FXMLDocumentController implements Initializable {
     // Make empty calendar
     initializeCalendarGrid();
     initializeCalendarWeekdayHeader();
+    initializeMonthSelector();
     
     // Set Depths
     JFXDepthManager.setDepth(centerArea, 1);
