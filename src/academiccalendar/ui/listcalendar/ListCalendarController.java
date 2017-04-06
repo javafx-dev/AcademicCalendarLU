@@ -5,6 +5,7 @@
  */
 package academiccalendar.ui.listcalendar;
 
+import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
@@ -67,7 +68,7 @@ public class ListCalendarController implements Initializable {
     private TableColumn<Calendar, String> endCol;
     
     // Controllers
-     private FXMLDocumentController mainController ;
+    private FXMLDocumentController mainController ;
 
     public void setMainController(FXMLDocumentController mainController) {
         this.mainController = mainController ;
@@ -88,14 +89,13 @@ public class ListCalendarController implements Initializable {
     @FXML
     private void load(MouseEvent event) {
         
-       // TableViewSelectionModel selectionModel = tableView.getSelectionModel();
-        //ObservableList selectedCells = selectionModel.getSelectedCells();
-       // TablePosition tablePosition = (TablePosition) selectedCells.get(0);
-        //Object val = tablePosition.getTableColumn().getCellData(0);
-        //System.out.println(val.toString());
+        Calendar cal = tableView.getSelectionModel().getSelectedItem();
+        Model.getInstance().calendar_name = cal.getName();
+        Model.getInstance().calendar_start = Integer.parseInt(cal.getStartYear());
+        Model.getInstance().calendar_end = Integer.parseInt(cal.getEndYear());
         
         // Load the calendar in the main window
-        //mainController.calendarGenerate();
+        mainController.calendarGenerate();
         
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
