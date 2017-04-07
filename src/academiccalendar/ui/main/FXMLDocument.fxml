@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
-<?import com.jfoenix.controls.JFXDrawer?>
-<?import com.jfoenix.controls.JFXHamburger?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -17,86 +17,97 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1200.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1400.0" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
-      <AnchorPane prefHeight="45.0" prefWidth="1200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <JFXHamburger fx:id="hamburglar" alignment="TOP_RIGHT" layoutX="14.0" layoutY="11.0" prefHeight="23.0" prefWidth="33.0" />
-         </children>
-      </AnchorPane>
-      <BorderPane layoutX="350.0" layoutY="45.0" prefHeight="755.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
-         <bottom>
-            <Pane prefHeight="39.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER" />
-         </bottom>
-         <right>
-            <VBox prefHeight="739.0" prefWidth="160.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
+      <BorderPane layoutX="350.0" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox fx:id="centerArea" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="875.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXComboBox fx:id="selectedYear" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year" visible="false">
-                     <VBox.margin>
-                        <Insets left="20.0" right="20.0" />
-                     </VBox.margin></JFXComboBox>
-                  <JFXListView fx:id="monthSelect" prefHeight="556.0" prefWidth="161.0" styleClass="list-cell">
-                     <VBox.margin>
-                        <Insets left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin></JFXListView>
+                  <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="694.0" prefWidth="880.0">
+                     <content>
+                        <VBox prefHeight="698.0" prefWidth="865.0">
+                           <children>
+                              <HBox fx:id="weekdayHeader" minHeight="-Infinity" prefHeight="80.0" prefWidth="873.0" />
+                              <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="638.0" prefWidth="865.0" styleClass="calendar_pane">
+                                <columnConstraints>
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+                  <StackPane>
+                     <children>
+                        <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" textAlignment="CENTER">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
                </children>
                <BorderPane.margin>
                   <Insets />
                </BorderPane.margin>
             </VBox>
-         </right>
+         </center>
          <left>
-            <HBox prefHeight="681.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+            <VBox fx:id="vPane" prefHeight="706.0" prefWidth="304.0" BorderPane.alignment="CENTER">
                <children>
-                  <JFXDrawer fx:id="drawer" prefHeight="681.0" prefWidth="89.0">
-                     <HBox.margin>
-                        <Insets left="5.0" />
-                     </HBox.margin>
-                  </JFXDrawer>
-                  <Pane prefHeight="681.0" prefWidth="123.0" />
+                  <HBox fx:id="menuNode" prefHeight="58.0" prefWidth="304.0">
+                     <children>
+                        <JFXButton buttonType="RAISED" onMouseClicked="#fileBtn" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #45baae;" text="File" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font></JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onMouseClicked="#toolsBtn" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #72d3c9;" text="Tools" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font></JFXButton>
+                        <JFXButton buttonType="RAISED" layoutX="62.0" layoutY="10.0" onMouseClicked="#rulesBtn" prefHeight="68.0" prefWidth="187.0" style="-fx-background-color: #45baae;" text="Rules" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font size="14.0" />
+                           </font></JFXButton>
+                     </children>
+                  </HBox>
+                  <Pane fx:id="menuPane" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #efefef;" />
                </children>
-            </HBox>
+               <BorderPane.margin>
+                  <Insets right="10.0" />
+               </BorderPane.margin>
+            </VBox>
          </left>
-         <center>
-            <VBox fx:id="centerArea" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <right>
+            <VBox prefHeight="800.0" prefWidth="164.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
-                  <HBox fx:id="weekdayHeader" prefHeight="60.0" prefWidth="880.0" />
-                  <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="880.0" styleClass="calendar_pane" VBox.vgrow="ALWAYS">
-                    <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <JFXComboBox fx:id="selectedYear" focusColor="#333333" prefHeight="50.0" prefWidth="165.0" promptText="Year" visible="false">
                      <VBox.margin>
-                        <Insets />
+                        <Insets left="20.0" right="20.0" />
                      </VBox.margin>
-                  </GridPane>
+                  </JFXComboBox>
+                  <JFXListView fx:id="monthSelect" prefHeight="556.0" prefWidth="161.0" styleClass="list-cell">
+                     <VBox.margin>
+                        <Insets left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </JFXListView>
                </children>
             </VBox>
-         </center>
-         <top>
-            <StackPane prefHeight="51.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" textAlignment="CENTER">
-                     <font>
-                        <Font size="21.0" />
-                     </font>
-                  </Label>
-               </children>
-            </StackPane>
-         </top>
+         </right>
       </BorderPane>
    </children>
 </AnchorPane>
