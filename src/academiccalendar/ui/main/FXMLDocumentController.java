@@ -9,7 +9,9 @@ import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
-import academiccalendar.ui.listcalendar.ListCalendarController;
+import academiccalendar.ui.main.menu.FileContentController;
+import academiccalendar.ui.main.menu.RulesContentController;
+import academiccalendar.ui.main.menu.ToolsContentController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
@@ -49,6 +51,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -76,27 +79,10 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private AnchorPane rootPane;
     
-    // Menu labels
-    @FXML
-    private Label newCalendarBtn;
-    @FXML
-    private Label saveBtn;
-    @FXML
-    private Label helpBtn;
     @FXML
     private Label monthLabel;
     @FXML
-    private Label calendarNameLabel;
-    @FXML
     private HBox weekdayHeader;
-    
-    // Hamburglar Menu
-    @FXML
-    private JFXHamburger hamburglar;
-    @FXML
-    private Pane drawerPane;
-    @FXML
-    private JFXDrawer drawer;
     
     // Combo/Select Boxes
     @FXML
@@ -115,6 +101,14 @@ public class FXMLDocumentController implements Initializable {
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
     //--------------------------------------------------------------------
+    @FXML
+    private HBox menuNode;
+    @FXML
+    private Pane menuPane;
+    @FXML
+    private VBox vPane;
+    @FXML
+    private ScrollPane scrollPane;
     
     
     // Functions
@@ -166,28 +160,6 @@ public class FXMLDocumentController implements Initializable {
 
             AddCalendarController calendarController = loader.getController();
             calendarController.setMainController(this);
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void loadCalendarList() {
-        // When the user clicks "New Calendar" pop up window that let's them enter dates
-         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/academiccalendar/ui/listcalendar/list_calendar.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
-            Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL); 
-            
-            ListCalendarController listController = loader.getController();
-            listController.setMainController(this);
-            
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -481,49 +453,7 @@ public class FXMLDocumentController implements Initializable {
         }
        }
     
-    public void initializeHamburgerMenu(){
-        
-        try {
-            VBox vox = FXMLLoader.load(getClass().getResource("DrawerContent.fxml"));
-            JFXDepthManager.setDepth(drawer, 1);
-            drawer.setSidePane(vox);
-            
-            for (Node node: vox.getChildren()){
-                if (node.getAccessibleText() != null) {
-                    node.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)-> {
-                        switch(node.getAccessibleText()) {
-                            case "New_Calendar" : newCalendarEvent();
-                                break;
-                            case "Load_Calendar" : loadCalendarList();
-                                break;
-                            case "Export_To_PDF" : exportCalendar();
-                                break;
-                            case "Views":
-                                break;
-                        }
-                    } );
-                }
-            }
-            
-            HamburgerBackArrowBasicTransition burgerTask = new HamburgerBackArrowBasicTransition(hamburglar);
-            burgerTask.setRate(-1);
-            hamburglar.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-                burgerTask.setRate(burgerTask.getRate() * -1);
-                burgerTask.play();   
-
-                if(drawer.isShown()){
-                     drawer.close();
-                } else {
-                    drawer.open();
-                }
-
-            });
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }
+    
     
     public void initializeCalendarGrid(){
         
@@ -536,8 +466,7 @@ public class FXMLDocumentController implements Initializable {
                 // Add VBox and style it
                 VBox vPane = new VBox();
                 vPane.getStyleClass().add("calendar_pane");
-                vPane.setPrefHeight(200);
-                vPane.setPrefWidth(100);
+                vPane.setMinWidth(weekdayHeader.getPrefWidth()/7);
                 
                 vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
                     editEvent(vPane);
@@ -582,10 +511,7 @@ public class FXMLDocumentController implements Initializable {
     
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) { 
-    
-    // Initialize menu
-    initializeHamburgerMenu();    
+    public void initialize(URL url, ResourceBundle rb) {    
         
     // Make empty calendar
     initializeCalendarGrid();
@@ -594,10 +520,64 @@ public class FXMLDocumentController implements Initializable {
     
     // Set Depths
     JFXDepthManager.setDepth(centerArea, 1);
+    JFXDepthManager.setDepth(menuPane, 1);
 
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
     //****************************************************
     
     }    
+    
+    // Below is for switching between menu views
+    @FXML
+    private void fileBtn(MouseEvent event) {
+        menuPane.getChildren().clear();
+        try {
+            
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("menu/FileContent.fxml"));
+            VBox fileMenu = (VBox) loader.load();
+            menuPane.getChildren().add(fileMenu);
+            
+            FileContentController fileController = loader.getController();
+            fileController.setMainController(this);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void toolsBtn(MouseEvent event) {
+        menuPane.getChildren().clear();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("menu/ToolsContent.fxml"));
+            VBox toolsMenu = (VBox) loader.load();
+            menuPane.getChildren().add(toolsMenu);
+            
+            ToolsContentController fileController = loader.getController();
+            fileController.setMainController(this);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void rulesBtn(MouseEvent event) {
+        menuPane.getChildren().clear();
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("menu/RulesContent.fxml"));
+            VBox rulesMenu = (VBox) loader.load();
+            menuPane.getChildren().add(rulesMenu);
+            
+            RulesContentController fileController = loader.getController();
+            fileController.setMainController(this);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
