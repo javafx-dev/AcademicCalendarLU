@@ -43,7 +43,7 @@ public class AddCalendarController implements Initializable {
     //--------------------------------------------------------------------
 
     // Controllers
-     private FXMLDocumentController mainController ;
+    private FXMLDocumentController mainController ;
 
     public void setMainController(FXMLDocumentController mainController) {
         this.mainController = mainController ;
