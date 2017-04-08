@@ -71,6 +71,11 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class FXMLDocumentController implements Initializable {
@@ -364,7 +369,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    public void exportCalendar()
+    public void exportCalendarPDF()
     {
          TableView<Event> table = new TableView<Event>();
          ObservableList<Event> data =FXCollections.observableArrayList();  
@@ -445,7 +450,7 @@ public class FXMLDocumentController implements Initializable {
          
        
         table.getItems().setAll(data);
-        
+        // open dialog window and export table as pdf
         PrinterJob job = PrinterJob.createPrinterJob();
         if(job != null){
           job.printPage(table);
@@ -454,6 +459,102 @@ public class FXMLDocumentController implements Initializable {
        }
     
     
+     public void exportCalendarExcel()
+    {
+         TableView<Event> table = new TableView<Event>();
+         ObservableList<Event> data =FXCollections.observableArrayList();  
+   
+        
+        double w = 500.00;
+        // set width of table view
+        table.setPrefWidth(w);
+        // set resize policy
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        // intialize columns
+        TableColumn<Event,String> term  = new TableColumn<Event,String>("Term");
+        TableColumn<Event,String> subject  = new TableColumn<Event,String>("Subject");
+        TableColumn<Event,String> date = new TableColumn<Event,String>("Date");
+        // set width of columns
+        term.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
+        subject.setMaxWidth( 1f * Integer.MAX_VALUE * 60 ); // 50% width
+        date.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
+        // 
+        term.setCellValueFactory(new PropertyValueFactory<Event,String>("term"));
+        subject.setCellValueFactory( new PropertyValueFactory<Event,String>("subject"));
+        date.setCellValueFactory(new PropertyValueFactory<Event,String>("date"));
+        
+        // Add columns to the table
+        table.getColumns().add(term);
+        table.getColumns().add(subject);
+        table.getColumns().add(date);
+        
+        String calendarName = Model.getInstance().calendar_name;
+        
+        // Query to get ALL Events from the selected calendar!!
+        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
+        
+        // Store the results here
+        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
+        
+         try {
+             
+             while(result.next()){
+                //initalize temporarily strings
+                 String tempTerm="";
+                 String tempProgram="";
+                 // Get term, program, Event Description and Date
+                 
+                 String eventDescript = result.getString("EventDescription");
+                 int termID = result.getInt("TermID");
+                 
+                 
+                 Date dDate=result.getDate("EventDate");
+                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+                 String eventDate = df.format(dDate);
+                 
+                 int programID = result.getInt("ProgramID");
+                 String getProgramQuery = "SELECT ProgramName FROM PROGRAMS WHERE ProgramID=" + programID + "";
+                 String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
+                 ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
+                 ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
+                 
+                 while(termResult.next())
+                 {
+                      tempTerm=termResult.getString(1);
+                     
+                      while(programResult.next())
+                        {
+                           tempProgram = programResult.getString(1);
+                        }
+                      tempTerm+=" "+tempProgram;
+                 }
+                 
+               
+                data.add(new Event(tempTerm,eventDescript,eventDate));
+             
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+         
+         
+       
+        table.getItems().setAll(data);
+        // open dialog window and save table as excel
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet =wb.createSheet(calendarName);
+        
+        XSSFRow row = sheet.createRow(1);
+        XSSFCell cell;
+
+        cell = row.createCell(1);
+        cell.setCellValue("Term");
+        cell = row.createCell(2);
+        cell.setCellValue("Subject");
+        cell = row.createCell(3);
+        cell.setCellValue("Date");
+        
+       }
     
     public void initializeCalendarGrid(){
         
