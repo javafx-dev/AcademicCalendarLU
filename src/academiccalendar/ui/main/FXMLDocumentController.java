@@ -466,7 +466,7 @@ public class FXMLDocumentController implements Initializable {
      public void exportCalendarExcel() 
     {
          
-         System.out.println("Start of Export");
+         
 
       
         
@@ -549,7 +549,7 @@ public class FXMLDocumentController implements Initializable {
         FileOutputStream out = new FileOutputStream(new File(calendarName + ".xlsx"));
         wb.write(out);
         out.close();
-        System.out.println("I think it worked");
+       
          }
          catch(Exception e) {
             e.printStackTrace();
