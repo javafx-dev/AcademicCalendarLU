@@ -123,6 +123,7 @@ public class FileContentController implements Initializable {
     {
         // export current calendar to Excel File
         mainController.exportCalendarExcel();
+        System.out.println("About to go to Export");
     }
     
     

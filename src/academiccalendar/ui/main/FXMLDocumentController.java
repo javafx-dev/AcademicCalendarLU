@@ -17,6 +17,9 @@ import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import com.sun.javaws.Main;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -73,6 +76,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -459,37 +463,31 @@ public class FXMLDocumentController implements Initializable {
        }
     
     
-     public void exportCalendarExcel()
+     public void exportCalendarExcel() 
     {
-         TableView<Event> table = new TableView<Event>();
-         ObservableList<Event> data =FXCollections.observableArrayList();  
-   
+         
+         System.out.println("Start of Export");
+
+      
         
-        double w = 500.00;
-        // set width of table view
-        table.setPrefWidth(w);
-        // set resize policy
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        // intialize columns
-        TableColumn<Event,String> term  = new TableColumn<Event,String>("Term");
-        TableColumn<Event,String> subject  = new TableColumn<Event,String>("Subject");
-        TableColumn<Event,String> date = new TableColumn<Event,String>("Date");
-        // set width of columns
-        term.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
-        subject.setMaxWidth( 1f * Integer.MAX_VALUE * 60 ); // 50% width
-        date.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
-        // 
-        term.setCellValueFactory(new PropertyValueFactory<Event,String>("term"));
-        subject.setCellValueFactory( new PropertyValueFactory<Event,String>("subject"));
-        date.setCellValueFactory(new PropertyValueFactory<Event,String>("date"));
-        
-        // Add columns to the table
-        table.getColumns().add(term);
-        table.getColumns().add(subject);
-        table.getColumns().add(date);
         
         String calendarName = Model.getInstance().calendar_name;
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet =wb.createSheet(calendarName);
         
+        XSSFRow row = sheet.createRow(1);
+        XSSFCell cell;
+        
+        cell = row.createCell(1);
+        cell.setCellValue("Term");
+        cell = row.createCell(2);
+        cell.setCellValue("Subject");
+        cell = row.createCell(3);
+        cell.setCellValue("Date");
+        
+        
+
+       
         // Query to get ALL Events from the selected calendar!!
         String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
         
@@ -497,8 +495,9 @@ public class FXMLDocumentController implements Initializable {
         ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
         
          try {
-             
+             int counter=2;
              while(result.next()){
+                 
                 //initalize temporarily strings
                  String tempTerm="";
                  String tempProgram="";
@@ -529,30 +528,33 @@ public class FXMLDocumentController implements Initializable {
                       tempTerm+=" "+tempProgram;
                  }
                  
+                row = sheet.createRow(counter);
+                cell = row.createCell(1);
+                cell.setCellValue(tempTerm);
+                cell = row.createCell(2);
+                cell.setCellValue(eventDescript);
+                cell = row.createCell(3);
+                cell.setCellValue(eventDate);
+              for (int i=0; i<3; i++){
+               sheet.autoSizeColumn(i);
+            }
                
-                data.add(new Event(tempTerm,eventDescript,eventDate));
+                counter++;
              
              }
         } catch (SQLException ex) {
              Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
         } 
-         
-         
-       
-        table.getItems().setAll(data);
-        // open dialog window and save table as excel
-        XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet =wb.createSheet(calendarName);
-        
-        XSSFRow row = sheet.createRow(1);
-        XSSFCell cell;
-
-        cell = row.createCell(1);
-        cell.setCellValue("Term");
-        cell = row.createCell(2);
-        cell.setCellValue("Subject");
-        cell = row.createCell(3);
-        cell.setCellValue("Date");
+         try{
+        FileOutputStream out = new FileOutputStream(new File(calendarName + ".xlsx"));
+        wb.write(out);
+        out.close();
+        System.out.println("I think it worked");
+         }
+         catch(Exception e) {
+            e.printStackTrace();
+         }  
+            
         
        }
     
