@@ -1,6 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #45baae;" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.menu.RulesContentController" />
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.menu.RulesContentController">
+   <children>
+      <Label alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="304.0" text="Your Rules:">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+      <TableView prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn prefWidth="111.0" text="Description" />
+          <TableColumn prefWidth="84.0" text="Term" />
+            <TableColumn prefWidth="108.0" text="Days From Start" />
+        </columns>
+      </TableView>
+      <JFXButton onMouseClicked="#newRule" prefHeight="65.0" prefWidth="305.0" text="New Rule">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton onMouseClicked="#deleteRule" prefHeight="69.0" prefWidth="307.0" text="Delete Rule">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton onMouseClicked="#addSelectedRule" prefHeight="68.0" prefWidth="303.0" text="Edit Selected Rule">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </JFXButton>
+      <JFXButton onMouseClicked="#addAllRules" prefHeight="63.0" prefWidth="310.0" text="Create Event Based on Rule">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </JFXButton>
+   </children>
+</VBox>
