@@ -8,7 +8,9 @@ package academiccalendar.ui.main.menu;
 import academiccalendar.ui.main.FXMLDocumentController;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.MouseEvent;
 
 /**
  * FXML Controller class
@@ -29,5 +31,22 @@ public class RulesContentController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+
+    @FXML
+    private void newRule(MouseEvent event) {
+        mainController.newRuleEvent();
+    }
+
+    @FXML
+    private void deleteRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addSelectedRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addAllRules(MouseEvent event) {
+    }
     
 }
