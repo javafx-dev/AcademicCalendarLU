@@ -1,3 +1,5 @@
+
+
 /*
  * @Academic Calendar Version 1.0 3/7/2017
  * @owner and @author: FrumbSoftware
@@ -9,6 +11,7 @@ import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
+import academiccalendar.ui.addrule.AddRuleController;
 import academiccalendar.ui.main.menu.FileContentController;
 import academiccalendar.ui.main.menu.RulesContentController;
 import academiccalendar.ui.main.menu.ToolsContentController;
@@ -160,6 +163,27 @@ public class FXMLDocumentController implements Initializable {
 
             AddCalendarController calendarController = loader.getController();
             calendarController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void newRuleEvent() {
+        // When the user clicks "New Rule" pop up window appears
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/addrule/add_rule.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            AddRuleController ruleController = loader.getController();
+            ruleController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -519,8 +543,7 @@ public class FXMLDocumentController implements Initializable {
     initializeMonthSelector();
     
     // Set Depths
-    JFXDepthManager.setDepth(centerArea, 1);
-    JFXDepthManager.setDepth(menuPane, 1);
+    JFXDepthManager.setDepth(scrollPane, 1);
 
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
