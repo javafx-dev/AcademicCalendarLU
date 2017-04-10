@@ -9,7 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.menu.FileContentController">
+
    <children>
       <JFXButton onMouseClicked="#newCalendar" prefHeight="63.0" prefWidth="304.0" text="New Calendar">
          <font>
@@ -55,7 +57,7 @@
                <font>
                   <Font size="12.0" />
                </font></JFXButton>
-            <JFXButton prefHeight="54.0" prefWidth="243.0" text="to Excel">
+            <JFXButton onMouseClicked="#excelBtn" prefHeight="67.0" prefWidth="92.0" text="to Excel">
                <font>
                   <Font size="12.0" />
                </font></JFXButton>

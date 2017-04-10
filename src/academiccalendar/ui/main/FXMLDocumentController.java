@@ -20,6 +20,9 @@ import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
 import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
 import com.sun.javaws.Main;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -74,6 +77,12 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 
 public class FXMLDocumentController implements Initializable {
@@ -388,7 +397,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    public void exportCalendar()
+    public void exportCalendarPDF()
     {
          TableView<Event> table = new TableView<Event>();
          ObservableList<Event> data =FXCollections.observableArrayList();  
@@ -469,7 +478,7 @@ public class FXMLDocumentController implements Initializable {
          
        
         table.getItems().setAll(data);
-        
+        // open dialog window and export table as pdf
         PrinterJob job = PrinterJob.createPrinterJob();
         if(job != null){
           job.printPage(table);
@@ -478,6 +487,100 @@ public class FXMLDocumentController implements Initializable {
        }
     
     
+     public void exportCalendarExcel() 
+    {
+         
+         
+
+      
+        
+        
+        String calendarName = Model.getInstance().calendar_name;
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFSheet sheet =wb.createSheet(calendarName);
+        
+        XSSFRow row = sheet.createRow(1);
+        XSSFCell cell;
+        
+        cell = row.createCell(1);
+        cell.setCellValue("Term");
+        cell = row.createCell(2);
+        cell.setCellValue("Subject");
+        cell = row.createCell(3);
+        cell.setCellValue("Date");
+        
+        
+
+       
+        // Query to get ALL Events from the selected calendar!!
+        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
+        
+        // Store the results here
+        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
+        
+         try {
+             int counter=2;
+             while(result.next()){
+                 
+                //initalize temporarily strings
+                 String tempTerm="";
+                 String tempProgram="";
+                 // Get term, program, Event Description and Date
+                 
+                 String eventDescript = result.getString("EventDescription");
+                 int termID = result.getInt("TermID");
+                 
+                 
+                 Date dDate=result.getDate("EventDate");
+                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+                 String eventDate = df.format(dDate);
+                 
+                 int programID = result.getInt("ProgramID");
+                 String getProgramQuery = "SELECT ProgramName FROM PROGRAMS WHERE ProgramID=" + programID + "";
+                 String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
+                 ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
+                 ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
+                 
+                 while(termResult.next())
+                 {
+                      tempTerm=termResult.getString(1);
+                     
+                      while(programResult.next())
+                        {
+                           tempProgram = programResult.getString(1);
+                        }
+                      tempTerm+=" "+tempProgram;
+                 }
+                 
+                row = sheet.createRow(counter);
+                cell = row.createCell(1);
+                cell.setCellValue(tempTerm);
+                cell = row.createCell(2);
+                cell.setCellValue(eventDescript);
+                cell = row.createCell(3);
+                cell.setCellValue(eventDate);
+              for (int i=0; i<3; i++){
+               sheet.autoSizeColumn(i);
+            }
+               
+                counter++;
+             
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+         try{
+        FileOutputStream out = new FileOutputStream(new File(calendarName + ".xlsx"));
+        wb.write(out);
+        out.close();
+       
+         }
+         catch(Exception e) {
+            e.printStackTrace();
+         }  
+            
+        
+       }
     
     public void initializeCalendarGrid(){
         

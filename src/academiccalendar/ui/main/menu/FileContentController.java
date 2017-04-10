@@ -116,7 +116,15 @@ public class FileContentController implements Initializable {
     @FXML
     private void pdfBtn(MouseEvent event) {
         // Export current;y open calendar
-        mainController.exportCalendar();
+        mainController.exportCalendarPDF();
     }
+    @FXML 
+    private void excelBtn(MouseEvent event)
+    {
+        // export current calendar to Excel File
+        mainController.exportCalendarExcel();
+        System.out.println("About to go to Export");
+    }
+    
     
 }
