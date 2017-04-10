@@ -23,6 +23,15 @@
          <center>
             <VBox fx:id="centerArea" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="875.0" BorderPane.alignment="CENTER">
                <children>
+                  <StackPane>
+                     <children>
+                        <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" textAlignment="CENTER">
+                           <font>
+                              <Font size="21.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
                   <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="694.0" prefWidth="880.0">
                      <content>
                         <VBox prefHeight="698.0" prefWidth="865.0">
@@ -51,15 +60,6 @@
                         </VBox>
                      </content>
                   </ScrollPane>
-                  <StackPane>
-                     <children>
-                        <Label fx:id="monthLabel" alignment="CENTER" styleClass="month-label" textAlignment="CENTER">
-                           <font>
-                              <Font size="21.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </StackPane>
                </children>
                <BorderPane.margin>
                   <Insets />
@@ -71,15 +71,15 @@
                <children>
                   <HBox fx:id="menuNode" prefHeight="58.0" prefWidth="304.0">
                      <children>
-                        <JFXButton buttonType="RAISED" onMouseClicked="#fileBtn" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #45baae;" text="File" HBox.hgrow="ALWAYS">
+                        <JFXButton buttonType="RAISED" onMouseClicked="#fileBtn" prefHeight="200.0" prefWidth="200.0" text="File" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font></JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onMouseClicked="#toolsBtn" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #72d3c9;" text="Tools" HBox.hgrow="ALWAYS">
+                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onMouseClicked="#toolsBtn" prefHeight="200.0" prefWidth="200.0" text="Tools" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font></JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="62.0" layoutY="10.0" onMouseClicked="#rulesBtn" prefHeight="68.0" prefWidth="187.0" style="-fx-background-color: #45baae;" text="Rules" HBox.hgrow="ALWAYS">
+                        <JFXButton buttonType="RAISED" layoutX="62.0" layoutY="10.0" onMouseClicked="#rulesBtn" prefHeight="68.0" prefWidth="187.0" text="Rules" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font></JFXButton>
