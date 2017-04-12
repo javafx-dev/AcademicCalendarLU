@@ -9,56 +9,68 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #45baae;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.menu.FileContentController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.menu.FileContentController">
+
    <children>
-      <JFXButton onMouseClicked="#newCalendar" prefHeight="59.0" prefWidth="184.0" text="New Calendar">
+      <JFXButton onMouseClicked="#newCalendar" prefHeight="37.0" prefWidth="265.0" text="Create New Calendar">
          <font>
-            <Font size="13.0" />
-         </font></JFXButton>
-      <Label alignment="CENTER" prefHeight="27.0" prefWidth="172.0" text="Your Calendars">
+            <Font size="12.0" />
+         </font>
          <VBox.margin>
-            <Insets left="5.0" />
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </JFXButton>
+      <Label alignment="BOTTOM_CENTER" prefHeight="39.0" prefWidth="304.0" text="Your Calendars:">
+         <VBox.margin>
+            <Insets />
          </VBox.margin>
          <font>
-            <Font size="13.0" />
+            <Font size="12.0" />
          </font></Label>
       <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
          <columns>
-            <TableColumn fx:id="nameCol" prefWidth="168.0" text="Name" />
-            <TableColumn fx:id="startCol" minWidth="5.0" prefWidth="62.0" text="Fall Sem" />
-            <TableColumn fx:id="endCol" prefWidth="63.0" text="Spr Sem" />
+            <TableColumn fx:id="nameCol" prefWidth="114.0" text="Name" />
+            <TableColumn fx:id="startCol" minWidth="5.0" prefWidth="79.0" text="Fall Sem" />
+            <TableColumn fx:id="endCol" prefWidth="100.0" text="Spr Sem" />
          </columns>
          <VBox.margin>
-            <Insets left="5.0" right="5.0" />
+            <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </TableView>
-      <HBox prefHeight="47.0" prefWidth="151.0">
+      <HBox prefHeight="34.0" prefWidth="270.0">
          <children>
-            <JFXButton prefHeight="53.0" prefWidth="98.0" text="Delete">
+            <JFXButton prefHeight="59.0" prefWidth="169.0" text="Delete">
                <font>
-                  <Font size="13.0" />
+                  <Font size="12.0" />
                </font></JFXButton>
-            <JFXButton onMouseClicked="#loadCalendar" prefHeight="70.0" prefWidth="95.0" text="Open">
+            <JFXButton onMouseClicked="#loadCalendar" prefHeight="64.0" prefWidth="154.0" text="Open">
                <font>
-                  <Font size="13.0" />
+                  <Font size="12.0" />
                </font></JFXButton>
          </children>
+         <VBox.margin>
+            <Insets left="10.0" right="10.0" />
+         </VBox.margin>
       </HBox>
-      <Label alignment="CENTER" prefHeight="19.0" prefWidth="183.0" text="Export Options:">
+      <Label alignment="CENTER" prefHeight="43.0" prefWidth="304.0" text="Export Options:">
          <font>
-            <Font size="13.0" />
+            <Font size="12.0" />
          </font></Label>
-      <HBox prefHeight="46.0" prefWidth="151.0">
-         <children>
-            <JFXButton onMouseClicked="#pdfBtn" prefHeight="56.0" prefWidth="90.0" text="to PDF">
-               <font>
-                  <Font size="13.0" />
-               </font></JFXButton>
-            <JFXButton onMouseClicked="#excelBtn" prefHeight="67.0" prefWidth="92.0" text="to Excel">
-               <font>
-                  <Font size="13.0" />
-               </font></JFXButton>
-         </children>
-      </HBox>
+      <JFXButton onMouseClicked="#pdfBtn" prefHeight="37.0" prefWidth="261.0" text="Export Calendar to PDF">
+         <font>
+            <Font size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </JFXButton>
+      <JFXButton onMouseClicked="#excelBtn" prefHeight="36.0" prefWidth="262.0" text="Export Calendar to Excel">
+         <font>
+            <Font size="12.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="20.0" right="20.0" top="20.0" />
+         </VBox.margin>
+      </JFXButton>
    </children>
 </VBox>
