@@ -12,16 +12,10 @@ import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
 import academiccalendar.ui.addrule.AddRuleController;
-import academiccalendar.ui.main.menu.FileContentController;
-import academiccalendar.ui.main.menu.RulesContentController;
-import academiccalendar.ui.main.menu.ToolsContentController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import com.sun.javaws.Main;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -31,30 +25,21 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.print.PrinterJob;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -65,21 +50,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -112,16 +91,26 @@ public class FXMLDocumentController implements Initializable {
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
-    //--------------------------------------------------------------------
-    @FXML
-    private HBox menuNode;
-    @FXML
-    private Pane menuPane;
-    @FXML
-    private VBox vPane;
+    
     @FXML
     private ScrollPane scrollPane;
     
+    // Calendar Table Fields --------------------------------------------
+    ObservableList<academiccalendar.ui.main.Calendar> list = FXCollections.observableArrayList();    
+    
+    private TableView<academiccalendar.ui.main.Calendar> tableView;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> nameCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> startCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> endCol;
+    @FXML
+    private TableView<academiccalendar.ui.main.Calendar> calendarTableView;
+    @FXML
+    private TableView<academiccalendar.ui.main.Calendar> ruleTableView;
+    
+    // ------------------------------------------------------------------
     
     // Functions
     private void editEvent(VBox day) {
@@ -636,7 +625,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {    
         
@@ -645,6 +633,7 @@ public class FXMLDocumentController implements Initializable {
     initializeCalendarWeekdayHeader();
     initializeMonthSelector();
     
+    
     // Set Depths
     JFXDepthManager.setDepth(scrollPane, 1);
 
@@ -652,58 +641,98 @@ public class FXMLDocumentController implements Initializable {
     databaseHandler = new DBHandler();
     //****************************************************
     
+    // Initialize tables
+    initCol();
+    loadData();
+    
     }    
     
-    // Below is for switching between menu views
-    @FXML
-    private void fileBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
+    private void initCol() {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startYear"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endYear"));
+    }
+
+     private void loadData() { 
+        
+        String qu = "SELECT * FROM CALENDARS";
+        ResultSet result = databaseHandler.executeQuery(qu);
+        
         try {
-            
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/FileContent.fxml"));
-            VBox fileMenu = (VBox) loader.load();
-            menuPane.getChildren().add(fileMenu);
-            
-            FileContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
+            while (result.next()) {
+                String calendarName = result.getString("CalendarName");
+                String startYear = Integer.toString(result.getInt("StartYear"));
+                String endYear = Integer.toString(result.getInt("EndYear"));
+                
+                System.out.println(startYear);
+                
+                list.add(new academiccalendar.ui.main.Calendar(calendarName, startYear, endYear));
+               
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        calendarTableView.getItems().setAll(list);
+    }
+    
+    @FXML
+    private void newCalendar(MouseEvent event) {
+        newCalendarEvent();
     }
 
     @FXML
-    private void toolsBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/ToolsContent.fxml"));
-            VBox toolsMenu = (VBox) loader.load();
-            menuPane.getChildren().add(toolsMenu);
-            
-            ToolsContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void loadCalendar(MouseEvent event) {
+        // Get selected calendar from table
+        academiccalendar.ui.main.Calendar cal = calendarTableView.getSelectionModel().getSelectedItem();
+        Model.getInstance().calendar_name = cal.getName();
+        Model.getInstance().calendar_start = Integer.parseInt(cal.getStartYear());
+        Model.getInstance().calendar_end = Integer.parseInt(cal.getEndYear());
+        
+        // Load the calendar in the main window
+        calendarGenerate();
     }
 
     @FXML
-    private void rulesBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/RulesContent.fxml"));
-            VBox rulesMenu = (VBox) loader.load();
-            menuPane.getChildren().add(rulesMenu);
-            
-            RulesContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void pdfBtn(MouseEvent event) {
+        exportCalendarPDF();
+    }
+
+    @FXML
+    private void excelBtn(MouseEvent event) {
+        exportCalendarExcel();
+    }
+
+    @FXML
+    private void newRule(MouseEvent event) {
+        newRuleEvent();
+    }
+
+    @FXML
+    private void deleteRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addSelectedRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addAllRules(MouseEvent event) {
+    }
+
+    @FXML
+    private void fileTabSelect(javafx.event.Event event) {
+       // Load calendars
+    }
+
+    @FXML
+    private void toolsTabSelect(javafx.event.Event event) {
+        // Load colors
+    }
+
+    @FXML
+    private void rulesTabSelect(javafx.event.Event event) {
+        // Load rules
+        
     }
 }
