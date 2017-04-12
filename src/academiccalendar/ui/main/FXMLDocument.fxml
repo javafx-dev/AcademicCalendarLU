@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXColorPicker?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTabPane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -20,32 +24,6 @@
 <AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
       <BorderPane layoutX="350.0" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <left>
-            <VBox fx:id="vPane" prefHeight="706.0" prefWidth="310.0" BorderPane.alignment="CENTER">
-               <children>
-                  <HBox fx:id="menuNode" prefHeight="38.0" prefWidth="300.0">
-                     <children>
-                        <JFXButton buttonType="RAISED" onMouseClicked="#fileBtn" prefHeight="200.0" prefWidth="200.0" text="File" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="14.0" />
-                           </font></JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="10.0" onMouseClicked="#toolsBtn" prefHeight="200.0" prefWidth="200.0" text="Tools" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="14.0" />
-                           </font></JFXButton>
-                        <JFXButton buttonType="RAISED" layoutX="62.0" layoutY="10.0" onMouseClicked="#rulesBtn" prefHeight="68.0" prefWidth="187.0" text="Rules" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font size="14.0" />
-                           </font></JFXButton>
-                     </children>
-                  </HBox>
-                  <Pane fx:id="menuPane" prefHeight="661.0" prefWidth="250.0" style="-fx-background-color: #efefef;" />
-               </children>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
-            </VBox>
-         </left>
          <right>
             <VBox prefHeight="800.0" prefWidth="184.0" style="-fx-background-color: ecedf7;" BorderPane.alignment="CENTER">
                <children>
@@ -109,6 +87,201 @@
                </children>
             </AnchorPane>
          </center>
+         <left>
+            <JFXTabPane prefHeight="800.0" prefWidth="304.0" BorderPane.alignment="CENTER">
+               <tabs>
+                  <Tab onSelectionChanged="#fileTabSelect" text="File">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                                 <children>
+                                    <JFXButton onMouseClicked="#newCalendar" prefHeight="37.0" prefWidth="265.0" text="Create New Calendar">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <Label alignment="BOTTOM_CENTER" prefHeight="39.0" prefWidth="304.0" text="Your Calendars:">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="calendarTableView" prefHeight="200.0" prefWidth="200.0">
+                                       <columns>
+                                          <TableColumn fx:id="nameCol" prefWidth="114.0" text="Name" />
+                                          <TableColumn fx:id="startCol" minWidth="5.0" prefWidth="79.0" text="Fall Sem" />
+                                          <TableColumn fx:id="endCol" prefWidth="100.0" text="Spr Sem" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </TableView>
+                                    <HBox prefHeight="34.0" prefWidth="270.0">
+                                       <children>
+                                          <JFXButton prefHeight="59.0" prefWidth="169.0" text="Delete">
+                                             <font>
+                                                <Font size="12.0" />
+                                             </font>
+                                          </JFXButton>
+                                          <JFXButton onMouseClicked="#loadCalendar" prefHeight="64.0" prefWidth="154.0" text="Open">
+                                             <font>
+                                                <Font size="12.0" />
+                                             </font>
+                                          </JFXButton>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                    <Label alignment="CENTER" prefHeight="43.0" prefWidth="304.0" text="Export Options:">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXButton onMouseClicked="#pdfBtn" prefHeight="37.0" prefWidth="261.0" text="Export Calendar to PDF">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onMouseClicked="#excelBtn" prefHeight="36.0" prefWidth="262.0" text="Export Calendar to Excel">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="20.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab onSelectionChanged="#toolsTabSelect" text="Tools">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                                 <children>
+                                    <Label alignment="CENTER" prefHeight="32.0" prefWidth="316.0" text="Color Manager" />
+                                    <HBox prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All SEM" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <HBox prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All QTR" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="10.0" layoutY="85.0" prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All MBA" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="10.0" layoutY="128.0" prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All Half" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="10.0" layoutY="171.0" prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All Campus" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <HBox layoutX="10.0" layoutY="214.0" prefHeight="43.0" prefWidth="304.0">
+                                       <children>
+                                          <Label text="All Holiday" />
+                                          <JFXColorPicker />
+                                       </children>
+                                    </HBox>
+                                    <JFXButton prefHeight="44.0" prefWidth="328.0" text="New Term">
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab onSelectionChanged="#rulesTabSelect" text="Rules">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="235.0">
+                           <children>
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                                 <children>
+                                    <Label alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="304.0" text="Your Rules:">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                    </Label>
+                                    <TableView fx:id="ruleTableView" prefHeight="200.0" prefWidth="200.0">
+                                       <columns>
+                                          <TableColumn prefWidth="111.0" text="Description" />
+                                          <TableColumn prefWidth="84.0" text="Term" />
+                                          <TableColumn prefWidth="108.0" text="Days From Start" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets left="10.0" right="10.0" />
+                                       </VBox.margin>
+                                    </TableView>
+                                    <JFXButton onMouseClicked="#newRule" prefHeight="44.0" prefWidth="329.0" text="New Rule">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="10.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onMouseClicked="#deleteRule" prefHeight="44.0" prefWidth="329.0" text="Delete Rule">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="10.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onMouseClicked="#addSelectedRule" prefHeight="44.0" prefWidth="342.0" text="Edit Selected Rule">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="10.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                    <JFXButton onMouseClicked="#addAllRules" prefHeight="44.0" prefWidth="314.0" text="Create Event Based on Rule">
+                                       <font>
+                                          <Font size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="20.0" right="20.0" top="10.0" />
+                                       </VBox.margin>
+                                    </JFXButton>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+               </tabs>
+            </JFXTabPane>
+         </left>
       </BorderPane>
    </children>
 </AnchorPane>
