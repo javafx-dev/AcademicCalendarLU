@@ -12,11 +12,14 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -63,6 +66,18 @@ public class AddRuleController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        ObservableList<String> terms = 
+        FXCollections.observableArrayList(
+           "FA SEM","SP SEM", "SU SEM", 
+           "FA I MBA", "FA II MBA", "SP I MBA", "SP II MBA", "SU MBA",
+           "FA QTR", "WIN QTR", "SP QTR", "SU QTR",
+           "FA 1st Half", "FA 2nd Half", "SP 1st Half", "SP 2nd Half",
+           "Campus General", "Campus STC", "Campus BV",
+           "Holiday"
+        );
+        
+        termSelect.setItems(terms);
         
         // ******** Code below is for Draggable windows **********    
         
@@ -114,6 +129,24 @@ public class AddRuleController implements Initializable {
     @FXML
     private void save(MouseEvent event) {
         
+         
+        if(eventDescript.getText().isEmpty()||termSelect.getSelectionModel().isEmpty()
+                ||daysFromStart.getText().isEmpty()){
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Please fill out all fields");
+            alertMessage.showAndWait();
+            return;
+        }
+        
+        // Get fields for rule
+        String eventDescription = eventDescript.getText();
+        int days = Integer.parseInt(daysFromStart.getText());
+        String term = termSelect.getValue();
+        
+        // Close the stage
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
