@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="332.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
       <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
          <children>
@@ -43,7 +43,7 @@
             </Label>
          </children>
       </HBox>
-      <VBox layoutX="10.0" layoutY="57.0" prefHeight="222.0" prefWidth="320.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.0">
+      <VBox layoutX="10.0" layoutY="57.0" prefHeight="140.0" prefWidth="320.0" spacing="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="57.0">
          <children>
             <JFXTextField fx:id="subject" focusColor="#4d4d4d" labelFloat="true" prefHeight="40.0" prefWidth="337.0" promptText="Subject">
                <font>
@@ -51,8 +51,6 @@
                </font>
             </JFXTextField>
             <JFXComboBox fx:id="termSelect" focusColor="#4d4d4d" layoutX="10.0" layoutY="102.0" prefHeight="25.0" prefWidth="166.0" promptText="Term" />
-            <JFXComboBox fx:id="programSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Program" />
-            <JFXComboBox fx:id="typeSelect" focusColor="#4d4d4d" prefHeight="25.0" prefWidth="166.0" promptText="Type" />
             <JFXDatePicker fx:id="date" promptText="Date of Event" />
             <HBox prefHeight="100.0" prefWidth="200.0" />
          </children>

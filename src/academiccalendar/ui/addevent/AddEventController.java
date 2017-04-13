@@ -65,11 +65,6 @@ public class AddEventController implements Initializable {
     @FXML
     private JFXTextField subject;
     
-    // Combo boxes
-    @FXML
-    private JFXComboBox<String> programSelect;
-    @FXML
-    private JFXComboBox<String> typeSelect;
     @FXML
     private JFXComboBox<String> termSelect;
     
@@ -110,8 +105,7 @@ public class AddEventController implements Initializable {
         // Define date format
         DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
         
-        if(subject.getText().isEmpty()||programSelect.getSelectionModel().isEmpty()
-                ||typeSelect.getSelectionModel().isEmpty()||termSelect.getSelectionModel().isEmpty()
+        if(subject.getText().isEmpty()||termSelect.getSelectionModel().isEmpty()
                 ||date.getValue() == null){
             Alert alertMessage = new Alert(Alert.AlertType.ERROR);
             alertMessage.setHeaderText(null);
@@ -127,8 +121,8 @@ public class AddEventController implements Initializable {
         String eventSubject = subject.getText();
         
         // Get program, type, and term
-        String program = programSelect.getValue();
-        String type = typeSelect.getValue();
+        String program = "program";
+        String type = "term";
         String term = termSelect.getValue();
         
         int chosenTermID = 0;
@@ -282,13 +276,15 @@ public class AddEventController implements Initializable {
         
         autofillDatePicker();
         
+        // Note: Client says she only wants terms, and the term determines the program.
+        /*
             ObservableList<String> types = 
         FXCollections.observableArrayList(
            "Academic",
            "Holiday",
            "Sports",
            "Campus"      
-        );
+        ); 
             
            ObservableList<String> programs = 
         FXCollections.observableArrayList(
@@ -296,7 +292,7 @@ public class AddEventController implements Initializable {
            "Graduate (MBA)",
            "Online",
            "Accelerate Program"      
-        );
+        ); */
            
            ObservableList<String> terms = 
         FXCollections.observableArrayList(
@@ -310,8 +306,8 @@ public class AddEventController implements Initializable {
            
           
             
-        typeSelect.setItems(types);
-        programSelect.setItems(programs);
+        //typeSelect.setItems(types);
+        //programSelect.setItems(programs);
         termSelect.setItems(terms);
         
         // ************* Everything below is for Draggable Window ********
