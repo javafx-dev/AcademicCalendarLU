@@ -98,8 +98,9 @@ public class FXMLDocumentController implements Initializable {
     // Calendar Table Fields --------------------------------------------
     ObservableList<academiccalendar.ui.main.Calendar> list = FXCollections.observableArrayList();    
     
+
     ObservableList<academiccalendar.ui.main.Rule> listOfRules = FXCollections.observableArrayList();
-    
+
     private TableView<academiccalendar.ui.main.Calendar> tableView;
     @FXML
     private TableColumn<academiccalendar.ui.main.Calendar, String> nameCol;
@@ -110,6 +111,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private TableView<academiccalendar.ui.main.Calendar> calendarTableView;
     @FXML
+
     private TableView<academiccalendar.ui.main.Rule> ruleTableView;
     
     // KARIS ---> are the following lines correct? I don't think this is right to do
@@ -122,6 +124,7 @@ public class FXMLDocumentController implements Initializable {
     private TableColumn<academiccalendar.ui.main.Rule, String> daysCol;
     */
     
+
     // ------------------------------------------------------------------
     
     // Functions
@@ -178,6 +181,27 @@ public class FXMLDocumentController implements Initializable {
             stage.setScene(scene);
             stage.show();
             
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void newRuleEvent() {
+        // When the user clicks "New Rule" pop up window appears
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/addrule/add_rule.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            AddRuleController ruleController = loader.getController();
+            ruleController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -702,15 +726,19 @@ public class FXMLDocumentController implements Initializable {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         startCol.setCellValueFactory(new PropertyValueFactory<>("startYear"));
         endCol.setCellValueFactory(new PropertyValueFactory<>("endYear"));
+
         
         //descriptionCol.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
         //termCol.setCellValueFactory(new PropertyValueFactory<>("termName"));
         //daysCol.setCellValueFactory(new PropertyValueFactory<>("daysFromStart"));
+
     }
 
      private void loadData() { 
         
+
         //Load all calendars into the Calendar View Table
+
         String qu = "SELECT * FROM CALENDARS";
         ResultSet result = databaseHandler.executeQuery(qu);
         
@@ -719,11 +747,13 @@ public class FXMLDocumentController implements Initializable {
                 String calendarName = result.getString("CalendarName");
                 String startYear = Integer.toString(result.getInt("StartYear"));
                 String endYear = Integer.toString(result.getInt("EndYear"));
+
                 String startingDate = result.getString("StartDate");
                 
                 System.out.println(startYear);
                 
                 list.add(new academiccalendar.ui.main.Calendar(calendarName, startYear, endYear, startingDate));
+
                
             }
         } catch (SQLException ex) {
@@ -731,6 +761,7 @@ public class FXMLDocumentController implements Initializable {
         }
         
         calendarTableView.getItems().setAll(list);
+
         
         //********************************************************************************************************
         
@@ -754,12 +785,13 @@ public class FXMLDocumentController implements Initializable {
         }
         
         ruleTableView.getItems().setAll(listOfRules);
-        
+
     }
     
     @FXML
     private void newCalendar(MouseEvent event) {
         newCalendarEvent();
+
     }
 
     @FXML

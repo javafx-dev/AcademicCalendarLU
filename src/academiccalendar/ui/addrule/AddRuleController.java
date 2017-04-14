@@ -34,7 +34,10 @@ public class AddRuleController implements Initializable {
     
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
+
     DBHandler databaseHandler = new DBHandler();
+
+
     //--------------------------------------------------------------------
  
      // Controllers -------------------------------------------------------
@@ -144,11 +147,12 @@ public class AddRuleController implements Initializable {
         int days = Integer.parseInt(daysFromStart.getText());
         String term = termSelect.getValue();
         
+
         //*********************************************************************
         //Save rule into the database
         saveRuleInDatabase(eventDescription, term, days);
         //*********************************************************************
-        
+
         // Close the stage
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
@@ -160,6 +164,7 @@ public class AddRuleController implements Initializable {
         stage.close();
     }
     
+
     
     public void saveRuleInDatabase(String eventDescription, String termName, int daysFromStart)
     {
@@ -192,5 +197,5 @@ public class AddRuleController implements Initializable {
         }
         
     }
-    
+
 }

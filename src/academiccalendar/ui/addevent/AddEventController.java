@@ -119,7 +119,7 @@ public class AddEventController implements Initializable {
         
         // Subject for the event
         String eventSubject = subject.getText();
-        
+
         // Get term that was selected by the user
         String term = termSelect.getValue();
         
