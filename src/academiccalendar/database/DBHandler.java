@@ -11,6 +11,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -55,16 +58,27 @@ public class DBHandler {
         else {
             
             createCalendarTable();
-            //createDatesTable();  //it is commented out because we may not need this table anymore
             createTermsTable();
-            createProgramsTable();
-            createEventTypesTable();
+            //createDatesTable();  //it is commented out because we may not need this table anymore
+            //createProgramsTable();  //it is commented out because we may not need this table anymore
+            //createEventTypesTable();   //it is commented out because we may not need this table anymore
             createEventsTable();
+            createRulesTable();
         
             insertDefaultValuesIntoTables();
             printAllDefaultRecords();
             tablesAlreadyExist = true;
             System.out.println("the static variable tablesAlreadyExist was changed to true. THEREFORE, NO other table should try to be created");
+            
+            // the following lines are just here to test the correct functionality of the getListOfTerms method
+            try {
+                ArrayList<String> auxList = this.getListOfTerms();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // the following lines are just here to test the correct functionality of the getTermID method
+            int getIDTest = this.getTermID("FA QTR");
         }
         
         
@@ -100,7 +114,8 @@ public class DBHandler {
                 String query1 = "CREATE TABLE " + TableName + "("
                         + "CalendarName varchar(200) primary key not null,\n"
                         + "StartYear integer,\n"
-                        + "EndYear integer"
+                        + "EndYear integer,\n"
+                        + "StartDate date"
                         //+ "EndYear integer,\n"
                         //+ "constraint " + TableName + "_PK primary key ('calendarName'),\n"
                         + ")";
@@ -113,6 +128,7 @@ public class DBHandler {
         }
     }
     
+    /*
     //Create DATES Table
     void createDatesTable(){
         
@@ -141,7 +157,7 @@ public class DBHandler {
         } finally {
         }
     }
-    
+    */
     
     //Create TERMS Table
     void createTermsTable(){
@@ -171,6 +187,7 @@ public class DBHandler {
         }
     }
     
+    /*
     //Create PROGRAMS Table
     void createProgramsTable(){
         
@@ -225,6 +242,39 @@ public class DBHandler {
         } finally {
         }
     }
+    */
+    
+    
+    //Create RULES Table
+    void createRulesTable(){
+        
+        String TableName = "RULES";
+        try {
+            stmt = conn.createStatement();
+            
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
+            
+            if (listOfTables.next()) {
+                System.out.println("Table " + TableName + " already exists. Ready to go!");
+            }
+            else {
+                String query1 = "CREATE TABLE " + TableName + "("
+                        + "EventDescription varchar(200) not null,\n"
+                        + "TermID integer not null,\n"
+                        + "DaysFromStart integer,\n"
+                        + "constraint " + TableName + "_PK primary key(EventDescription, TermID)"
+                        //+ "constraint " + TableName + "_FK1 foreign key (TermID) references TERMS(TermID),\n"
+                        //+ "constraint " + TableName + "_FK2 foreign key (EventDescription) references EVENTS(EventDescription)"
+                        + ")";
+                stmt.execute(query1);
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage() + "--- setupDatabase");
+        } finally {
+        }
+    }
     
     
     //Create EVENTS Table
@@ -242,19 +292,23 @@ public class DBHandler {
             }
             else {
                 String query1 = "CREATE TABLE " + TableName + "("
-                        + "EventTypeID integer not null,\n"
-                        + "TermID integer not null,\n"
-                        + "ProgramID integer not null,\n"
+                        //+ "EventTypeID integer not null,\n"
+                        //+ "ProgramID integer not null,\n"
                         + "EventDescription varchar(200) not null,\n"
                         + "EventDate date not null,\n"
+                        + "TermID integer not null,\n"
                         + "CalendarName varchar(200) not null,\n"
-                        + "constraint " + TableName + "_PK primary key(EventTypeID, TermID, ProgramID, EventDescription, EventDate, CalendarName),\n"
-                        + "constraint " + TableName + "_FK1 foreign key (EventTypeID) references EVENT_TYPES(EventTypeID),\n"
-                        + "constraint " + TableName + "_FK2 foreign key (TermID) references TERMS(TermID),\n"
-                        + "constraint " + TableName + "_FK3 foreign key (ProgramID) references PROGRAMS(ProgramID),\n"
-                        + "constraint " + TableName + "_FK4 foreign key (CalendarName) references CALENDARS(CalendarName)"
-                        //+ "constraint " + TableName + "_FK4 foreign key (EventDate) references DATES(DateInCalendar)"
+                        + "constraint " + TableName + "_PK primary key(EventDescription, EventDate, TermID, CalendarName),\n"
+                        + "constraint " + TableName + "_FK1 foreign key (TermID) references TERMS(TermID),\n"
+                        + "constraint " + TableName + "_FK2 foreign key (CalendarName) references CALENDARS(CalendarName)"
                         + ")";
+                        //+ "constraint " + TableName + "_PK primary key(EventTypeID, TermID, ProgramID, EventDescription, EventDate, CalendarName),\n"
+                        //+ "constraint " + TableName + "_FK1 foreign key (EventTypeID) references EVENT_TYPES(EventTypeID),\n"
+                        //+ "constraint " + TableName + "_FK2 foreign key (TermID) references TERMS(TermID),\n"
+                        //+ "constraint " + TableName + "_FK3 foreign key (ProgramID) references PROGRAMS(ProgramID),\n"
+                        //+ "constraint " + TableName + "_FK4 foreign key (CalendarName) references CALENDARS(CalendarName)"
+                        //+ "constraint " + TableName + "_FK4 foreign key (EventDate) references DATES(DateInCalendar)"
+                        //+ ")";
                 stmt.execute(query1);
             }
         }
@@ -289,7 +343,85 @@ public class DBHandler {
     //Populate the tables TERMS, PROGRAMS, and EVENT_TYPES in the database with default values
     void insertDefaultValuesIntoTables() {
         
-        String TableName = "EVENT_TYPES";
+        String TableName = "TERMS";
+        try {
+            stmt = conn.createStatement();
+            
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
+            
+            if (listOfTables.next()) {
+                
+                boolean dataExistsInTable = checkIfTableIsEmpty(TableName);
+                if (!dataExistsInTable)
+                {
+                    int id = 1;
+                    for(int i=0; i < terms.length; i++)
+                    {
+                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"')";
+                        stmt.execute(query2);
+                        id++;
+                    }
+                    System.out.println("Default values SUCCESSFULLY inserted Table " + TableName + "!!!");
+                }
+                else {
+                    System.out.println("Default values already exist in Table " + TableName);
+                }
+                
+            }
+            else {
+                System.out.println("Table " + TableName + " does not exist");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage() + "--- setupDatabase");
+        } finally {
+        }
+        
+        
+        
+        TableName = "CALENDARS";
+        try {
+            stmt = conn.createStatement();
+            
+            DatabaseMetaData dbm = conn.getMetaData();
+            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
+            
+            if (listOfTables.next()) {
+                
+                boolean dataExistsInTable = checkIfTableIsEmpty(TableName);
+                if (!dataExistsInTable)
+                {
+                    /*
+                    int id = 1;
+                    for(int i=0; i < terms.length; i++)
+                    {
+                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"')";
+                        stmt.execute(query2);
+                        id++;
+                    }
+                    */
+                    String query2 = "INSERT INTO " + TableName + " VALUES('Test Name', 2017, 2018, '2017-08-01')";
+                    stmt.execute(query2);
+                    System.out.println("Default values SUCCESSFULLY inserted Table " + TableName + "!!!");
+                }
+                else {
+                    System.out.println("Default values already exist in Table " + TableName);
+                }
+                
+            }
+            else {
+                System.out.println("Table " + TableName + " does not exist");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println(e.getMessage() + "--- setupDatabase");
+        } finally {
+        }
+        
+        //we will get rid of these lines later
+        /*
+        TableName = "EVENT_TYPES";
         try {
             stmt = conn.createStatement();
             
@@ -357,83 +489,7 @@ public class DBHandler {
             System.err.println(e.getMessage() + "--- setupDatabase");
         } finally {
         }
-        
-        TableName = "TERMS";
-        try {
-            stmt = conn.createStatement();
-            
-            DatabaseMetaData dbm = conn.getMetaData();
-            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
-            
-            if (listOfTables.next()) {
-                
-                boolean dataExistsInTable = checkIfTableIsEmpty(TableName);
-                if (!dataExistsInTable)
-                {
-                    int id = 1;
-                    for(int i=0; i < terms.length; i++)
-                    {
-                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"')";
-                        stmt.execute(query2);
-                        id++;
-                    }
-                    System.out.println("Default values SUCCESSFULLY inserted Table " + TableName + "!!!");
-                }
-                else {
-                    System.out.println("Default values already exist in Table " + TableName);
-                }
-                
-            }
-            else {
-                System.out.println("Table " + TableName + " does not exist");
-            }
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage() + "--- setupDatabase");
-        } finally {
-        }
-        
-        
-        
-        TableName = "CALENDARS";
-        try {
-            stmt = conn.createStatement();
-            
-            DatabaseMetaData dbm = conn.getMetaData();
-            ResultSet listOfTables = dbm.getTables(null,null, TableName.toUpperCase(), null);
-            
-            if (listOfTables.next()) {
-                
-                boolean dataExistsInTable = checkIfTableIsEmpty(TableName);
-                if (!dataExistsInTable)
-                {
-                    /*
-                    int id = 1;
-                    for(int i=0; i < terms.length; i++)
-                    {
-                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"')";
-                        stmt.execute(query2);
-                        id++;
-                    }
-                    */
-                    String query2 = "INSERT INTO " + TableName + " VALUES('Test Name', 2017, 2018)";
-                    stmt.execute(query2);
-                    System.out.println("Default values SUCCESSFULLY inserted Table " + TableName + "!!!");
-                }
-                else {
-                    System.out.println("Default values already exist in Table " + TableName);
-                }
-                
-            }
-            else {
-                System.out.println("Table " + TableName + " does not exist");
-            }
-        }
-        catch (SQLException e) {
-            System.err.println(e.getMessage() + "--- setupDatabase");
-        } finally {
-        }
-        
+        */
            
     }
     
@@ -441,6 +497,27 @@ public class DBHandler {
     
     void printAllDefaultRecords(){
         try {
+            
+            stmt = conn.createStatement();
+            ResultSet res = stmt.executeQuery("SELECT * FROM TERMS");
+            System.out.println("----------------------------------------");
+            System.out.println("----------------------------------------");
+            System.out.println("Table TERMS default records:");
+            while (res.next()){
+                System.out.println(res.getString("TermID") + " - " + res.getString("TermName") + ", color: " + res.getString("TermColor"));
+            }
+            
+            
+            System.out.println("----------------------------------------");
+            System.out.println("----------------------------------------");
+            System.out.println("Table RULES default records:");
+            res = stmt.executeQuery("SELECT * FROM RULES");
+            while (res.next()){
+                System.out.println("Record has values: " +res.getString("EventDescription") + " - " + res.getString("TermID") + " - " + res.getString("DaysFromStart"));
+            }
+            
+            //We will get rid of these lines later
+            /*
             stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery("SELECT * FROM EVENT_TYPES");
             System.out.println("----------------------------------------");
@@ -464,6 +541,7 @@ public class DBHandler {
             while (res.next()){
                 System.out.println(res.getString("TermID") + " - " + res.getString("TermName") + ", color: " + res.getString("TermColor"));
             }
+            */
         }
         catch (SQLException e) {
             System.err.println(e.getMessage() + "--- Error when printing");
@@ -510,8 +588,80 @@ public class DBHandler {
     
     
     
+    public ArrayList<String> getListOfTerms() throws SQLException {
+        
+        //ArrayList that will contain all terms saved in the TERMS Tables
+        ArrayList<String> listOfTerms = new ArrayList();
+        
+        //Query that will obtain all available Term Names from the database table TERMS
+        String queryListOfTerms = "SELECT TermName FROM TERMS";
+        //Variable that will hold the result of executing the previous query
+        ResultSet rs = executeQuery(queryListOfTerms);
+        
+        
+        try
+        {
+            //While there are Term Names in the ResultSet variable, add each one of them to the ArrayList of Strings
+           while(rs.next()) 
+            {
+                //get the term name and store it in a String variable
+                String termName = rs.getString("TermName");
+                //add Term Name to list of terms
+                listOfTerms.add(termName);
+            } 
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getListOfTerms method in DBHandler class");
+        }
+        
+        //********************************************************************************************************
+        //*******  These lines of code are to Test we get all terms correctly from databse table TERMS  **********
+        
+        //Print full array with all Term Names for testing that we get the list we need
+        System.out.println("Array list of terms is the following:  " + listOfTerms);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        int arrayListSize = listOfTerms.size();
+        int idTerm = 1;
+        for (int i=0; i < arrayListSize; i++)
+        {
+            System.out.println("ID: " + idTerm + " --- " + listOfTerms.get(i));
+            idTerm++;
+        }
+        //*******************************************************************************************************
+        //*******************************************************************************************************
+        
+        return listOfTerms;
+    }
     
-    
+    public int getTermID(String termName) {
+        
+        int termID = 0;
+        String getTermIDQuery = "Select TermID From TERMS WHERE TermName='" + termName + "'";
+        ResultSet res = executeQuery(getTermIDQuery);
+        
+        try
+        {
+            while(res.next())
+            {
+                termID = res.getInt("TermID");
+            }
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getTermID method in DBHandler class");
+        } 
+        
+        //test function for correct result
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Term ID for " + termName + " is: " + termID);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        
+        return termID;
+    }
     
     
 }

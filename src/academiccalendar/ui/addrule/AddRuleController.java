@@ -34,7 +34,10 @@ public class AddRuleController implements Initializable {
     
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
-    DBHandler databaseHandler;
+
+    DBHandler databaseHandler = new DBHandler();
+
+
     //--------------------------------------------------------------------
  
      // Controllers -------------------------------------------------------
@@ -144,6 +147,12 @@ public class AddRuleController implements Initializable {
         int days = Integer.parseInt(daysFromStart.getText());
         String term = termSelect.getValue();
         
+
+        //*********************************************************************
+        //Save rule into the database
+        saveRuleInDatabase(eventDescription, term, days);
+        //*********************************************************************
+
         // Close the stage
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
@@ -155,4 +164,38 @@ public class AddRuleController implements Initializable {
         stage.close();
     }
     
+
+    
+    public void saveRuleInDatabase(String eventDescription, String termName, int daysFromStart)
+    {
+        //Get term ID for the term selected because it is needed to save the rule in the RULES table due int attribute called TermID
+        int termID = databaseHandler.getTermID(termName);
+        
+        //Query that will insert the rule into the RULES table in the database
+        String addRuleQuery = "INSERT INTO RULES VALUES ("
+                            + "'" + eventDescription + "', "
+                            + termID + ", "
+                            + daysFromStart
+                            + ")";
+        
+        //print query to check it is properly written
+        System.out.println(addRuleQuery);
+        
+        //save rule into the database and show message whether or not it was saved successfully
+        if(databaseHandler.executeAction(addRuleQuery)) {
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Rule was added successfully");
+            alertMessage.showAndWait();
+        }
+        else //if there is an error
+        {
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Adding Rule Failed!");
+            alertMessage.showAndWait();
+        }
+        
+    }
+
 }

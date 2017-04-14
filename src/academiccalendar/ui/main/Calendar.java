@@ -15,11 +15,15 @@ public class Calendar {
         private final SimpleStringProperty name;
         private final SimpleStringProperty startYear;
         private final SimpleStringProperty endYear;
+
+        private final SimpleStringProperty startDate;
          
-        public Calendar(String name, String startYear, String endYear) {
+        public Calendar(String name, String startYear, String endYear, String startingDate) {
             this.name = new SimpleStringProperty(name);
             this.startYear = new SimpleStringProperty(startYear);
             this.endYear = new SimpleStringProperty(endYear);
+            this.startDate = new SimpleStringProperty(startingDate);
+
         }
          
         public String getName() {
@@ -33,4 +37,9 @@ public class Calendar {
         public String getEndYear() {
             return endYear.get();
         }
+        
+        public String getStartDate() {
+            return startDate.get();
+        }
+
     }
