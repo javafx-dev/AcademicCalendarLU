@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -78,11 +79,28 @@ public class AddCalendarController implements Initializable {
         
         if ( (date.getValue() != null) && (!calendarName.getText().isEmpty())) {            
             
-            // Set the starting and ending years
+            // Set the starting and ending years, and the starting date
+            Model.getInstance().calendar_start_date = "" + date.getValue();
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
+            System.out.println("Calendar starting DATE is:  " + Model.getInstance().calendar_start_date);
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
             Model.getInstance().calendar_start = date.getValue().getYear();
             Model.getInstance().calendar_end = date.getValue().getYear() + 1;
             Model.getInstance().calendar_name = calendarName.getText();
             
+            
+            
+            // Define date format
+            DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            // Get the date value from the date picker
+            String startingDate = date.getValue().format(myFormat);
+            System.out.println("Calendar starting DATE format is now:  " + startingDate);
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
+            System.out.println("*-**--*--*-*-*-*--*-*-*-*-*-*-*-*--*");
+            
+            //String startingDate = Model.getInstance().calendar_start_date;
             String startingYear = Integer.toString(Model.getInstance().calendar_start);
             String endingYear = Integer.toString(Model.getInstance().calendar_end);
             String calName = calendarName.getText();
@@ -91,13 +109,21 @@ public class AddCalendarController implements Initializable {
             // You have the variables above (startingYear, endingYear, calName)
             // Let me know if you need more/ different fields.
             
+            //************************************************************************
+            //************************************************************************
+            //
+            //********  Inserting the new calendar data into the database  ***********
+            
+            
             //*** Instantiate DBHandler object *******************
             databaseHandler = new DBHandler();
             //****************************************************
-            String calendarQuery = "INSERT INTO CALENDARS VALUES ("
-                    + "'" + calName + "', " + startingYear + ", " + endingYear + ")";
             
-            System.out.println(calendarQuery);
+            // Query that inserts the new calendar into the database
+            String calendarQuery = "INSERT INTO CALENDARS VALUES ("
+                    + "'" + calName + "', " + startingYear + ", " + endingYear + ", " + "'" + startingDate + "')";
+            
+            System.out.println(calendarQuery); //to test the query that will be sent to the database is written correctly 
             
             //Insert the new calendar into the database and show a message wheher the insertion was successful or not
             if(databaseHandler.executeAction(calendarQuery)) 
