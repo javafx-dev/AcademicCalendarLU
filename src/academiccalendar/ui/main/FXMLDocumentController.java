@@ -1,3 +1,5 @@
+
+
 /*
  * @Academic Calendar Version 1.0 3/7/2017
  * @owner and @author: FrumbSoftware
@@ -9,16 +11,11 @@ import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
-import academiccalendar.ui.main.menu.FileContentController;
-import academiccalendar.ui.main.menu.RulesContentController;
-import academiccalendar.ui.main.menu.ToolsContentController;
+import academiccalendar.ui.addrule.AddRuleController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
-import com.jfoenix.transitions.hamburger.HamburgerBackArrowBasicTransition;
-import com.sun.javaws.Main;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -28,30 +25,21 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashSet;
-import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.print.PrinterJob;
-import javafx.scene.Cursor;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -62,21 +50,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -109,16 +91,38 @@ public class FXMLDocumentController implements Initializable {
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
-    //--------------------------------------------------------------------
-    @FXML
-    private HBox menuNode;
-    @FXML
-    private Pane menuPane;
-    @FXML
-    private VBox vPane;
+    
     @FXML
     private ScrollPane scrollPane;
     
+    // Calendar Table Fields --------------------------------------------
+    ObservableList<academiccalendar.ui.main.Calendar> list = FXCollections.observableArrayList();    
+    
+    ObservableList<academiccalendar.ui.main.Rule> listOfRules = FXCollections.observableArrayList();
+    
+    private TableView<academiccalendar.ui.main.Calendar> tableView;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> nameCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> startCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Calendar, String> endCol;
+    @FXML
+    private TableView<academiccalendar.ui.main.Calendar> calendarTableView;
+    @FXML
+    private TableView<academiccalendar.ui.main.Rule> ruleTableView;
+    
+    // KARIS ---> are the following lines correct? I don't think this is right to do
+    /*
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Rule, String> descriptionCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Rule, String> termCol;
+    @FXML
+    private TableColumn<academiccalendar.ui.main.Rule, String> daysCol;
+    */
+    
+    // ------------------------------------------------------------------
     
     // Functions
     private void editEvent(VBox day) {
@@ -169,6 +173,28 @@ public class FXMLDocumentController implements Initializable {
 
             AddCalendarController calendarController = loader.getController();
             calendarController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void newRuleEvent() {
+        // When the user clicks "New Rule" pop up window appears
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/addrule/add_rule.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            AddRuleController ruleController = loader.getController();
+            ruleController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -415,35 +441,44 @@ public class FXMLDocumentController implements Initializable {
              while(result.next()){
                 //initalize temporarily strings
                  String tempTerm="";
-                 String tempProgram="";
-                 // Get term, program, Event Description and Date
+                
                  
+                //***** Get term, Event Description and Date *****
+                
+                //Get Event Description
                  String eventDescript = result.getString("EventDescription");
+                //Get Term ID for an event
                  int termID = result.getInt("TermID");
                  
-                 
+                //Get Event Date and format it as day-month-year
                  Date dDate=result.getDate("EventDate");
                  DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
                  String eventDate = df.format(dDate);
                  
-                 int programID = result.getInt("ProgramID");
-                 String getProgramQuery = "SELECT ProgramName FROM PROGRAMS WHERE ProgramID=" + programID + "";
+                 //Query that will get the term name based on a term ID
                  String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
+                 //Execute query to get TermName and store it in a ResultSet variable
                  ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
-                 ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
+                 
                  
                  while(termResult.next())
                  {
                       tempTerm=termResult.getString(1);
-                     
+                     /*
                       while(programResult.next())
                         {
                            tempProgram = programResult.getString(1);
                         }
                       tempTerm+=" "+tempProgram;
+                    */
                  }
                  
-               
+                
+                //Get Term Name for an event
+                //tempTerm = termResult.getString(1);
+                
+                
+                //Add event information in a row
                 data.add(new Event(tempTerm,eventDescript,eventDate));
              
              }
@@ -497,7 +532,29 @@ public class FXMLDocumentController implements Initializable {
          try {
              int counter=2;
              while(result.next()){
+                
+                 //initalize temporarily strings
+                 String tempTerm="";
+                
                  
+                //***** Get term, Event Description and Date *****
+                
+                //Get Event Description
+                 String eventDescript = result.getString("EventDescription");
+                //Get Term ID for an event
+                 int termID = result.getInt("TermID");
+                 
+                //Get Event Date and format it as day-month-year
+                 Date dDate=result.getDate("EventDate");
+                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+                 String eventDate = df.format(dDate);
+                 
+                 //Query that will get the term name based on a term ID
+                 String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + "";
+                 //Execute query to get TermName and store it in a ResultSet variable
+                 ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
+                 
+                /* 
                 //initalize temporarily strings
                  String tempTerm="";
                  String tempProgram="";
@@ -516,18 +573,25 @@ public class FXMLDocumentController implements Initializable {
                  String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
                  ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
                  ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
-                 
+                 */
+                
                  while(termResult.next())
                  {
                       tempTerm=termResult.getString(1);
                      
+                      /*
                       while(programResult.next())
                         {
                            tempProgram = programResult.getString(1);
                         }
                       tempTerm+=" "+tempProgram;
+                      */
                  }
-                 
+                
+                //Get Term Name for an event
+                //tempTerm = termResult.getString("TermName");
+                
+                
                 row = sheet.createRow(counter);
                 cell = row.createCell(1);
                 cell.setCellValue(tempTerm);
@@ -612,7 +676,6 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {    
         
@@ -621,66 +684,137 @@ public class FXMLDocumentController implements Initializable {
     initializeCalendarWeekdayHeader();
     initializeMonthSelector();
     
+    
     // Set Depths
-    JFXDepthManager.setDepth(centerArea, 1);
-    JFXDepthManager.setDepth(menuPane, 1);
+    JFXDepthManager.setDepth(scrollPane, 1);
 
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
     //****************************************************
     
+    // Initialize tables
+    initCol();
+    loadData();
+    
     }    
     
-    // Below is for switching between menu views
-    @FXML
-    private void fileBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
+    private void initCol() {
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startYear"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endYear"));
+        
+        //descriptionCol.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
+        //termCol.setCellValueFactory(new PropertyValueFactory<>("termName"));
+        //daysCol.setCellValueFactory(new PropertyValueFactory<>("daysFromStart"));
+    }
+
+     private void loadData() { 
+        
+        //Load all calendars into the Calendar View Table
+        String qu = "SELECT * FROM CALENDARS";
+        ResultSet result = databaseHandler.executeQuery(qu);
+        
         try {
-            
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/FileContent.fxml"));
-            VBox fileMenu = (VBox) loader.load();
-            menuPane.getChildren().add(fileMenu);
-            
-            FileContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
+            while (result.next()) {
+                String calendarName = result.getString("CalendarName");
+                String startYear = Integer.toString(result.getInt("StartYear"));
+                String endYear = Integer.toString(result.getInt("EndYear"));
+                String startingDate = result.getString("StartDate");
+                
+                System.out.println(startYear);
+                
+                list.add(new academiccalendar.ui.main.Calendar(calendarName, startYear, endYear, startingDate));
+               
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        calendarTableView.getItems().setAll(list);
+        
+        //********************************************************************************************************
+        
+        //Load all rules into the Rule View Table
+        qu = "SELECT * FROM RULES";
+        result = databaseHandler.executeQuery(qu);
+        
+        try {
+            while (result.next()) {
+                String eventSubject = result.getString("EventDescription");
+                String termID = Integer.toString(result.getInt("TermID"));
+                String daysFromStart = Integer.toString(result.getInt("DaysFromStart"));
+                
+                System.out.println();
+                
+                listOfRules.add(new academiccalendar.ui.main.Rule(eventSubject, termID, daysFromStart));
+               
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ruleTableView.getItems().setAll(listOfRules);
+        
+    }
+    
+    @FXML
+    private void newCalendar(MouseEvent event) {
+        newCalendarEvent();
     }
 
     @FXML
-    private void toolsBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/ToolsContent.fxml"));
-            VBox toolsMenu = (VBox) loader.load();
-            menuPane.getChildren().add(toolsMenu);
-            
-            ToolsContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void loadCalendar(MouseEvent event) {
+        // Get selected calendar from table
+        academiccalendar.ui.main.Calendar cal = calendarTableView.getSelectionModel().getSelectedItem();
+        Model.getInstance().calendar_name = cal.getName();
+        Model.getInstance().calendar_start = Integer.parseInt(cal.getStartYear());
+        Model.getInstance().calendar_end = Integer.parseInt(cal.getEndYear());
+        Model.getInstance().calendar_start_date = cal.getStartDate();
+        
+        // Load the calendar in the main window
+        calendarGenerate();
     }
 
     @FXML
-    private void rulesBtn(MouseEvent event) {
-        menuPane.getChildren().clear();
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("menu/RulesContent.fxml"));
-            VBox rulesMenu = (VBox) loader.load();
-            menuPane.getChildren().add(rulesMenu);
-            
-            RulesContentController fileController = loader.getController();
-            fileController.setMainController(this);
-            
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    private void pdfBtn(MouseEvent event) {
+        exportCalendarPDF();
+    }
+
+    @FXML
+    private void excelBtn(MouseEvent event) {
+        exportCalendarExcel();
+    }
+
+    @FXML
+    private void newRule(MouseEvent event) {
+        newRuleEvent();
+    }
+
+    @FXML
+    private void deleteRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addSelectedRule(MouseEvent event) {
+    }
+
+    @FXML
+    private void addAllRules(MouseEvent event) {
+    }
+
+    @FXML
+    private void fileTabSelect(javafx.event.Event event) {
+       // Load calendars
+    }
+
+    @FXML
+    private void toolsTabSelect(javafx.event.Event event) {
+        // Load colors
+    }
+
+    @FXML
+    private void rulesTabSelect(javafx.event.Event event) {
+        // Load rules
+        
     }
 }
