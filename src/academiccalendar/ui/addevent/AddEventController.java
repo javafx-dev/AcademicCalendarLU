@@ -65,11 +65,6 @@ public class AddEventController implements Initializable {
     @FXML
     private JFXTextField subject;
     
-    // Combo boxes
-    @FXML
-    private JFXComboBox<String> programSelect;
-    @FXML
-    private JFXComboBox<String> typeSelect;
     @FXML
     private JFXComboBox<String> termSelect;
     
@@ -110,8 +105,7 @@ public class AddEventController implements Initializable {
         // Define date format
         DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
         
-        if(subject.getText().isEmpty()||programSelect.getSelectionModel().isEmpty()
-                ||typeSelect.getSelectionModel().isEmpty()||termSelect.getSelectionModel().isEmpty()
+        if(subject.getText().isEmpty()||termSelect.getSelectionModel().isEmpty()
                 ||date.getValue() == null){
             Alert alertMessage = new Alert(Alert.AlertType.ERROR);
             alertMessage.setHeaderText(null);
@@ -126,14 +120,12 @@ public class AddEventController implements Initializable {
         // Subject for the event
         String eventSubject = subject.getText();
         
-        // Get program, type, and term
-        String program = programSelect.getValue();
-        String type = typeSelect.getValue();
+        // Get term that was selected by the user
         String term = termSelect.getValue();
         
+        // variable that holds the ID value of the term selected by the user. It set to 0 becasue no selection has been made yet
         int chosenTermID = 0;
-        int chosenProgramID = 0;
-        int chosenEventTypeID = 0;
+        
         
         System.out.println("---------------------");
         System.out.println(term);
@@ -158,12 +150,13 @@ public class AddEventController implements Initializable {
              Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        /*
         System.out.println("---------------------");
         System.out.println(program);
         System.out.println("Getting ID for selected PROGRAM");
         
         
-        //Query to get ID for the selected Term
+        //Query to get ID for the selected Program
         getIDQuery = "SELECT ProgramID From PROGRAMS "
                 + "WHERE PROGRAMS.ProgramName='" + program + "' ";
         
@@ -205,14 +198,22 @@ public class AddEventController implements Initializable {
         } catch (SQLException ex) {
              Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         
         
         // Get calendar name from calendar table
-        
         //---------------------------------------------------------
         //Insert new event into the EVENTS table in the database
         
         //Query to get ID for the selected Term
+        String insertQuery = "INSERT INTO EVENTS VALUES ("
+                + "'" + eventSubject + "', "
+                + "'" + calendarDate + "', "
+                + chosenTermID + ", "
+                + "'" + calendarName + "'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
+                + ")";
+        
+        /*
         String insertQuery = "INSERT INTO EVENTS VALUES ("
                 + chosenEventTypeID + ", "
                 + chosenTermID + ", "
@@ -221,6 +222,7 @@ public class AddEventController implements Initializable {
                 + "'" + calendarDate + "', "
                 + "'" + calendarName + "'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
                 + ")";
+        */
         
         System.out.println(insertQuery);
         
@@ -242,11 +244,21 @@ public class AddEventController implements Initializable {
 
         // RODOLFO - ^^^ this is in the format you will need ^^^
         //saveToDatabase(calendarDate, eventSubject, program, type, term);
-                
+        
+        
+        //Reloads all available calendars in the database of the table view for loading calendars
+        //loadData();
+        
+        
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
+    
+    
+    
+    
+    
     
     private void addEventLabel(){
         
@@ -282,13 +294,15 @@ public class AddEventController implements Initializable {
         
         autofillDatePicker();
         
+        // Note: Client says she only wants terms, and the term determines the program.
+        /*
             ObservableList<String> types = 
         FXCollections.observableArrayList(
            "Academic",
            "Holiday",
            "Sports",
            "Campus"      
-        );
+        ); 
             
            ObservableList<String> programs = 
         FXCollections.observableArrayList(
@@ -296,7 +310,7 @@ public class AddEventController implements Initializable {
            "Graduate (MBA)",
            "Online",
            "Accelerate Program"      
-        );
+        ); */
            
            ObservableList<String> terms = 
         FXCollections.observableArrayList(
@@ -310,8 +324,8 @@ public class AddEventController implements Initializable {
            
           
             
-        typeSelect.setItems(types);
-        programSelect.setItems(programs);
+        //typeSelect.setItems(types);
+        //programSelect.setItems(programs);
         termSelect.setItems(terms);
         
         // ************* Everything below is for Draggable Window ********
