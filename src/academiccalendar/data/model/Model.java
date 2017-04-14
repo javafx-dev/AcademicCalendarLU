@@ -22,7 +22,8 @@ public class Model {
     public String event_subject;
     
     public int calendar_start;
-    public int calendar_end;  
+    public int calendar_end;
+    public String calendar_start_date;
     public String calendar_name;
     
     public int getMonthIndex(String month){
