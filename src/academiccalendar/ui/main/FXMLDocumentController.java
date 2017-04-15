@@ -655,8 +655,8 @@ public class FXMLDocumentController implements Initializable {
         
         // Set up Row Constraints
         for (int i = 0; i < 7; i++) {
-         RowConstraints row = new RowConstraints(scrollPane.getHeight()/7, Control.USE_COMPUTED_SIZE,
-         Control.USE_COMPUTED_SIZE);
+         RowConstraints row = new RowConstraints();
+         row.setMinHeight(scrollPane.getHeight()/7);
          calendarGrid.getRowConstraints().add(row);
         }
     }
