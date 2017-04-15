@@ -207,26 +207,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    public void newRuleEvent() {
-        // When the user clicks "New Rule" pop up window appears
-         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/academiccalendar/ui/addrule/add_rule.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
-            Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL); 
-
-            AddRuleController ruleController = loader.getController();
-            ruleController.setMainController(this);
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
     
     private void initializeMonthSelector(){
         // Add event listener to each month list item, allowing user to change months
