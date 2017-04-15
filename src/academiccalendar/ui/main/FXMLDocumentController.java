@@ -27,7 +27,9 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -41,6 +43,7 @@ import javafx.geometry.Insets;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -53,6 +56,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -206,8 +210,6 @@ public class FXMLDocumentController implements Initializable {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
     
     private void initializeMonthSelector(){
         // Add event listener to each month list item, allowing user to change months
@@ -644,12 +646,21 @@ public class FXMLDocumentController implements Initializable {
                     editEvent(vPane);
                 });
                 
+                GridPane.setVgrow(vPane, Priority.ALWAYS);
+                
                 // Add it to the grid
                 calendarGrid.add(vPane, j, i);  
             }
         }       
+        
+        // Set up Row Constraints
+        for (int i = 0; i < 7; i++) {
+         RowConstraints row = new RowConstraints(scrollPane.getHeight()/7, Control.USE_COMPUTED_SIZE,
+         Control.USE_COMPUTED_SIZE);
+         calendarGrid.getRowConstraints().add(row);
+        }
     }
-    
+
     
     public void initializeCalendarWeekdayHeader(){
     
