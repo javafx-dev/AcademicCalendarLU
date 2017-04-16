@@ -17,7 +17,7 @@
    <children>
       <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
          <children>
-            <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Edit Event">
+            <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Add New Event">
                <font>
                   <Font size="15.0" />
                </font>
