@@ -12,6 +12,7 @@ import academiccalendar.database.DBHandler;
 import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
 import academiccalendar.ui.addrule.AddRuleController;
+import academiccalendar.ui.editevent.EditEventController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
@@ -27,20 +28,25 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.print.PrinterJob;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
@@ -53,6 +59,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -128,7 +135,7 @@ public class FXMLDocumentController implements Initializable {
     // ------------------------------------------------------------------
     
     // Functions
-    private void editEvent(VBox day) {
+    private void addEvent(VBox day) {
         
         // ONLY for days that have labels
         if(!day.getChildren().isEmpty()) {
@@ -160,8 +167,38 @@ public class FXMLDocumentController implements Initializable {
            } catch (IOException ex) {
                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
            }
-            
         }
+    }    
+    
+    private void editEvent(VBox day, String descript) {
+        
+        // Store event day and month in data singleton
+        Label dayLbl = (Label)day.getChildren().get(0);
+        Model.getInstance().event_day = Integer.parseInt(dayLbl.getText());
+        Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());      
+        Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
+        
+        Model.getInstance().event_subject = descript;
+
+        // When user clicks on any date in the calendar, event editor window opens
+        try {
+           // Load root layout from fxml file.
+           FXMLLoader loader = new FXMLLoader();
+           loader.setLocation(getClass().getResource("/academiccalendar/ui/editevent/edit_event.fxml"));
+           AnchorPane rootLayout = (AnchorPane) loader.load();
+           Stage stage = new Stage(StageStyle.UNDECORATED);
+           stage.initModality(Modality.APPLICATION_MODAL); 
+
+           EditEventController eventController = loader.getController();
+           eventController.setMainController(this);
+           // Show the scene containing the root layout.
+           Scene scene = new Scene(rootLayout);
+           stage.setScene(scene);
+           stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }    
     
     public void newCalendarEvent() {
@@ -181,27 +218,6 @@ public class FXMLDocumentController implements Initializable {
             stage.setScene(scene);
             stage.show();
             
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public void newRuleEvent() {
-        // When the user clicks "New Rule" pop up window appears
-         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/academiccalendar/ui/addrule/add_rule.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
-            Stage stage = new Stage(StageStyle.UNDECORATED);
-            stage.initModality(Modality.APPLICATION_MODAL); 
-
-            AddRuleController ruleController = loader.getController();
-            ruleController.setMainController(this);
-            // Show the scene containing the root layout.
-            Scene scene = new Scene(rootLayout);
-            stage.setScene(scene);
-            stage.show();
         } catch (IOException ex) {
             Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -417,6 +433,26 @@ public class FXMLDocumentController implements Initializable {
                     Label eventLbl = new Label(descript); 
                     eventLbl.setGraphic(imgView);
                     eventLbl.getStyleClass().add("event-label");
+                    
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
+                        editEvent((VBox)eventLbl.getParent(),
+                                eventLbl.getText());
+                        
+                    });
+                    
+                    // Stretch to fill box
+                    eventLbl.setMaxWidth(Double.MAX_VALUE);
+                    
+                    // Mouse effects
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_ENTERED, (e)->{
+                        eventLbl.getScene().setCursor(Cursor.HAND);
+                    });
+                    
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_EXITED, (e)->{
+                        eventLbl.getScene().setCursor(Cursor.DEFAULT);
+                    });
+                    
+                    // Add label to calendar
                     day.getChildren().add(eventLbl);
                 }
             }
@@ -524,12 +560,6 @@ public class FXMLDocumentController implements Initializable {
     
      public void exportCalendarExcel() 
     {
-         
-         
-
-      
-        
-        
         String calendarName = Model.getInstance().calendar_name;
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet =wb.createSheet(calendarName);
@@ -544,9 +574,6 @@ public class FXMLDocumentController implements Initializable {
         cell = row.createCell(3);
         cell.setCellValue("Date");
         
-        
-
-       
         // Query to get ALL Events from the selected calendar!!
         String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";   
         
@@ -642,8 +669,6 @@ public class FXMLDocumentController implements Initializable {
          catch(Exception e) {
             e.printStackTrace();
          }  
-            
-        
        }
     
     public void initializeCalendarGrid(){
@@ -660,15 +685,24 @@ public class FXMLDocumentController implements Initializable {
                 vPane.setMinWidth(weekdayHeader.getPrefWidth()/7);
                 
                 vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->{
-                    editEvent(vPane);
+                    addEvent(vPane);
                 });
+                
+                GridPane.setVgrow(vPane, Priority.ALWAYS);
                 
                 // Add it to the grid
                 calendarGrid.add(vPane, j, i);  
             }
         }       
+        
+        // Set up Row Constraints
+        for (int i = 0; i < 7; i++) {
+         RowConstraints row = new RowConstraints();
+         row.setMinHeight(scrollPane.getHeight()/7);
+         calendarGrid.getRowConstraints().add(row);
+        }
     }
-    
+
     
     public void initializeCalendarWeekdayHeader(){
     
