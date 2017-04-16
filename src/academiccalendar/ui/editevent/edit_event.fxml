@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="249.0" prefWidth="340.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.60" fx:controller="academiccalendar.ui.editevent.EditEventController">
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editevent.EditEventController">
     <stylesheets>
         <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
     </stylesheets>
