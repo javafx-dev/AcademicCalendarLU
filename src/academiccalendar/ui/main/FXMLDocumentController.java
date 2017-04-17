@@ -319,6 +319,7 @@ public class FXMLDocumentController implements Initializable {
            
            day.getChildren().clear();
            day.setStyle("-fx-backgroud-color: white");
+           day.setStyle("-fx-font: 14px \"System\" ");
            
            // Start placing labels on the first day for the month
            if (gridCount < offset) {
@@ -420,7 +421,7 @@ public class FXMLDocumentController implements Initializable {
     
     public void showDate(int dayNumber, String descript){
         
-        Image img = new Image(getClass().getClassLoader().getResourceAsStream("academiccalendar/ui/icons/event_icon.png"));
+        Image img = new Image(getClass().getClassLoader().getResourceAsStream("academiccalendar/ui/icons/icon2.png"));
         ImageView imgView = new ImageView();
         imgView.setImage(img);
         
