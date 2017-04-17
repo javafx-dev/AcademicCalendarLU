@@ -54,10 +54,10 @@
                      <children>
                         <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="810.0" prefWidth="880.0" vbarPolicy="ALWAYS">
                            <content>
-                              <VBox prefHeight="698.0" prefWidth="865.0">
+                              <VBox prefWidth="863.0">
                                  <children>
                                     <HBox fx:id="weekdayHeader" minHeight="-Infinity" prefHeight="80.0" prefWidth="873.0" />
-                                    <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="878.0" styleClass="calendar_pane" VBox.vgrow="ALWAYS">
+                                    <GridPane fx:id="calendarGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="863.0" styleClass="calendar_pane" VBox.vgrow="ALWAYS">
                                       <columnConstraints>
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -68,12 +68,12 @@
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
-                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
-                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
-                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
-                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
-                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
+                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
+                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
+                                          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
+                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
+                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
+                                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="120.0" vgrow="ALWAYS" />
                                       </rowConstraints>
                                     </GridPane>
                                  </children>
@@ -86,7 +86,7 @@
             </AnchorPane>
          </center>
          <left>
-            <JFXTabPane prefHeight="800.0" prefWidth="304.0" BorderPane.alignment="CENTER">
+            <JFXTabPane prefHeight="800.0" prefWidth="304.0" rotateGraphic="true" side="BOTTOM" stylesheets="@menuStyle.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                <tabs>
                   <Tab text="File">
                     <content>
@@ -151,7 +151,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="770.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="32.0" prefWidth="316.0" text="Color Manager" />
                                     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="304.0">
@@ -167,7 +167,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="304.0">
@@ -183,7 +183,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="85.0" prefHeight="43.0" prefWidth="304.0">
@@ -199,7 +199,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="128.0" prefHeight="43.0" prefWidth="304.0">
@@ -215,7 +215,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="171.0" prefHeight="43.0" prefWidth="304.0">
@@ -231,7 +231,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="214.0" prefHeight="43.0" prefWidth="304.0">
@@ -247,7 +247,7 @@
                                           </ColorPicker>
                                        </children>
                                        <VBox.margin>
-                                          <Insets right="50.0" />
+                                          <Insets right="100.0" />
                                        </VBox.margin>
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="42.0" prefWidth="304.0">
