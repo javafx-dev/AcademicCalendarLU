@@ -65,12 +65,12 @@
             </TableView>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="309.0" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#addSelectedRule" text="Add Selected Rule to Calendar" />
+                  <JFXButton onMouseClicked="#addSelectedRule" text="Create Event Based On Selected Rule" />
                </children>
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="339.0" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#addAllRules" text="Add All Rules to Calendar" />
+                  <JFXButton onMouseClicked="#addAllRules" text="Create Events Based On All Rules" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="459.0">
