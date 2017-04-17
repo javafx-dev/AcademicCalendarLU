@@ -13,6 +13,8 @@ import academiccalendar.ui.addcalendar.AddCalendarController;
 import academiccalendar.ui.addevent.AddEventController;
 import academiccalendar.ui.addrule.AddRuleController;
 import academiccalendar.ui.editevent.EditEventController;
+import academiccalendar.ui.listcalendars.ListCalendarsController;
+import academiccalendar.ui.listrules.ListRulesController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
@@ -88,53 +90,19 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private JFXListView<String> monthSelect;
     
-    // Grid (has all the dates)
+    // Center area
     @FXML
     private GridPane calendarGrid;
-    
     @FXML
     private VBox centerArea;
+    @FXML
+    private ScrollPane scrollPane;
     
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
     
-    @FXML
-    private ScrollPane scrollPane;
-    
-    // Calendar Table Fields --------------------------------------------
-    ObservableList<academiccalendar.ui.main.Calendar> list = FXCollections.observableArrayList();    
-    
-
-    ObservableList<academiccalendar.ui.main.Rule> listOfRules = FXCollections.observableArrayList();
-
-    private TableView<academiccalendar.ui.main.Calendar> tableView;
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> nameCol;
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> startCol;
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> endCol;
-    @FXML
-    private TableView<academiccalendar.ui.main.Calendar> calendarTableView;
-    @FXML
-
-    private TableView<academiccalendar.ui.main.Rule> ruleTableView;
-    
-    // KARIS ---> are the following lines correct? I don't think this is right to do
-    /*
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Rule, String> descriptionCol;
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Rule, String> termCol;
-    @FXML
-    private TableColumn<academiccalendar.ui.main.Rule, String> daysCol;
-    */
-    
-
-    // ------------------------------------------------------------------
-    
-    // Functions
+    // Events
     private void addEvent(VBox day) {
         
         // ONLY for days that have labels
@@ -213,6 +181,50 @@ public class FXMLDocumentController implements Initializable {
 
             AddCalendarController calendarController = loader.getController();
             calendarController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void listCalendarsEvent() {
+        // When the user clicks "New Calendar" pop up window that let's them enter dates
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/listcalendars/list_calendars.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            ListCalendarsController listController = loader.getController();
+            listController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void listRulesEvent() {
+        // When the user clicks "New Calendar" pop up window that let's them enter dates
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/listrules/list_rules.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            ListRulesController listController = loader.getController();
+            listController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -749,96 +761,27 @@ public class FXMLDocumentController implements Initializable {
     //*** Instantiate DBHandler object *******************
     databaseHandler = new DBHandler();
     //****************************************************
-    
-    // Initialize tables
-    initCol();
-    loadData();
-    
+
     }    
     
-    private void initCol() {
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        startCol.setCellValueFactory(new PropertyValueFactory<>("startYear"));
-        endCol.setCellValueFactory(new PropertyValueFactory<>("endYear"));
-
-        
-        //descriptionCol.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
-        //termCol.setCellValueFactory(new PropertyValueFactory<>("termName"));
-        //daysCol.setCellValueFactory(new PropertyValueFactory<>("daysFromStart"));
-
-    }
-
-     private void loadData() { 
-        
-
-        //Load all calendars into the Calendar View Table
-
-        String qu = "SELECT * FROM CALENDARS";
-        ResultSet result = databaseHandler.executeQuery(qu);
-        
-        try {
-            while (result.next()) {
-                String calendarName = result.getString("CalendarName");
-                String startYear = Integer.toString(result.getInt("StartYear"));
-                String endYear = Integer.toString(result.getInt("EndYear"));
-
-                String startingDate = result.getString("StartDate");
-                
-                System.out.println(startYear);
-                
-                list.add(new academiccalendar.ui.main.Calendar(calendarName, startYear, endYear, startingDate));
-
-               
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        calendarTableView.getItems().setAll(list);
-
-        
-        //********************************************************************************************************
-        
-        //Load all rules into the Rule View Table
-        qu = "SELECT * FROM RULES";
-        result = databaseHandler.executeQuery(qu);
-        
-        try {
-            while (result.next()) {
-                String eventSubject = result.getString("EventDescription");
-                String termID = Integer.toString(result.getInt("TermID"));
-                String daysFromStart = Integer.toString(result.getInt("DaysFromStart"));
-                
-                System.out.println();
-                
-                listOfRules.add(new academiccalendar.ui.main.Rule(eventSubject, termID, daysFromStart));
-               
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        ruleTableView.getItems().setAll(listOfRules);
-
-    }
-    
+    // Side - menu buttons 
     @FXML
     private void newCalendar(MouseEvent event) {
         newCalendarEvent();
-
     }
-
+    
     @FXML
-    private void loadCalendar(MouseEvent event) {
-        // Get selected calendar from table
-        academiccalendar.ui.main.Calendar cal = calendarTableView.getSelectionModel().getSelectedItem();
-        Model.getInstance().calendar_name = cal.getName();
-        Model.getInstance().calendar_start = Integer.parseInt(cal.getStartYear());
-        Model.getInstance().calendar_end = Integer.parseInt(cal.getEndYear());
-        Model.getInstance().calendar_start_date = cal.getStartDate();
-        
-        // Load the calendar in the main window
-        calendarGenerate();
+    private void manageCalendars(MouseEvent event) {
+        listCalendarsEvent();
+    }
+    
+    @FXML
+    private void manageRules(MouseEvent event) {
+    }
+    
+    @FXML
+    private void newRule(MouseEvent event) {
+        newRuleEvent();
     }
 
     @FXML
@@ -851,36 +794,8 @@ public class FXMLDocumentController implements Initializable {
         exportCalendarExcel();
     }
 
-    @FXML
-    private void newRule(MouseEvent event) {
-        newRuleEvent();
-    }
 
-    @FXML
-    private void deleteRule(MouseEvent event) {
-    }
 
-    @FXML
-    private void addSelectedRule(MouseEvent event) {
-    }
 
-    @FXML
-    private void addAllRules(MouseEvent event) {
-    }
 
-    @FXML
-    private void fileTabSelect(javafx.event.Event event) {
-       // Load calendars
-    }
-
-    @FXML
-    private void toolsTabSelect(javafx.event.Event event) {
-        // Load colors
-    }
-
-    @FXML
-    private void rulesTabSelect(javafx.event.Event event) {
-        // Load rules
-        
-    }
 }
