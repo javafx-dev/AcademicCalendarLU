@@ -252,7 +252,7 @@
                                     </HBox>
                                     <HBox alignment="CENTER" prefHeight="42.0" prefWidth="304.0">
                                        <children>
-                                          <JFXButton prefHeight="39.0" prefWidth="180.0" text="New Color" />
+                                          <JFXButton prefHeight="39.0" prefWidth="180.0" text="Update Colors" />
                                        </children>
                                     </HBox>
                                  </children>
