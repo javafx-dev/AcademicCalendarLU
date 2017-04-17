@@ -1,3 +1,10 @@
+*{
+    -fx-color-label-visible: false;
+}
+
+.color-picker {
+    -fx-background-color:  #E9F2F5;
+}
 
 .label {
     -fx-font-size: 11pt;
@@ -45,7 +52,7 @@
 }
 
 .button {
-    -fx-background-color: #26A69A;
+    -fx-background-color: #777;
     -fx-font-family: "Segoe UI semibold", Helvetica, Arial, sans-serif;
     -fx-font-size: 12pt;
     -fx-text-fill: white;
