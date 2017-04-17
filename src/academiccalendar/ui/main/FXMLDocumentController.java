@@ -777,6 +777,7 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private void manageRules(MouseEvent event) {
+        listRulesEvent();
     }
     
     @FXML
