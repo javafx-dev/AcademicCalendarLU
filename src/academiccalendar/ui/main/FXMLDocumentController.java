@@ -64,6 +64,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -525,7 +526,7 @@ public class FXMLDocumentController implements Initializable {
                  
                 //Get Event Date and format it as day-month-year
                  Date dDate=result.getDate("EventDate");
-                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
+                 DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                  String eventDate = df.format(dDate);
                  
                  //Query that will get the term name based on a term ID
@@ -573,6 +574,22 @@ public class FXMLDocumentController implements Initializable {
     
      public void exportCalendarExcel() 
     {
+        
+         FileChooser fileChooser = new FileChooser();
+
+              //Set extension filter
+              FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("excel files (*.xlsx)", "*.xlsx");
+              fileChooser.getExtensionFilters().add(extFilter);
+
+              //Show save file dialog
+              File file = fileChooser.showSaveDialog(new Stage());
+
+              if(file != null){
+                  createExcelSheet(file);
+                  System.out.println("hi");
+              }
+    }        
+   public void createExcelSheet(File file){
         String calendarName = Model.getInstance().calendar_name;
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet =wb.createSheet(calendarName);
@@ -674,9 +691,11 @@ public class FXMLDocumentController implements Initializable {
              Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
         } 
          try{
-        FileOutputStream out = new FileOutputStream(new File(calendarName + ".xlsx"));
+        FileOutputStream out = new FileOutputStream(file);
         wb.write(out);
+        out.flush();
         out.close();
+        
        
          }
          catch(Exception e) {
