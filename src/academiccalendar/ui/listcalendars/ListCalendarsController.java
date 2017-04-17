@@ -21,6 +21,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -176,6 +177,71 @@ public class ListCalendarsController implements Initializable {
 
     @FXML
     private void deleteCalendar(MouseEvent event) {
+        
+        // Get selected calendar from table
+        academiccalendar.ui.main.Calendar cal = tableView.getSelectionModel().getSelectedItem();        
+        String calendarName = cal.getName();
+        System.out.println(calendarName);
+        
+        //Query that will delete all events that belong to the selected calendar
+        String deleteEventsQuery = "DELETE FROM EVENTS "
+                                 + "WHERE EVENTS.CalendarName='" + calendarName + "'";
+        
+        System.out.println(deleteEventsQuery);
+        
+        //Query that will delete the selected calendar, AFTER all its events had been deleted
+        String deleteCalendarQuery = "DELETE FROM CALENDARS "
+                                    + "WHERE CALENDARS.CalendarName='" + calendarName + "'";
+        
+        System.out.println(deleteCalendarQuery);
+        
+        //Execute query that deletes all events associated to the selected calendar
+        boolean eventsWereDeleted = databaseHandler.executeAction(deleteEventsQuery);
+        
+        if (eventsWereDeleted)
+        {
+            System.out.println("All events associated to the selected calendar were successfully deleted. Deleting Calendar is next");
+            //Execute query that deletes the selected calendar
+            boolean calendarWasDeleted = databaseHandler.executeAction(deleteCalendarQuery);
+            
+            //Check if the selected calendar was deleted
+            if (calendarWasDeleted)
+            {
+                //Show message indicating that the selected calendar was deleted
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Calendar was successfully deleted");
+                alertMessage.showAndWait();
+                
+                // Close the window, so that when user clicks on "Manage Your Calendars" only the remaining existing calendar appear
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.close();
+            }
+            else
+            {
+                //Show message indicating that the calendar could not be deleted
+                Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Deleting Calendar Failed!");
+                alertMessage.showAndWait();
+            }
+        }
+        else
+        {
+            //Show message indicating that the calendar could not be deleted
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Deleting Calendar Failed!");
+            alertMessage.showAndWait();
+            System.out.println("Deleting Events of Selected Calendar Failed!!!");
+        }
+        
+        
+        
+        
+        
+        
+        
     }
     
 }
