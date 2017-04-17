@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="409.0" prefWidth="444.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listrules.ListRulesController">
+    <stylesheets>
+        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
+    </stylesheets>
+   <children>
+      <VBox prefHeight="409.0" prefWidth="459.0">
+         <children>
+            <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
+               <children>
+                  <Label fx:id="topLabel" prefHeight="25.0" prefWidth="419.0" text="Rule Manager">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="10.0" top="5.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <ImageView fitHeight="18.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/drag_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+                  <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0" stylesheets="@../addevent/addEvent.css">
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../icons/exit_icon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+               </children>
+            </HBox>
+            <Label prefHeight="34.0" prefWidth="471.0" text="Your Rules:">
+               <VBox.margin>
+                  <Insets left="10.0" />
+               </VBox.margin>
+            </Label>
+            <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
+               <columns>
+                  <TableColumn fx:id="eventCol" prefWidth="200.0" text="Event Description" />
+                  <TableColumn fx:id="termCol" minWidth="0.0" prefWidth="124.0" text="Term" />
+                  <TableColumn fx:id="daysCol" prefWidth="114.0" text="Days From Start" />
+               </columns>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" />
+               </VBox.margin>
+            </TableView>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="309.0" prefHeight="30.0" prefWidth="459.0">
+               <children>
+                  <JFXButton onMouseClicked="#addSelectedRule" text="Add Selected Rule to Calendar" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="339.0" prefHeight="30.0" prefWidth="459.0">
+               <children>
+                  <JFXButton onMouseClicked="#addAllRules" text="Add All Rules to Calendar" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="459.0">
+               <children>
+                  <JFXButton onMouseClicked="#editRule" text="Edit Rule" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="339.0" prefHeight="30.0" prefWidth="459.0">
+               <children>
+                  <JFXButton onMouseClicked="#deleteRule" text="Delete Rule" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
