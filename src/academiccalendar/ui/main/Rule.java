@@ -27,7 +27,7 @@ public class Rule {
             return eventDescription.get();
         }
 
-        public String getTermIDOfRule() {
+        public String getTermID() {
             return termID.get();
         }
 
