@@ -79,6 +79,9 @@ public class DBHandler {
             
             // the following lines are just here to test the correct functionality of the getTermID method
             int getIDTest = this.getTermID("FA QTR");
+            
+            // the following lines are just here to test the correct functionality of the getTermName method
+            String nameAux = this.getTermName(2);
         }
         
         
@@ -663,5 +666,42 @@ public class DBHandler {
         return termID;
     }
     
+    
+    public String getTermName(int termIDAux) {
+        
+        //Declare variable that will contain the name of the term
+        String nameOfTerm = "x";
+        //Create query that will find a matching result for the termName based on the term's ID
+        String getTermNameQuery = "SELECT TermName FROM TERMS "
+                                + "WHERE TERMS.TermID=" + termIDAux;
+        
+        System.out.println("Query to get TermName is: " + getTermNameQuery);
+        
+        
+        ResultSet res = executeQuery(getTermNameQuery);
+        
+        try
+        {
+            while(res.next())
+            {
+                nameOfTerm = res.getString("TermName");
+            }
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getTermID method in DBHandler class");
+        } 
+        
+        //test function for correct result
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Term Name for " + termIDAux + " is: " + nameOfTerm);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        
+        
+        
+        return nameOfTerm;
+    }
     
 }
