@@ -5,6 +5,8 @@
  */
 package academiccalendar.ui.listrules;
 
+import academiccalendar.ui.main.Rule;
+
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.main.FXMLDocumentController;
 import java.net.URL;
@@ -20,6 +22,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -69,7 +72,7 @@ public class ListRulesController implements Initializable {
     
     private void initCol() {
         eventCol.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
-        termCol.setCellValueFactory(new PropertyValueFactory<>("termName"));
+        termCol.setCellValueFactory(new PropertyValueFactory<>("termID"));
         daysCol.setCellValueFactory(new PropertyValueFactory<>("daysFromStart"));
     }
     
@@ -80,13 +83,26 @@ public class ListRulesController implements Initializable {
         
         try {
             while (result.next()) {
+                
                 String eventSubject = result.getString("EventDescription");
-                String termID = Integer.toString(result.getInt("TermID"));
+                
+                //String termIDAux = "" + result.getInt("TermID");
+                String termIDAux = Integer.toString(result.getInt("TermID"));
+                //This line checks that a umber or string is at least gotten from the result that was gotten from th Results table
+                System.out.println("termIDAux is: " + termIDAux);
+                
                 String daysFromStart = Integer.toString(result.getInt("DaysFromStart"));
                 
+                //these lines check each result gotten from the RULES table
+                System.out.println("result is:  " + eventSubject + " - " + termIDAux + " - " + daysFromStart);
                 System.out.println();
+                /*
+                Rule ruleObject = new Rule(eventSubject, termIDAux, daysFromStart);
+                String auxID = ruleObject.getTermIDOfRule();
+                System.out.println("auxID is: " + auxID);
+                */
                 
-                list.add(new academiccalendar.ui.main.Rule(eventSubject, termID, daysFromStart));
+                list.add(new academiccalendar.ui.main.Rule(eventSubject, termIDAux, daysFromStart));
                
             }
         } catch (SQLException ex) {
@@ -168,6 +184,46 @@ public class ListRulesController implements Initializable {
 
     @FXML
     private void deleteRule(MouseEvent event) {
+        
+        // Get selected rule from table
+        academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
+        String eventSubject = rule.getEventDescription();
+        String auxTermID = rule.getTermIDOfRule();
+        System.out.println(eventSubject);
+        System.out.println(auxTermID);
+        
+        //Query that will delete the selected rule
+        String deleteRulesQuery = "DELETE FROM RULES "
+                                 + "WHERE RULES.EventDescription='" + eventSubject + "' "
+                                 + "AND RULES.TermID=" + auxTermID;
+        
+        System.out.println(deleteRulesQuery);
+        
+        
+        //Execute query that deletes the selected rule
+        boolean ruleWasDeleted = databaseHandler.executeAction(deleteRulesQuery);
+        
+        if (ruleWasDeleted)
+        {
+            //Show message indicating that the selected rule was deleted
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Selected rule was successfully deleted");
+            alertMessage.showAndWait();
+                
+            // Close the window, so that when user clicks on "Manage Rules" only the remaining existing rules appear
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.close();
+        }
+        else
+        {
+            //Show message indicating that the rule could not be deleted
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Deleting Rule Failed!");
+            alertMessage.showAndWait();
+        }
+        
     }
     
 }
