@@ -173,6 +173,10 @@ public class ListCalendarsController implements Initializable {
         
         // Load the calendar in the main window
         mainController.calendarGenerate();
+        
+        // Close the window after opening and loading the selected calendar
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
