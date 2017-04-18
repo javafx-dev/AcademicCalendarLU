@@ -14,12 +14,12 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Rule {
     private final SimpleStringProperty eventDescription;
-        private final SimpleStringProperty termName;
+        private final SimpleStringProperty termID;
         private final SimpleStringProperty daysFromStart;
          
-        public Rule(String eventSubject, String nameOfTerm, String days) {
+        public Rule(String eventSubject, String auxTermID, String days) {
             this.eventDescription = new SimpleStringProperty(eventSubject);
-            this.termName = new SimpleStringProperty(nameOfTerm);
+            this.termID = new SimpleStringProperty(auxTermID);
             this.daysFromStart = new SimpleStringProperty(days);
         }
          
@@ -27,8 +27,8 @@ public class Rule {
             return eventDescription.get();
         }
 
-        public String getTermNameOfRule() {
-            return termName.get();
+        public String getTermIDOfRule() {
+            return termID.get();
         }
 
         public String getDaysFromStart() {
