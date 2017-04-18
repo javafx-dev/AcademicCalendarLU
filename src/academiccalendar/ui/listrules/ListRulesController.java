@@ -188,7 +188,7 @@ public class ListRulesController implements Initializable {
         // Get selected rule from table
         academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
         String eventSubject = rule.getEventDescription();
-        String auxTermID = rule.getTermIDOfRule();
+        String auxTermID = rule.getTermID();
         System.out.println(eventSubject);
         System.out.println(auxTermID);
         
