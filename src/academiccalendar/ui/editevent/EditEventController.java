@@ -7,13 +7,18 @@ package academiccalendar.ui.editevent;
 
 import academiccalendar.data.model.Model;
 import academiccalendar.database.DBHandler;
+import academiccalendar.ui.addevent.AddEventController;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -63,14 +68,38 @@ public class EditEventController implements Initializable {
        int day = Model.getInstance().event_day;
        int month = Model.getInstance().event_month + 1;
        int year = Model.getInstance().event_year;
-       
+       int termID = Model.getInstance().event_term_id;
        String descript = Model.getInstance().event_subject;
+       
+        //Query to get ID for the selected Term
+        String getIDQuery = "SELECT TermName From TERMS "
+                + "WHERE TERMS.TermID= " + termID + " ";
+        
+        String chosenTermName = "";
+        
+        //System.out.println(getIDQuery);
+
+        //Variable that stores the results from executing the Query
+        // RODOLFO! - this is where I get the error. this line vvvvv
+        ResultSet result = databaseHandler.executeQuery(getIDQuery);
+        //Try-catch statements that will get the ID if a result was actually gotten back from the database
+        try {
+             while(result.next()){
+                 //store ID into the corresponding variable
+                 chosenTermName = result.getString("TermName");
+                 System.out.println(chosenTermName);
+             }
+        } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        }
        
        // Set default value for datepicker
        date.setValue(LocalDate.of(year, month, day));
        
        // Fill description field
        subject.setText(descript);
+       
+       termSelect.getSelectionModel().select(chosenTermName);
     }
     
     /**
@@ -79,6 +108,12 @@ public class EditEventController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
+        //*** Instantiate DBHandler object *******************
+        databaseHandler = new DBHandler();
+        //****************************************************
+        
         autofillDatePicker();
         
         // ************* Everything below is for Draggable Window ********
