@@ -28,6 +28,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -139,7 +140,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }    
     
-    private void editEvent(VBox day, String descript) {
+    private void editEvent(VBox day, String descript, String termID) {
         
         // Store event day and month in data singleton
         Label dayLbl = (Label)day.getChildren().get(0);
@@ -148,6 +149,7 @@ public class FXMLDocumentController implements Initializable {
         Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
         
         Model.getInstance().event_subject = descript;
+        Model.getInstance().event_term_id = Integer.parseInt(termID);
 
         // When user clicks on any date in the calendar, event editor window opens
         try {
@@ -364,10 +366,12 @@ public class FXMLDocumentController implements Initializable {
         // Get a list of all the months (1-12) in a year
         DateFormatSymbols dateFormat = new DateFormatSymbols();
         String months[] = dateFormat.getMonths();
+        System.out.println("Length:" + months.length);
+        String[] spliceMonths = Arrays.copyOfRange(months, 0, 12);
         
         // Load month section for calendar
         monthSelect.getItems().clear();  // Invokes our change listener
-        monthSelect.getItems().addAll(months);   
+        monthSelect.getItems().addAll(spliceMonths);   
         
         // Select the first MONTH as default
         monthSelect.getSelectionModel().selectFirst();
@@ -401,6 +405,7 @@ public class FXMLDocumentController implements Initializable {
                  // Get date for the event
                  Date eventDate = result.getDate("EventDate");
                  String eventDescript = result.getString("EventDescription");
+                 int eventTermID = result.getInt("TermID");
                  
                  // Check for year we have selected
                  if (currentYear == eventDate.toLocalDate().getYear()){
@@ -411,7 +416,7 @@ public class FXMLDocumentController implements Initializable {
                         int day = eventDate.toLocalDate().getDayOfMonth();
 
                         // Display decription of the event given it's day
-                        showDate(day, eventDescript);
+                        showDate(day, eventDescript, eventTermID);
                     }         
                  }
              }
@@ -420,7 +425,7 @@ public class FXMLDocumentController implements Initializable {
         } 
     }
     
-    public void showDate(int dayNumber, String descript){
+    public void showDate(int dayNumber, String descript, int termID){
         
         Image img = new Image(getClass().getClassLoader().getResourceAsStream("academiccalendar/ui/icons/icon2.png"));
         ImageView imgView = new ImageView();
@@ -448,9 +453,12 @@ public class FXMLDocumentController implements Initializable {
                     eventLbl.setGraphic(imgView);
                     eventLbl.getStyleClass().add("event-label");
                     
+                    // Save the term ID in accessible text
+                    eventLbl.setAccessibleText(Integer.toString(termID));
+                    System.out.println(eventLbl.getAccessibleText());
+                    
                     eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e)->{
-                        editEvent((VBox)eventLbl.getParent(),
-                                eventLbl.getText());
+                        editEvent((VBox)eventLbl.getParent(), eventLbl.getText(), eventLbl.getAccessibleText());
                         
                     });
                     
