@@ -20,6 +20,7 @@ public class Model {
     public int event_month;
     public int event_year;
     public String event_subject;
+    public int event_term_id;
     
     public int calendar_start;
     public int calendar_end;
