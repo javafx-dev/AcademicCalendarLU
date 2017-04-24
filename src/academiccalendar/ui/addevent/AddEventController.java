@@ -240,7 +240,7 @@ public class AddEventController implements Initializable {
             alertMessage.showAndWait();
         }
         
-        mainController.showDate(date.getValue().getDayOfMonth(), eventSubject);
+        mainController.showDate(date.getValue().getDayOfMonth(), eventSubject, chosenTermID);
 
         // RODOLFO - ^^^ this is in the format you will need ^^^
         //saveToDatabase(calendarDate, eventSubject, program, type, term);
