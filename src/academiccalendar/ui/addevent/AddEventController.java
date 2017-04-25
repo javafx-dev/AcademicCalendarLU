@@ -126,82 +126,9 @@ public class AddEventController implements Initializable {
         // variable that holds the ID value of the term selected by the user. It set to 0 becasue no selection has been made yet
         int chosenTermID = 0;
         
+        // Get the ID of the selected term from the database based on the selected term's name
+        chosenTermID = databaseHandler.getTermID(term);
         
-        System.out.println("---------------------");
-        System.out.println(term);
-        System.out.println("Getting ID for selected Term");
-        
-        //Query to get ID for the selected Term
-        String getIDQuery = "SELECT TermID From TERMS "
-                + "WHERE TERMS.TermName='" + term + "' ";
-        
-        System.out.println(getIDQuery);
-
-        //Variable that stores the results from executing the Query
-        ResultSet result = databaseHandler.executeQuery(getIDQuery);
-        //Try-catch statements that will get the ID if a result was actually gotten back from the database
-        try {
-             while(result.next()){
-                 //store ID into the corresponding variable
-                 chosenTermID = Integer.parseInt(result.getString("TermID"));
-                 System.out.println(chosenTermID);
-             }
-        } catch (SQLException ex) {
-             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        /*
-        System.out.println("---------------------");
-        System.out.println(program);
-        System.out.println("Getting ID for selected PROGRAM");
-        
-        
-        //Query to get ID for the selected Program
-        getIDQuery = "SELECT ProgramID From PROGRAMS "
-                + "WHERE PROGRAMS.ProgramName='" + program + "' ";
-        
-        System.out.println(getIDQuery);
-
-        //Variable that stores the results from executing the Query
-        result = databaseHandler.executeQuery(getIDQuery);
-        //Try-catch statements that will get the ID if a result was actually gotten back from the database
-        try {
-             while(result.next()){
-                 //store ID into the corresponding variable
-                 chosenProgramID = Integer.parseInt(result.getString("ProgramID"));
-                 System.out.println(chosenProgramID);
-             }
-        } catch (SQLException ex) {
-             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        System.out.println("---------------------");
-        System.out.println(type);
-        System.out.println("Getting ID for selected EVENT TYPE");
-        
-        //Query to get ID for the selected Term
-        getIDQuery = "SELECT EventTypeID From EVENT_TYPES "
-                + "WHERE EVENT_TYPES.EventTypeName='" + type + "' ";
-        
-        System.out.println(getIDQuery);
-
-        //Variable that stores the results from executing the Query
-        result = databaseHandler.executeQuery(getIDQuery);
-        //Try-catch statements that will get the ID if a result was actually gotten back from the database
-        try {
-             while(result.next()){
-                 //store ID into the corresponding variable
-                 chosenEventTypeID = Integer.parseInt(result.getString("EventTypeID"));
-                 System.out.println(chosenEventTypeID);
-             }
-        } catch (SQLException ex) {
-             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        */
-        
-        
-        // Get calendar name from calendar table
         //---------------------------------------------------------
         //Insert new event into the EVENTS table in the database
         
@@ -210,22 +137,11 @@ public class AddEventController implements Initializable {
                 + "'" + eventSubject + "', "
                 + "'" + calendarDate + "', "
                 + chosenTermID + ", "
-                + "'" + calendarName + "'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
+                + "'" + calendarName + "'"
                 + ")";
         
-        /*
-        String insertQuery = "INSERT INTO EVENTS VALUES ("
-                + chosenEventTypeID + ", "
-                + chosenTermID + ", "
-                + chosenProgramID + ", "
-                + "'" + eventSubject + "', "
-                + "'" + calendarDate + "', "
-                + "'" + calendarName + "'"  // This value will have to be replaced later by the name that the user choose to put on the calendar he or she generates at the beginning
-                + ")";
-        */
         
-        System.out.println(insertQuery);
-        
+        //Check if insertion into database was successful, and show message either if it was or not
         if(databaseHandler.executeAction(insertQuery)) {
             Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
             alertMessage.setHeaderText(null);
@@ -240,23 +156,13 @@ public class AddEventController implements Initializable {
             alertMessage.showAndWait();
         }
         
+        //Show event on the calendar
         mainController.showDate(date.getValue().getDayOfMonth(), eventSubject, chosenTermID);
-
-        // RODOLFO - ^^^ this is in the format you will need ^^^
-        //saveToDatabase(calendarDate, eventSubject, program, type, term);
-        
-        
-        //Reloads all available calendars in the database of the table view for loading calendars
-        //loadData();
-        
-        
+            
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
-    
-    
-    
     
     
     
@@ -294,40 +200,19 @@ public class AddEventController implements Initializable {
         
         autofillDatePicker();
         
-        // Note: Client says she only wants terms, and the term determines the program.
-        /*
-            ObservableList<String> types = 
-        FXCollections.observableArrayList(
-           "Academic",
-           "Holiday",
-           "Sports",
-           "Campus"      
-        ); 
-            
-           ObservableList<String> programs = 
-        FXCollections.observableArrayList(
-           "Undergraduate",
-           "Graduate (MBA)",
-           "Online",
-           "Accelerate Program"      
-        ); */
-           
-           ObservableList<String> terms = 
-        FXCollections.observableArrayList(
-           "FA SEM","SP SEM", "SU SEM", 
-           "FA I MBA", "FA II MBA", "SP I MBA", "SP II MBA", "SU MBA",
-           "FA QTR", "WIN QTR", "SP QTR", "SU QTR",
-           "FA 1st Half", "FA 2nd Half", "SP 1st Half", "SP 2nd Half",
-           "Campus General", "Campus STC", "Campus BV",
-           "Holiday"
-        );
-           
-          
-            
-        //typeSelect.setItems(types);
-        //programSelect.setItems(programs);
-        termSelect.setItems(terms);
+        //Get the list of exisitng terms from the database and show them in the correspondent drop-down menu
+         try {
+             //Get terms from database and store them in the ObservableList variable "terms"
+             ObservableList<String> terms = databaseHandler.getListOfTerms();
+             //Show list of terms in the drop-down menu
+             termSelect.setItems(terms);
+         } catch (SQLException ex) {
+             Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+         }
+   
         
+        
+        //**********************************************************************
         // ************* Everything below is for Draggable Window ********
         
         // Set up Mouse Dragging for the Event pop up window
