@@ -5,13 +5,20 @@
  */
 package academiccalendar.ui.listrules;
 
+import academiccalendar.data.model.Model;
 import academiccalendar.ui.main.Rule;
 
 import academiccalendar.database.DBHandler;
+import academiccalendar.ui.editevent.EditEventController;
 import academiccalendar.ui.main.FXMLDocumentController;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -78,7 +86,8 @@ public class ListRulesController implements Initializable {
     
     private void loadData(){
         //Load all rules into the Rule View Table
-        String qu = "SELECT * FROM RULES";
+        String qu = "SELECT RULES.EventDescription, TERMS.TermName, RULES.DaysFromStart FROM RULES, TERMS WHERE RULES.TermID=TERMS.TermID";
+        //String qu = "SELECT * FROM RULES";
         ResultSet result = databaseHandler.executeQuery(qu);
         
         try {
@@ -86,8 +95,8 @@ public class ListRulesController implements Initializable {
                 
                 String eventSubject = result.getString("EventDescription");
                 
-                //String termIDAux = "" + result.getInt("TermID");
-                String termIDAux = Integer.toString(result.getInt("TermID"));
+                String termIDAux = result.getString("TermName");
+                //String termIDAux = Integer.toString(result.getInt("TermID"));
                 //This line checks that a umber or string is at least gotten from the result that was gotten from th Results table
                 System.out.println("termIDAux is: " + termIDAux);
                 
@@ -180,15 +189,47 @@ public class ListRulesController implements Initializable {
 
     @FXML
     private void editRule(MouseEvent event) {
+        updateRule();
     }
 
     @FXML
     private void deleteRule(MouseEvent event) {
         
+        //Show confirmation dialog to make sure the user want to delete the selected rule
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Rule Deletion");
+        alert.setContentText("Are you sure you want to delete this rule?");
+        //Customize the buttons in the confirmation dialog
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        //Set buttons onto the confirmation dialog
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        
+        //Get the user's answer on whether deleting or not
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
+        if (result.get() == buttonTypeYes){
+            deleteSelectedRule();
+        } 
+        else 
+        {
+            // Close the window
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.close(); 
+        }
+        
+    }
+    
+    
+    public void deleteSelectedRule() {
+        
         // Get selected rule from table
         academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
         String eventSubject = rule.getEventDescription();
-        String auxTermID = rule.getTermID();
+        String auxTermName = rule.getTermID();
+        int auxTermID = databaseHandler.getTermID(auxTermName);
         System.out.println(eventSubject);
         System.out.println(auxTermID);
         
@@ -223,7 +264,19 @@ public class ListRulesController implements Initializable {
             alertMessage.setContentText("Deleting Rule Failed!");
             alertMessage.showAndWait();
         }
+    }
+    
+    
+    public void updateRule() {
         
+        System.out.println("Still working on this Edit Rule function");
+        
+        // I think this function must go in the window where the user inputs the new information for the rule
+        // Therefore I am not doing anything with it yet.
+        // Karis:
+        //       Please help me creating this window. As with editing an event, the window has to look exactly
+        //       like the window for add the rule. The fields on this window must be shown filled out with the information
+        //       of the selected rule
     }
     
 }
