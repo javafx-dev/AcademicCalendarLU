@@ -11,6 +11,7 @@ import academiccalendar.ui.main.FXMLDocumentController;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -182,6 +184,37 @@ public class ListCalendarsController implements Initializable {
     @FXML
     private void deleteCalendar(MouseEvent event) {
         
+        //Show confirmation dialog to make sure the user want to delete the selected rule
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation Dialog");
+        alert.setHeaderText("Calendar Deletion");
+        alert.setContentText("Are you sure you want to delete this calendar?");
+        //Customize the buttons in the confirmation dialog
+        ButtonType buttonTypeYes = new ButtonType("Yes");
+        ButtonType buttonTypeNo = new ButtonType("No");
+        //Set buttons onto the confirmation dialog
+        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+        
+        //Get the user's answer on whether deleting or not
+        Optional<ButtonType> result = alert.showAndWait();
+        
+        //If the user wants to delete the calendar, call the function that deletes the calendar. Otherwise, close the window
+        if (result.get() == buttonTypeYes){
+            deleteSelectedCalendar();
+        } 
+        else 
+        {
+            // Close the window
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.close(); 
+        }
+        
+        
+    }
+    
+    
+    public void deleteSelectedCalendar() {
+        
         // Get selected calendar from table
         academiccalendar.ui.main.Calendar cal = tableView.getSelectionModel().getSelectedItem();        
         String calendarName = cal.getName();
@@ -238,14 +271,9 @@ public class ListCalendarsController implements Initializable {
             alertMessage.setContentText("Deleting Calendar Failed!");
             alertMessage.showAndWait();
             System.out.println("Deleting Events of Selected Calendar Failed!!!");
-        }
-        
-        
-        
-        
-        
-        
-        
+        }    
     }
+    
+    
     
 }
