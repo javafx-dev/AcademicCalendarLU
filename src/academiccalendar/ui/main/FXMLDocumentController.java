@@ -272,13 +272,11 @@ public class FXMLDocumentController implements Initializable {
                     if (newValue != null) {
                         // Show selected/current month above calendar
                         monthLabel.setText(newValue);
+                        
+                        // Update the VIEWING MONTH
+                        Model.getInstance().viewing_month = Model.getInstance().getMonthIndex(newValue);
 
-                        // Change calendar day labels based on month selected
-                        loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
-                                , Model.getInstance().getMonthIndex(newValue));
-
-                        // Now, populate calendar view with the events for that month
-                        populateMonthWithEvents();
+                        repaintView();
                     }
                     
                 }
@@ -290,18 +288,21 @@ public class FXMLDocumentController implements Initializable {
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                     
                     if (newValue != null){
-                        // Change calendar day labels based on month selected
-                        loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem())
-                                , Model.getInstance().getMonthIndex(newValue));
-
-                        // Now, populate calendar view with the events for that month
-                        populateMonthWithEvents();
+                        
+                        // Update the VIEWING YEAR
+                        Model.getInstance().viewing_year = Integer.parseInt(newValue);
+                        
+                        repaintView();
                     }
                 }
             });
     }
     
-    private void loadCalendarLabels(int year, int month){
+    private void loadCalendarLabels(){
+        
+        // Get the current VIEW
+        int year = Model.getInstance().viewing_year;
+        int month = Model.getInstance().viewing_month;
         
         // Note: Java's Gregorian Calendar class gives us the right
         // "first day of the month" for a given calendar & month
@@ -352,13 +353,15 @@ public class FXMLDocumentController implements Initializable {
     
     public void calendarGenerate(){
         
-        // Load year selection for calendar
+        // Load year selection
         selectedYear.getItems().clear(); // Invokes our change listener
         selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_start));
         selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_end));
 
         // Select the first YEAR as default     
         selectedYear.getSelectionModel().selectFirst();
+        // Update the VIEWING YEAR
+        Model.getInstance().viewing_year = Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem());
         
         // Enable year selection box
         selectedYear.setVisible(true);
@@ -369,22 +372,30 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("Length:" + months.length);
         String[] spliceMonths = Arrays.copyOfRange(months, 0, 12);
         
-        // Load month section for calendar
-        monthSelect.getItems().clear();  // Invokes our change listener
+        // Load month selection
+        monthSelect.getItems().clear();  // Note, this will invoke our change listener too
         monthSelect.getItems().addAll(spliceMonths);   
         
         // Select the first MONTH as default
         monthSelect.getSelectionModel().selectFirst();
         monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem());
+        // Update the VIEWING MONTH
+        Model.getInstance().viewing_month = 
+                Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());
         
-        // Show first month automatically after Calendar is created
-        loadCalendarLabels(Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem()), 0);
+        repaintView();
+    }
+    
+    public void repaintView(){
+        // Purpose - To be usable anywhere to update view
+        // 1. Correct calendar labels based on Gregorian Calendar 
+        // 2. Display events known to database
         
-        // Show all events for that calendar (on the month user has selected)
+        loadCalendarLabels(); 
         populateMonthWithEvents();
     }
     
-    public void populateMonthWithEvents(){
+    private void populateMonthWithEvents(){
         
         String calendarName = Model.getInstance().calendar_name;
         
