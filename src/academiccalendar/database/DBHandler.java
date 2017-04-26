@@ -44,6 +44,8 @@ public class DBHandler {
     //Variable that controls whether or not the tables have to be created and populated
     private static boolean tablesAlreadyExist = false;
     
+    private static String defaultTermStartDate = "2017-08-28";
+    
     
     //Constructor
     public DBHandler() {
@@ -82,6 +84,10 @@ public class DBHandler {
             
             // the following lines are just here to test the correct functionality of the getTermName method
             String nameAux = this.getTermName(2);
+            
+            // the following lines are just here to test the correct functionality of the getTermStartDate method
+            String auxTermDate = this.getTermStartDate(3);
+            
         }
         
         
@@ -528,4 +534,37 @@ public class DBHandler {
         return nameOfTerm;
     }
     
+    public String getTermStartDate(int auxTermID){
+        
+        String termStartDate = defaultTermStartDate;
+        
+        String getTermDateQuery = "SELECT TermStartDate FROM TERMS "
+                            + "WHERE TERMS.TermID=" + auxTermID;
+        
+        System.out.println("*********************************************************");
+        System.out.println("Query to get term start date is: " + getTermDateQuery);
+        System.out.println("*********************************************************");
+        
+        ResultSet res = executeQuery(getTermDateQuery);
+        
+        try
+        {
+            while(res.next())
+            {
+                termStartDate = res.getString("TermStartDate");
+            }
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getTermID method in DBHandler class");
+        } 
+        
+        
+        System.out.println("*********************************************************");
+        System.out.println("The start date of the Term (" + auxTermID + ") is:  " + termStartDate);
+        System.out.println("*********************************************************");
+        
+        
+        return termStartDate;
+    }
 }
