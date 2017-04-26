@@ -65,6 +65,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -103,6 +104,22 @@ public class FXMLDocumentController implements Initializable {
     //--------------------------------------------------------------------
     //---------Database Object -------------------------------------------
     DBHandler databaseHandler;
+    @FXML
+    private VBox colorRootPane;
+    @FXML
+    private JFXColorPicker springSemCP;
+    @FXML
+    private JFXColorPicker fallSemCP;
+    @FXML
+    private JFXColorPicker allQtrCP;
+    @FXML
+    private JFXColorPicker allMbaCP;
+    @FXML
+    private JFXColorPicker allHalfCP;
+    @FXML
+    private JFXColorPicker allCampusCP;
+    @FXML
+    private JFXColorPicker allHolidayCP;
     
     // Events
     private void addEvent(VBox day) {
@@ -722,6 +739,11 @@ public class FXMLDocumentController implements Initializable {
          }  
        }
     
+    private void changeColors(){
+        // Purpose - Update colors in database and calendar from color picker
+        
+    }
+   
     public void initializeCalendarGrid(){
         
         // Go through each calendar grid location, or each "day" (7x6)
@@ -832,6 +854,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void excelBtn(MouseEvent event) {
         exportCalendarExcel();
+    }
+
+    @FXML
+    private void updateColors(MouseEvent event) {
+        changeColors();
     }
 
 
