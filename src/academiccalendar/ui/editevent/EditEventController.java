@@ -91,9 +91,7 @@ public class EditEventController implements Initializable {
         
         //System.out.println(getIDQuery);
 
-        //Variable that stores the results from executing the Query
-        // RODOLFO! - this is where I get the error. this line vvvvv
-        // I did not see the error anymore, Karis. Maybe because as you mentioned, already instantiated/initialize the DBHandler object
+        //Store the results from executing the Query
         ResultSet result = databaseHandler.executeQuery(getIDQuery);
         //Try-catch statements that will get the ID if a result was actually gotten back from the database
         try {
@@ -303,6 +301,8 @@ public class EditEventController implements Initializable {
             alertMessage.setContentText("Event was updated successfully");
             alertMessage.showAndWait();
             
+            // Update view
+            mainController.repaintView();
             
         }
         else //if there is an error
@@ -313,9 +313,6 @@ public class EditEventController implements Initializable {
             alertMessage.showAndWait();
         }
         
-        //Show event with new data on the calendar
-        mainController.showDate(date.getValue().getDayOfMonth(), Model.getInstance().event_subject, newTerm);
-            
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
@@ -372,6 +369,9 @@ public class EditEventController implements Initializable {
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Selected event was successfully deleted");
             alertMessage.showAndWait();
+            
+            // Update view
+            mainController.repaintView();
                 
             // Close the window, so that when user clicks on "Manage Rules" only the remaining existing rules appear
             Stage stage = (Stage) rootPane.getScene().getWindow();
@@ -386,8 +386,6 @@ public class EditEventController implements Initializable {
             alertMessage.showAndWait();
         }
         
-        
     }
-    
     
 }
