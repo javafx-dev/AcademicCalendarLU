@@ -33,6 +33,12 @@ public class Model {
     public String calendar_start_date;
     public String calendar_name;
     
+    // for editing rules
+    public int rule_days;
+    public String rule_term;
+    public String rule_descript;
+    
+    
     public int getMonthIndex(String month){
         switch (month)
         {    

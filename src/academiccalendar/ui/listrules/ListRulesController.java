@@ -10,7 +10,9 @@ import academiccalendar.ui.main.Rule;
 
 import academiccalendar.database.DBHandler;
 import academiccalendar.ui.editevent.EditEventController;
+import academiccalendar.ui.editrule.EditRuleController;
 import academiccalendar.ui.main.FXMLDocumentController;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +29,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
@@ -38,7 +41,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 /**
@@ -80,13 +85,18 @@ public class ListRulesController implements Initializable {
         this.mainController = mainController ;
     }
     
-    private void initCol() {
+    public void initCol() {
         eventCol.setCellValueFactory(new PropertyValueFactory<>("eventDescription"));
         termCol.setCellValueFactory(new PropertyValueFactory<>("termID"));
         daysCol.setCellValueFactory(new PropertyValueFactory<>("daysFromStart"));
     }
-    
-    private void loadData(){
+   
+    public void loadData(){
+        
+        // wipe current rules to add updates rules from database
+        tableView.getItems().clear();
+        list.clear();
+        
         //Load all rules into the Rule View Table
         String qu = "SELECT RULES.EventDescription, TERMS.TermName, RULES.DaysFromStart FROM RULES, TERMS WHERE RULES.TermID=TERMS.TermID";
         //String qu = "SELECT * FROM RULES";
@@ -228,7 +238,7 @@ public class ListRulesController implements Initializable {
 
     @FXML
     private void editRule(MouseEvent event) {
-        updateRule();
+        editRuleEvent();
     }
 
     @FXML
@@ -261,6 +271,37 @@ public class ListRulesController implements Initializable {
         
     }
     
+    private void editRuleEvent() {
+        
+        // Get selected rule data
+        academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();
+        
+        // Store rule data
+        Model.getInstance().rule_term = rule.getTermID();
+        Model.getInstance().rule_descript = rule.getEventDescription();
+        Model.getInstance().rule_days = Integer.parseInt(rule.getDaysFromStart());
+        
+        // When user clicks on any date in the calendar, event editor window opens
+        try {
+           // Load root layout from fxml file.
+           FXMLLoader editRuleLoader = new FXMLLoader();
+           editRuleLoader.setLocation(getClass().getResource("/academiccalendar/ui/editrule/edit_rule.fxml"));
+           AnchorPane rootLayout = (AnchorPane) editRuleLoader.load();
+           Stage stage = new Stage(StageStyle.UNDECORATED);
+           stage.initModality(Modality.APPLICATION_MODAL); 
+      
+           EditRuleController ruleController = editRuleLoader.getController();
+           ruleController.setMainController(mainController);
+           ruleController.setListController(this);
+         
+           // Show the scene containing the root layout.
+           Scene scene = new Scene(rootLayout);
+           stage.setScene(scene);
+           stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void deleteSelectedRule() {
         
@@ -305,20 +346,6 @@ public class ListRulesController implements Initializable {
         }
     }
     
-    
-    public void updateRule() {
-        
-        System.out.println("Still working on this Edit Rule function");
-        
-        // I think this function must go in the window where the user inputs the new information for the rule
-        // Therefore I am not doing anything with it yet.
-        // Karis:
-        //       Please help me creating this window. As with editing an event, the window has to look exactly
-        //       like the window for add the rule. The fields on this window must be shown filled out with the information
-        //       of the selected rule
-    }
-    
-    
     //**************************************************************************************************************************
     //************************    Auxiliary Functions For Creating Events Based On Rules    ************************************
     //**************************************************************************************************************************
@@ -350,6 +377,8 @@ public class ListRulesController implements Initializable {
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Event was created based on a rule successfully");
             alertMessage.showAndWait();
+            
+            mainController.repaintView();
         }
         else //if there is an error
         {
@@ -362,8 +391,7 @@ public class ListRulesController implements Initializable {
         //Store the year, month, and day of the event in a array of Strings
         String[] newEventDateParts = newEventDate.split("-");
         //Show event on the calendar. Use the array of string above to use the day of the month as the first parameter for .showDate() method
-        //mainController.showDate(Integer.parseInt(newEventDateParts[2]), evtDescription, auxTermID);
-            
+        
         // Close "Manage Rule" window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
