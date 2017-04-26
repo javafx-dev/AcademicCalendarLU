@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -38,6 +39,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.apache.poi.ss.usermodel.DateUtil;
 
 /**
  * FXML Controller class
@@ -181,10 +183,47 @@ public class ListRulesController implements Initializable {
 
     @FXML
     private void addSelectedRule(MouseEvent event) {
+        
+        // Get the information of selected rule on the table view
+        academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
+        String eventSubject = rule.getEventDescription();
+        String auxTermName = rule.getTermID();
+        int auxTermID = databaseHandler.getTermID(auxTermName);
+        String auxDaysFromStart = rule.getDaysFromStart();
+        System.out.println(eventSubject);
+        System.out.println(auxTermID);
+        System.out.println("days from starts are: " + auxDaysFromStart);
+        
+        // Get the calendar name
+        String auxCalName = Model.getInstance().calendar_name;
+        
+        createEventFromRule(eventSubject, auxTermID, auxDaysFromStart, auxCalName);
+        
     }
 
     @FXML
     private void addAllRules(MouseEvent event) {
+        
+        //********************************************************************************
+        // I am working on this.  I will have ready Wednesday for sure.  RODOLFO
+        //********************************************************************************
+        
+        //TO DO:
+        
+        //Get the current calendar name using Model.getInstance().calendar_name;
+        
+        //Create query that selects all rules from the rules table
+        
+        //Execute query and store the records gotten from the database in a ResultSet variable
+        
+        //Create the following loop:
+        //        While there are results;
+        //                get each individual field of a rule record and store them in variables,
+        //                call createEventFromRule method using the above fields and calendar name as parameters 
+        
+        //Let the user know that the events were created successfully
+        
+        //Close window
     }
 
     @FXML
@@ -225,7 +264,7 @@ public class ListRulesController implements Initializable {
     
     public void deleteSelectedRule() {
         
-        // Get selected rule from table
+        // Get the information of selected rule on the table view
         academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
         String eventSubject = rule.getEventDescription();
         String auxTermName = rule.getTermID();
@@ -278,5 +317,103 @@ public class ListRulesController implements Initializable {
         //       like the window for add the rule. The fields on this window must be shown filled out with the information
         //       of the selected rule
     }
+    
+    
+    //**************************************************************************************************************************
+    //************************    Auxiliary Functions For Creating Events Based On Rules    ************************************
+    //**************************************************************************************************************************
+    
+    //Function that creates event based on rule and inserts it into the database in the EVENTS table
+    public void createEventFromRule(String evtDescription, int auxTermID, String auxDaysFromStart, String auxCalName) {
+        
+        //Get the start date of the term specified by the rule
+        String termStartDate = databaseHandler.getTermStartDate(auxTermID);
+        
+        //Calculate the new date for the event by adding auxDaysFromStart to the termStartDate
+        String newEventDate = getNewEventDate(termStartDate, auxDaysFromStart);
+        
+        
+        //Create Query that will insert the event into the database table EVENTS
+        String insertEventQuery = "INSERT INTO EVENTS VALUES ("
+                                + "'" + evtDescription + "', "
+                                + "'" + newEventDate + "', "
+                                + auxTermID + ", "
+                                + "'" + auxCalName + "'"
+                                + ")";
+        
+        System.out.println(insertEventQuery);
+        
+        //Execute the query that insert the new event
+        //Check if insertion into database was successful, and show message either if it was or not
+        if(databaseHandler.executeAction(insertEventQuery)) {
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Event was created based on a rule successfully");
+            alertMessage.showAndWait();
+        }
+        else //if there is an error
+        {
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Creating event based on a rule failed!");
+            alertMessage.showAndWait();
+        }
+        
+        //Store the year, month, and day of the event in a array of Strings
+        String[] newEventDateParts = newEventDate.split("-");
+        //Show event on the calendar. Use the array of string above to use the day of the month as the first parameter for .showDate() method
+        //mainController.showDate(Integer.parseInt(newEventDateParts[2]), evtDescription, auxTermID);
+            
+        // Close "Manage Rule" window
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
+    }
+    
+    //Function that returns a new date for the event created based on a rule: add days from start to term's start date
+    public String getNewEventDate (String auxTermStartDate, String auxDays) {
+        
+        //Variable that holds the new date for the event that will be created based on a rule
+        String newEventDate = "none";
+        //Format needed to be saved in the database
+        SimpleDateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        System.out.println("auxTermStartDate value is: " + auxTermStartDate);
+        
+        //Convert number of days from Start to Integer type
+        int auxDaysFromStart = Integer.parseInt(auxDays);
+        
+        //ADD DAYS to the term's start date
+        try {
+            //Create Date object that holds the start date of a term
+            Date auxDate = myDateFormat.parse(auxTermStartDate);
+            System.out.println("auxDate value is: " + auxDate);
+            
+            //Create Calendar object to use its add method for adding days to a date
+            Calendar auxCal = Calendar.getInstance();
+            //Set the calendar's date to the auxDate (which is the term's start date)
+            auxCal.setTime(auxDate);
+            //Add the days from the start to the TERM's start date to get new date for an event
+            auxCal.add(Calendar.DATE, auxDaysFromStart);
+            //Get the new date that resulted from adding the days from the start to the term start date
+            auxDate = auxCal.getTime();
+        
+            
+            System.out.println("The new date is: " + auxDate);
+            
+            //Assign new date value to the String variable that will be returned
+            newEventDate = myDateFormat.format(auxDate);
+            System.out.println("Formatted new event date is: " + auxDate);
+            
+            System.out.println("newEventDate is: " + newEventDate);
+                 
+        } catch (ParseException ex) {
+            Logger.getLogger(ListRulesController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return newEventDate;
+    }
+    //**************************************************************************************************************************
+    //************************************    End Of Auxiliary Functions    ****************************************************
+    //**************************************************************************************************************************
     
 }
