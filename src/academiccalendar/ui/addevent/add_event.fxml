@@ -15,7 +15,7 @@
 
 <AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" styleClass="main-anchorpane" stylesheets="@addEvent.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.addevent.AddEventController">
    <children>
-      <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
+      <HBox id="header" fx:id="header" prefHeight="35.0" prefWidth="340.0">
          <children>
             <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Add New Event">
                <font>
