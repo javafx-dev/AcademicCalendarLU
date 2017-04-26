@@ -16,12 +16,18 @@ public class Model {
         return instance;
     }
     
+    // for adding/editing events
     public int event_day;
     public int event_month;
     public int event_year;
-    public String event_subject;
     public int event_term_id;
+    public String event_subject;
     
+    // for the year and month the user has open, is "viewing"
+    public int viewing_month;
+    public int viewing_year;
+    
+    // for the current calendar being worked on
     public int calendar_start;
     public int calendar_end;
     public String calendar_start_date;
