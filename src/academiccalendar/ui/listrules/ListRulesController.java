@@ -194,20 +194,22 @@ public class ListRulesController implements Initializable {
     @FXML
     private void addSelectedRule(MouseEvent event) {
         
-        // Get the information of selected rule on the table view
-        academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
-        String eventSubject = rule.getEventDescription();
-        String auxTermName = rule.getTermID();
-        int auxTermID = databaseHandler.getTermID(auxTermName);
-        String auxDaysFromStart = rule.getDaysFromStart();
-        System.out.println(eventSubject);
-        System.out.println(auxTermID);
-        System.out.println("days from starts are: " + auxDaysFromStart);
-        
-        // Get the calendar name
-        String auxCalName = Model.getInstance().calendar_name;
-        
-        createEventFromRule(eventSubject, auxTermID, auxDaysFromStart, auxCalName);
+        if (!tableView.getSelectionModel().isEmpty()){
+            // Get the information of selected rule on the table view
+            academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();        
+            String eventSubject = rule.getEventDescription();
+            String auxTermName = rule.getTermID();
+            int auxTermID = databaseHandler.getTermID(auxTermName);
+            String auxDaysFromStart = rule.getDaysFromStart();
+            System.out.println(eventSubject);
+            System.out.println(auxTermID);
+            System.out.println("days from starts are: " + auxDaysFromStart);
+
+            // Get the calendar name
+            String auxCalName = Model.getInstance().calendar_name;
+
+            createEventFromRule(eventSubject, auxTermID, auxDaysFromStart, auxCalName);
+        }
         
     }
 
@@ -244,62 +246,66 @@ public class ListRulesController implements Initializable {
     @FXML
     private void deleteRule(MouseEvent event) {
         
-        //Show confirmation dialog to make sure the user want to delete the selected rule
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation Dialog");
-        alert.setHeaderText("Rule Deletion");
-        alert.setContentText("Are you sure you want to delete this rule?");
-        //Customize the buttons in the confirmation dialog
-        ButtonType buttonTypeYes = new ButtonType("Yes");
-        ButtonType buttonTypeNo = new ButtonType("No");
-        //Set buttons onto the confirmation dialog
-        alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
-        
-        //Get the user's answer on whether deleting or not
-        Optional<ButtonType> result = alert.showAndWait();
-        
-        //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
-        if (result.get() == buttonTypeYes){
-            deleteSelectedRule();
-        } 
-        else 
-        {
-            // Close the window
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            stage.close(); 
+        if(!tableView.getSelectionModel().isEmpty()) {
+            //Show confirmation dialog to make sure the user want to delete the selected rule
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Rule Deletion");
+            alert.setContentText("Are you sure you want to delete this rule?");
+            //Customize the buttons in the confirmation dialog
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+            //Set buttons onto the confirmation dialog
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+            //Get the user's answer on whether deleting or not
+            Optional<ButtonType> result = alert.showAndWait();
+
+            //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
+            if (result.get() == buttonTypeYes){
+                deleteSelectedRule();
+            } 
+            else 
+            {
+                // Close the window
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.close(); 
+            }
         }
         
     }
     
     private void editRuleEvent() {
         
-        // Get selected rule data
-        academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();
-        
-        // Store rule data
-        Model.getInstance().rule_term = rule.getTermID();
-        Model.getInstance().rule_descript = rule.getEventDescription();
-        Model.getInstance().rule_days = Integer.parseInt(rule.getDaysFromStart());
-        
-        // When user clicks on any date in the calendar, event editor window opens
-        try {
-           // Load root layout from fxml file.
-           FXMLLoader editRuleLoader = new FXMLLoader();
-           editRuleLoader.setLocation(getClass().getResource("/academiccalendar/ui/editrule/edit_rule.fxml"));
-           AnchorPane rootLayout = (AnchorPane) editRuleLoader.load();
-           Stage stage = new Stage(StageStyle.UNDECORATED);
-           stage.initModality(Modality.APPLICATION_MODAL); 
-      
-           EditRuleController ruleController = editRuleLoader.getController();
-           ruleController.setMainController(mainController);
-           ruleController.setListController(this);
-         
-           // Show the scene containing the root layout.
-           Scene scene = new Scene(rootLayout);
-           stage.setScene(scene);
-           stage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        if (!tableView.getSelectionModel().isEmpty()){
+            // Get selected rule data
+            academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();
+
+            // Store rule data
+            Model.getInstance().rule_term = rule.getTermID();
+            Model.getInstance().rule_descript = rule.getEventDescription();
+            Model.getInstance().rule_days = Integer.parseInt(rule.getDaysFromStart());
+
+            // When user clicks on any date in the calendar, event editor window opens
+            try {
+               // Load root layout from fxml file.
+               FXMLLoader editRuleLoader = new FXMLLoader();
+               editRuleLoader.setLocation(getClass().getResource("/academiccalendar/ui/editrule/edit_rule.fxml"));
+               AnchorPane rootLayout = (AnchorPane) editRuleLoader.load();
+               Stage stage = new Stage(StageStyle.UNDECORATED);
+               stage.initModality(Modality.APPLICATION_MODAL); 
+
+               EditRuleController ruleController = editRuleLoader.getController();
+               ruleController.setMainController(mainController);
+               ruleController.setListController(this);
+
+               // Show the scene containing the root layout.
+               Scene scene = new Scene(rootLayout);
+               stage.setScene(scene);
+               stage.show();
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -312,18 +318,18 @@ public class ListRulesController implements Initializable {
         int auxTermID = databaseHandler.getTermID(auxTermName);
         System.out.println(eventSubject);
         System.out.println(auxTermID);
-        
+
         //Query that will delete the selected rule
         String deleteRulesQuery = "DELETE FROM RULES "
                                  + "WHERE RULES.EventDescription='" + eventSubject + "' "
                                  + "AND RULES.TermID=" + auxTermID;
-        
+
         System.out.println(deleteRulesQuery);
-        
-        
+
+
         //Execute query that deletes the selected rule
         boolean ruleWasDeleted = databaseHandler.executeAction(deleteRulesQuery);
-        
+
         if (ruleWasDeleted)
         {
             //Show message indicating that the selected rule was deleted
@@ -331,7 +337,7 @@ public class ListRulesController implements Initializable {
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Selected rule was successfully deleted");
             alertMessage.showAndWait();
-                
+
             // Close the window, so that when user clicks on "Manage Rules" only the remaining existing rules appear
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
@@ -343,7 +349,7 @@ public class ListRulesController implements Initializable {
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Deleting Rule Failed!");
             alertMessage.showAndWait();
-        }
+        }  
     }
     
     //**************************************************************************************************************************
