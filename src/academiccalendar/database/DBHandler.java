@@ -88,6 +88,12 @@ public class DBHandler {
             // the following lines are just here to test the correct functionality of the getTermStartDate method
             String auxTermDate = this.getTermStartDate(3);
             
+            // the following lines are just here to test the correct functionality of the getListOfRules method
+            ArrayList<String> auxListOfRules= this.getListOfRules();
+            
+            // the following lines are just here to test the correct functionality of the getTermColor method
+            String colorAux = this.getTermColor(2);
+            
         }
         
         
@@ -155,7 +161,7 @@ public class DBHandler {
                 String query1 = "CREATE TABLE " + TableName + "("
                         + "TermID integer primary key not null,\n"
                         + "TermName varchar(20),\n"
-                        + "TermColor varchar(9),\n"
+                        + "TermColor varchar(20),\n"
                         + "TermStartDate date"
                         + ")";
                 stmt.execute(query1);
@@ -431,7 +437,7 @@ public class DBHandler {
         
         try
         {
-            //While there are Term Names in the ResultSet variable, add each one of them to the ArrayList of Strings
+            //While there are Term Names in the ResultSet variable, add each one of them to the ObservableList of Strings
            while(rs.next()) 
             {
                 //get the term name and store it in a String variable
@@ -567,4 +573,91 @@ public class DBHandler {
         
         return termStartDate;
     }
+    
+    public ArrayList<String> getListOfRules() {
+        
+        //Object that will hold all the rows of rules to be returned
+        ArrayList<String> listOfRules = new ArrayList<>();
+        
+        //Query that select all rows of rules from the RULES table
+        String queryListOfRules = "SELECT * FROM RULES";
+        
+        //Variable that will hold the result of executing the previous query
+        ResultSet rs = executeQuery(queryListOfRules);
+        
+        
+        try
+        {
+            //While there are Rules in the ResultSet variable, add each one of them to the ArrayList of Strings
+           while(rs.next()) 
+            {
+                //get the full row of the rule and store it in a String variable
+                String ruleDataRow = rs.getString("EventDescription") + "/" + rs.getInt("TermID") + "/" + rs.getString("DaysFromStart");
+                //add rule to list of rules
+                listOfRules.add(ruleDataRow);
+            } 
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getListOfRules method in DBHandler class");
+        }
+        
+        //********************************************************************************************************
+        //*******  These lines of code are to Test we get all rules correctly from databse table TERMS  **********
+        
+        //Print full array with all Term Names for testing that we get the list we need
+        System.out.println("Array list of rules is the following:  ");//+ listOfRules);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        int arrayListSize = listOfRules.size();
+        
+        for (int i=0; i < arrayListSize; i++)
+        {
+            System.out.println("Rule: " + listOfRules.get(i));
+        }
+        //*******************************************************************************************************
+        //*******************************************************************************************************
+        
+        return listOfRules; 
+    }
+    
+    
+    public String getTermColor(int auxTermID) {
+        
+        //Declare variable that will contain the color of the term to be returned
+        String termColor = "x";
+      
+        //Create query that will find a matching result for the termColor based on the term's ID
+        String getTermColorQuery = "SELECT TermColor FROM TERMS "
+                                + "WHERE TERMS.TermID=" + auxTermID;
+        
+        System.out.println("Query to get TermName is: " + getTermColorQuery);
+        
+        
+        ResultSet res = executeQuery(getTermColorQuery);
+        
+        try
+        {
+            while(res.next())
+            {
+                termColor = res.getString("TermColor");
+            }
+        }
+        catch (SQLException e) 
+        {
+            System.err.println(e.getMessage() + "--- error at getTermColor method in DBHandler class");
+        } 
+        
+        //test function for correct result
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        System.out.println("Term Color for " + auxTermID + " is: " + termColor);
+        System.out.println("-----------------------------------------------------");
+        System.out.println("-----------------------------------------------------");
+        
+        
+        
+        return termColor;
+    }
+    
 }
