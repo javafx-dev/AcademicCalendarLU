@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
@@ -207,42 +208,87 @@ public class ListRulesController implements Initializable {
 
             // Get the calendar name
             String auxCalName = Model.getInstance().calendar_name;
-
-            createEventFromRule(eventSubject, auxTermID, auxDaysFromStart, auxCalName);
+            
+            //Create event based on selected rule
+            boolean eventWasCreated = createEventFromRule(eventSubject, auxTermID, auxDaysFromStart, auxCalName);
+            
+            //Check if event was create and show the correspondent message to the user
+            if (eventWasCreated)
+            {
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Event was created based on a rule successfully");
+                alertMessage.showAndWait();    
+            }
+            else
+            {
+                Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Creating event based on a rule failed!");
+                alertMessage.showAndWait();
+            }
         }
         
     }
 
     @FXML
     private void addAllRules(MouseEvent event) {
+                
+        // Get the calendar name
+        String auxCalName = Model.getInstance().calendar_name;
         
-        //********************************************************************************
-        // I am working on this.  I will have ready Wednesday for sure.  RODOLFO
-        //********************************************************************************
+        //Get list of rules from database and store it in an ArrayList variable
+        ArrayList<String> listOfRules = databaseHandler.getListOfRules();
         
-        //TO DO:
+        //Store number of rules (size of array list)
+        int listSize = listOfRules.size();
+        //Variable that keeps track of the number of events created
+        int auxEventsCreated = 0;
         
-        //Get the current calendar name using Model.getInstance().calendar_name;
-        
-        //Create query that selects all rules from the rules table
-        
-        //Execute query and store the records gotten from the database in a ResultSet variable
-        
-        //Create the following loop:
-        //        While there are results;
-        //                get each individual field of a rule record and store them in variables,
-        //                call createEventFromRule method using the above fields and calendar name as parameters 
-        
-        //Let the user know that the events were created successfully
-        
-        //Close window
+        //Check if array list of rules is not empty
+        if (!listOfRules.isEmpty())
+        {
+            //Loop that creates all events based on rules
+            for (int i=0; i < listSize; i++)
+            {
+                //Splits rule by EventDescription, TermID, and DaysFromStart
+                String[] auxRule = listOfRules.get(i).split("/");
+                //Create event based on this rule
+                boolean eventWasCreated = createEventFromRule(auxRule[0], Integer.parseInt(auxRule[1]), auxRule[2], auxCalName);
+                
+                //Increase number of events created
+                if (eventWasCreated)
+                {
+                    auxEventsCreated++;
+                }      
+            }
+            
+            if (auxEventsCreated > 0)
+            {
+                //Show message letting the user know that events were created successfully based on all rules
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText(auxEventsCreated + " Events Were Successfully Created Based On All Rules!");
+                alertMessage.showAndWait();
+            }
+        }
+        else
+        {
+            //Show message letting the user know that events were created successfully based on all rules
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Action Failed! There aren't any saved rules!");
+            alertMessage.showAndWait();
+        }
     }
-
+    
+    
     @FXML
     private void editRule(MouseEvent event) {
         editRuleEvent();
     }
 
+    
     @FXML
     private void deleteRule(MouseEvent event) {
         
@@ -357,7 +403,11 @@ public class ListRulesController implements Initializable {
     //**************************************************************************************************************************
     
     //Function that creates event based on rule and inserts it into the database in the EVENTS table
-    public void createEventFromRule(String evtDescription, int auxTermID, String auxDaysFromStart, String auxCalName) {
+    //and return a boolean variable indicating if it was created or not
+    public boolean createEventFromRule(String evtDescription, int auxTermID, String auxDaysFromStart, String auxCalName) {
+        
+        //Booolean variable to be returned whether or not the event creation was successful
+        boolean eventWasCreated = false;
         
         //Get the start date of the term specified by the rule
         String termStartDate = databaseHandler.getTermStartDate(auxTermID);
@@ -378,29 +428,20 @@ public class ListRulesController implements Initializable {
         
         //Execute the query that insert the new event
         //Check if insertion into database was successful, and show message either if it was or not
-        if(databaseHandler.executeAction(insertEventQuery)) {
-            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
-            alertMessage.setHeaderText(null);
-            alertMessage.setContentText("Event was created based on a rule successfully");
-            alertMessage.showAndWait();
+        if(databaseHandler.executeAction(insertEventQuery)) 
+        {
+            //Change boolean variable to true if event was created
+            eventWasCreated = true;
             
+            //Show the new event in the table view
             mainController.repaintView();
         }
         else //if there is an error
         {
-            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
-            alertMessage.setHeaderText(null);
-            alertMessage.setContentText("Creating event based on a rule failed!");
-            alertMessage.showAndWait();
+            return eventWasCreated;   
         }
         
-        //Store the year, month, and day of the event in a array of Strings
-        String[] newEventDateParts = newEventDate.split("-");
-        //Show event on the calendar. Use the array of string above to use the day of the month as the first parameter for .showDate() method
-        
-        // Close "Manage Rule" window
-        Stage stage = (Stage) rootPane.getScene().getWindow();
-        stage.close();
+        return eventWasCreated;
     }
     
     //Function that returns a new date for the event created based on a rule: add days from start to term's start date
