@@ -15,6 +15,7 @@ import academiccalendar.ui.addrule.AddRuleController;
 import academiccalendar.ui.editevent.EditEventController;
 import academiccalendar.ui.listcalendars.ListCalendarsController;
 import academiccalendar.ui.listrules.ListRulesController;
+import academiccalendar.ui.listterms.ListTermsController;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
@@ -233,8 +234,31 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
+    private void manageTermsEvent() {
+        // When the user clicks "Manage Term Dates" pop up window that let's 
+        // them change starting dates for terms
+         try {
+            // Load root layout from fxml file.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/academiccalendar/ui/listterms/list_terms.fxml"));
+            AnchorPane rootLayout = (AnchorPane) loader.load();
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL); 
+
+            ListTermsController listController = loader.getController();
+            listController.setMainController(this);
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     private void listRulesEvent() {
-        // When the user clicks "New Calendar" pop up window that let's them enter dates
+        // When the user clicks "Manage Rules" pop up window that let's them manage rules
          try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
@@ -859,6 +883,11 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void updateColors(MouseEvent event) {
         changeColors();
+    }
+
+    @FXML
+    private void manageTermDates(MouseEvent event) {
+        manageTermsEvent();
     }
 
 
