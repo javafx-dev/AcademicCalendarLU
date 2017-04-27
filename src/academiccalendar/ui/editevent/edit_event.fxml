@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -14,12 +13,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editevent.EditEventController">
-    <stylesheets>
-        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
-    </stylesheets>
+<AnchorPane fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" stylesheets="@../style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editevent.EditEventController">
    <children>
-      <HBox prefHeight="35.0" prefWidth="345.0" style="-fx-background-color: whitesmoke;" AnchorPane.topAnchor="0.0">
+      <HBox id="header" prefHeight="35.0" prefWidth="345.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Edit Event">
                <font>
@@ -61,12 +57,12 @@
       </VBox>
       <HBox layoutX="5.0" layoutY="181.0" prefHeight="41.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <JFXButton onMouseClicked="#update" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Update">
+            <JFXButton onMouseClicked="#update" prefHeight="40.0" prefWidth="200.0" text="Update">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton onMouseClicked="#delete" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Delete">
+            <JFXButton onMouseClicked="#delete" prefHeight="40.0" prefWidth="200.0" text="Delete">
                <font>
                   <Font size="13.0" />
                </font>

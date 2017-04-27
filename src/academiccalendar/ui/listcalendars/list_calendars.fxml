@@ -13,14 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="360.0" prefWidth="459.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listcalendars.ListCalendarsController">
-    <stylesheets>
-        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
-    </stylesheets>
+<AnchorPane fx:id="rootPane" prefHeight="360.0" prefWidth="459.0" stylesheets="@../style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listcalendars.ListCalendarsController">
    <children>
       <VBox layoutX="59.0" layoutY="46.0" prefHeight="409.0" prefWidth="459.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
+            <HBox id="header" prefHeight="35.0" prefWidth="340.0">
                <children>
                   <Label fx:id="topLabel" prefHeight="25.0" prefWidth="419.0" text="Calendar Manager">
                      <font>
@@ -55,23 +52,32 @@
             </Label>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
               <columns>
-                <TableColumn fx:id="nameCol" prefWidth="209.0" text="Calendar Name" />
-                <TableColumn fx:id="springCol" minWidth="0.0" prefWidth="120.0" text="Spring Semester" />
-                  <TableColumn fx:id="fallCol" prefWidth="109.0" text="Fall Semester" />
+                <TableColumn fx:id="nameCol" prefWidth="163.0" text="Calendar Name" />
+                <TableColumn fx:id="springCol" minWidth="0.0" prefWidth="140.0" text="Spring Semester" />
+                  <TableColumn fx:id="fallCol" minWidth="0.0" prefWidth="140.0" text="Fall Semester" />
               </columns>
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
+               <stylesheets>
+                  <URL value="@../style/tableStyle.css" />
+                  <URL value="@../style/scrollbarStyle.css" />
+               </stylesheets>
             </TableView>
-            <HBox alignment="CENTER" prefHeight="30.0" prefWidth="459.0">
+            <HBox alignment="CENTER" prefHeight="42.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#openCalendar" text="Open Selected Calendar" />
+                  <JFXButton onMouseClicked="#openCalendar" prefHeight="40.0" prefWidth="190.0" text="Open Selected Calendar">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton onMouseClicked="#deleteCalendar" prefHeight="40.0" prefWidth="190.0" text="Delete Selected Calendar">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
                </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="279.0" prefHeight="30.0" prefWidth="459.0">
-               <children>
-                  <JFXButton onMouseClicked="#deleteCalendar" text="Delete Selected Calendar" />
-               </children>
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>

@@ -13,14 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="432.0" prefWidth="370.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listterms.ListTermsController">
-    <stylesheets>
-        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
-    </stylesheets>
+<AnchorPane fx:id="rootPane" prefHeight="432.0" prefWidth="370.0" stylesheets="@../style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listterms.ListTermsController">
    <children>
-      <VBox prefHeight="432.0" prefWidth="370.0">
+      <VBox prefHeight="421.0" prefWidth="370.0">
          <children>
-            <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
+            <HBox id="header" prefHeight="35.0" prefWidth="340.0">
                <children>
                   <Label fx:id="topLabel" prefHeight="25.0" prefWidth="419.0" text="Term Manager">
                      <font>
@@ -52,8 +49,11 @@
                <VBox.margin>
                   <Insets left="10.0" />
                </VBox.margin>
+               <font>
+                  <Font size="13.0" />
+               </font>
             </Label>
-            <TableView fx:id="tableView" prefHeight="287.0" prefWidth="350.0">
+            <TableView fx:id="tableView" prefHeight="257.0" prefWidth="350.0">
                <columns>
                   <TableColumn fx:id="termCol" prefWidth="170.0" text="Term" />
                   <TableColumn fx:id="dateCol" prefWidth="179.0" text="Starting Date" />
@@ -61,25 +61,34 @@
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
+               <stylesheets>
+                  <URL value="@../style/tableStyle.css" />
+                  <URL value="@../style/scrollbarStyle.css" />
+               </stylesheets>
             </TableView>
-            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="459.0">
-               <children>
-                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#editTerm" prefHeight="32.0" prefWidth="130.0" text="Edit Term" />
-               </children>
-               <VBox.margin>
-                  <Insets top="10.0" />
-               </VBox.margin>
-            </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="376.0" prefHeight="31.0" prefWidth="459.0">
                <children>
-                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#editTerm" prefHeight="32.0" prefWidth="145.0" text="Delete Term">
+                  <Label alignment="BOTTOM_CENTER" prefHeight="73.0" prefWidth="470.0" text="For Currently Selected Term:" textAlignment="CENTER">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="31.0" prefWidth="459.0">
+               <children>
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#editTerm" prefHeight="32.0" prefWidth="140.0" stylesheets="@../style/materialButtonStyle.css" text="Edit Term">
                      <HBox.margin>
-                        <Insets />
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#editTerm" prefHeight="32.0" prefWidth="140.0" stylesheets="@../style/materialButtonStyle.css" text="Delete Term">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </JFXButton>
                </children>
                <VBox.margin>
-                  <Insets bottom="10.0" top="10.0" />
+                  <Insets top="10.0" />
                </VBox.margin>
             </HBox>
          </children>
