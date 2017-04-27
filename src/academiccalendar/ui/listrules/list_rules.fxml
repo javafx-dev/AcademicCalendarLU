@@ -81,7 +81,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#addAllRules" prefHeight="22.0" prefWidth="120.0" text="Create Event">
+                  <JFXButton onMouseClicked="#addSelectedRule" prefHeight="22.0" prefWidth="120.0" text="Create Event">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin></JFXButton>
@@ -109,7 +109,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="309.0" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#addSelectedRule" prefHeight="22.0" prefWidth="200.0" text="Create All Events" />
+                  <JFXButton onMouseClicked="#addAllRules" prefHeight="22.0" prefWidth="200.0" text="Create All Events" />
                </children>
                <VBox.margin>
                   <Insets top="10.0" />
