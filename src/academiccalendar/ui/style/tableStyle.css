@@ -31,8 +31,8 @@
 
 .table-view {
     -fx-table-header-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
-    -fx-background-color: transparent;
+    /*-fx-table-cell-border-color: transparent;*/
+    /*-fx-background-color: transparent;*/
 }
 
 .workbench-view > .table-view {
@@ -52,7 +52,7 @@
 }
 
 .table-row-cell {
-    -fx-background-color: transparent;
+   /* -fx-background-color: transparent;*/
 }
 
 .table-row-cell:hover {

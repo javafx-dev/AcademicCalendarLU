@@ -32,7 +32,7 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0" stylesheets="@../addevent/addEvent.css">
+            <Label onMouseClicked="#exit" prefHeight="37.0" prefWidth="39.0">
                <graphic>
                   <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
                      <image>
