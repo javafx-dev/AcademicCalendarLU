@@ -38,6 +38,9 @@ public class Model {
     public String rule_term;
     public String rule_descript;
     
+    // for editing terms
+    public String term_name;
+    public String term_date;    
     
     public int getMonthIndex(String month){
         switch (month)
