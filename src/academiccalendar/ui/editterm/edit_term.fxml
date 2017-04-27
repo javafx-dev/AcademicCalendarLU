@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXDatePicker?>
-<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -12,12 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="213.0" prefWidth="295.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editterm.EditTermController">
-    <stylesheets>
-        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
-    </stylesheets>
+<AnchorPane fx:id="rootPane" prefHeight="213.0" prefWidth="295.0" stylesheets="@../style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editterm.EditTermController">
    <children>
-      <HBox id="header" prefHeight="35.0" prefWidth="342.0" style="-fx-background-color: whitesmoke;" stylesheets="@../addevent/addEvent.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox id="header" prefHeight="35.0" prefWidth="342.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label fx:id="topLabel" prefHeight="25.0" prefWidth="313.0" text="Edit Term Date">
                <font>
@@ -45,13 +41,13 @@
             </Label>
          </children>
       </HBox>
-      <VBox layoutX="32.0" layoutY="39.0" prefHeight="134.0" prefWidth="286.0" spacing="20.0">
+      <VBox layoutX="32.0" layoutY="40.0" prefHeight="134.0" prefWidth="286.0" spacing="20.0">
          <children>
             <HBox prefHeight="46.0" prefWidth="298.0">
                <children>
                   <Label prefHeight="46.0" prefWidth="325.0" text="Change Starting Date For: ">
                      <font>
-                        <Font size="13.0" />
+                        <Font size="14.0" />
                      </font>
                   </Label>
                   <Label fx:id="termLabel" layoutX="10.0" layoutY="10.0" prefHeight="46.0" prefWidth="301.0">
@@ -66,12 +62,12 @@
       </VBox>
       <HBox prefHeight="41.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
          <children>
-            <JFXButton onMouseClicked="#save" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Update">
+            <JFXButton onMouseClicked="#save" prefHeight="40.0" prefWidth="200.0" text="Update">
                <font>
                   <Font size="13.0" />
                </font>
             </JFXButton>
-            <JFXButton onMouseClicked="#cancel" prefHeight="40.0" prefWidth="200.0" styleClass="jfx-button" stylesheets="@../addevent/addEvent.css" text="Cancel">
+            <JFXButton onMouseClicked="#cancel" prefHeight="40.0" prefWidth="200.0" text="Cancel">
                <font>
                   <Font size="13.0" />
                </font>

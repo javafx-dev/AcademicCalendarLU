@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../style/mainStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.main.FXMLDocumentController">
    <children>
       <BorderPane layoutX="350.0" prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: ecedf7;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <right>
@@ -53,7 +53,7 @@
                <children>
                   <VBox fx:id="centerArea" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="707.0" prefWidth="875.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="810.0" prefWidth="880.0" vbarPolicy="ALWAYS">
+                        <ScrollPane fx:id="scrollPane" fitToWidth="true" hbarPolicy="NEVER" prefHeight="810.0" prefWidth="880.0" stylesheets="@../style/scrollbarStyle.css" vbarPolicy="ALWAYS">
                            <content>
                               <VBox prefWidth="863.0">
                                  <children>
@@ -87,13 +87,13 @@
             </AnchorPane>
          </center>
          <left>
-            <JFXTabPane prefHeight="800.0" prefWidth="304.0" rotateGraphic="true" side="BOTTOM" stylesheets="@menuStyle.css" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <JFXTabPane prefHeight="800.0" prefWidth="304.0" rotateGraphic="true" side="BOTTOM" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
                <tabs>
                   <Tab text="File">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" stylesheets="@../style/menuStyle.css">
                                  <children>
                                     <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="23.0" prefWidth="343.0" text="Calendar Options:" textAlignment="CENTER">
                                        <VBox.margin>
@@ -150,10 +150,10 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox prefHeight="200.0" prefWidth="100.0" stylesheets="@../style/menuStyle.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label alignment="CENTER" prefHeight="42.0" prefWidth="308.0" text="Color Manager:" />
-                                    <VBox fx:id="colorRootPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css" VBox.vgrow="NEVER">
+                                    <VBox fx:id="colorRootPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="304.0" VBox.vgrow="NEVER">
                                        <children>
                                           <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="304.0" spacing="20.0">
                                              <children>
@@ -294,7 +294,7 @@
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="235.0">
                            <children>
-                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" style="-fx-background-color: #E9F2F5;" stylesheets="@menuStyle.css">
+                              <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="637.0" prefWidth="304.0" stylesheets="@../style/menuStyle.css">
                                  <children>
                                     <Label alignment="BOTTOM_CENTER" prefHeight="40.0" prefWidth="304.0" text="Rule Options:">
                                        <font>

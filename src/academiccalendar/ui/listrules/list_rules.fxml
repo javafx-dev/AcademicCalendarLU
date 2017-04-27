@@ -13,14 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="rootPane" prefHeight="409.0" prefWidth="444.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listrules.ListRulesController">
-    <stylesheets>
-        <URL value="@/academiccalendar/ui/addevent/addEvent.css" />
-    </stylesheets>
+<AnchorPane fx:id="rootPane" prefHeight="440.0" prefWidth="459.0" stylesheets="@../style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.listrules.ListRulesController">
    <children>
-      <VBox prefHeight="409.0" prefWidth="459.0">
+      <VBox prefHeight="440.0" prefWidth="459.0">
          <children>
-            <HBox prefHeight="35.0" prefWidth="340.0" style="-fx-background-color: whitesmoke;">
+            <HBox id="header" prefHeight="35.0" prefWidth="340.0">
                <children>
                   <Label fx:id="topLabel" prefHeight="25.0" prefWidth="419.0" text="Rule Manager">
                      <font>
@@ -52,6 +49,9 @@
                <VBox.margin>
                   <Insets left="10.0" />
                </VBox.margin>
+               <font>
+                  <Font size="13.0" />
+               </font>
             </Label>
             <TableView fx:id="tableView" prefHeight="200.0" prefWidth="200.0">
                <columns>
@@ -62,26 +62,58 @@
                <VBox.margin>
                   <Insets left="10.0" right="10.0" />
                </VBox.margin>
+               <stylesheets>
+                  <URL value="@../style/tableStyle.css" />
+                  <URL value="@../style/scrollbarStyle.css" />
+               </stylesheets>
             </TableView>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="309.0" prefHeight="30.0" prefWidth="459.0">
-               <children>
-                  <JFXButton onMouseClicked="#addSelectedRule" text="Create Event Based On Selected Rule" />
-               </children>
-            </HBox>
             <HBox alignment="CENTER" layoutX="10.0" layoutY="339.0" prefHeight="30.0" prefWidth="459.0">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
                <children>
-                  <JFXButton onMouseClicked="#addAllRules" text="Create Events Based On All Rules" />
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="509.0" text="For currently selected rule:" textAlignment="CENTER">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#editRule" text="Edit Rule" />
+                  <JFXButton onMouseClicked="#addAllRules" prefHeight="22.0" prefWidth="120.0" text="Create Event">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton onMouseClicked="#editRule" prefWidth="120.0" text="Edit Rule">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
+                  <JFXButton onMouseClicked="#deleteRule" prefHeight="22.0" prefWidth="120.0" text="Delete Rule">
+                     <HBox.margin>
+                        <Insets left="5.0" right="5.0" />
+                     </HBox.margin></JFXButton>
+               </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="289.0" prefHeight="30.0" prefWidth="459.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="509.0" text="For all rules:" textAlignment="CENTER">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutX="10.0" layoutY="339.0" prefHeight="30.0" prefWidth="459.0">
+            <HBox alignment="CENTER" layoutX="10.0" layoutY="309.0" prefHeight="30.0" prefWidth="459.0">
                <children>
-                  <JFXButton onMouseClicked="#deleteRule" text="Delete Rule" />
+                  <JFXButton onMouseClicked="#addSelectedRule" prefHeight="22.0" prefWidth="200.0" text="Create All Events" />
                </children>
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
             </HBox>
          </children>
       </VBox>
