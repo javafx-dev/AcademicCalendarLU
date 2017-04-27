@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -72,10 +75,10 @@ public class ListTermsController implements Initializable {
     private void editTermEvent() {
         
         if (!tableView.getSelectionModel().isEmpty()){
-            // Get selected rule data
+            // Get selected term data
             Term term = tableView.getSelectionModel().getSelectedItem();
 
-            // Store rule data
+            // Store term data
             Model.getInstance().term_name = term.getTermName();
             Model.getInstance().term_date = term.getTermDate();
 
@@ -193,6 +196,117 @@ public class ListTermsController implements Initializable {
     @FXML
     private void editTerm(MouseEvent event) {
         editTermEvent();
+    }
+    
+    @FXML
+    private void deleteTerm(MouseEvent event) {
+        
+        if(!tableView.getSelectionModel().isEmpty()) {
+            //Show confirmation dialog to make sure the user want to delete the selected rule
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Term Deletion");
+            alert.setContentText("WARNING!\nThis action cannot be undone!\nAre you sure you want to permanently delete this term?");
+            //Customize the buttons in the confirmation dialog
+            ButtonType buttonTypeYes = new ButtonType("Yes");
+            ButtonType buttonTypeNo = new ButtonType("No");
+            //Set buttons onto the confirmation dialog
+            alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
+
+            //Get the user's answer on whether deleting or not
+            Optional<ButtonType> result = alert.showAndWait();
+
+            //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
+            if (result.get() == buttonTypeYes){
+                deleteSelectedTerm();
+            } 
+            else 
+            {
+                // Close the window
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.close(); 
+            }
+        }
+    }
+    
+    
+    public void deleteSelectedTerm(){
+        
+        // Get selected term data
+        Term term = tableView.getSelectionModel().getSelectedItem();
+
+        // Store term data
+        String termName = term.getTermName();
+        String termStartDate = term.getTermDate();
+        //Get termID that corresponds to the selected term to be deleted
+        int auxTermID = databaseHandler.getTermID(termName);
+        
+        //***************************************************************
+        //***  First, Delete all events related to the selected term  ***
+        //***  Second, Delete all rules related to the selected term  ***
+        //***  Third, Delete the selected term                        ***
+        //***************************************************************
+        
+        //Query that will delete all events that are associated to to the selected term
+        String deleteEventsQuery = "DELETE FROM EVENTS "
+                                 + "WHERE EVENTS.TermID=" + auxTermID;
+        
+        System.out.println(deleteEventsQuery);
+        
+        //Query that will delete all rules that are associated to the selected term
+        String deleteRulesQuery = "DELETE FROM RULES "
+                                 + "WHERE RULES.TermID=" + auxTermID;
+        
+        System.out.println(deleteRulesQuery);
+        
+        //Query that will delete the selected calendar, AFTER all its events had been deleted
+        String deleteTermQuery = "DELETE FROM TERMS "
+                                    + "WHERE TERMS.TermID=" + auxTermID;
+        
+        System.out.println(deleteTermQuery);
+        
+        //Execute query that deletes all events associated to the selected term
+        boolean eventsWereDeleted = databaseHandler.executeAction(deleteEventsQuery);
+        //Execute query that deletes all events associated to the selected term
+        boolean rulesWereDeleted = databaseHandler.executeAction(deleteRulesQuery);
+        
+        if (eventsWereDeleted && rulesWereDeleted)
+        {
+            System.out.println("All events and rules associated to the selected term were successfully deleted. Deleting TERM is next");
+            //Execute query that deletes the selected term
+            boolean termWasDeleted = databaseHandler.executeAction(deleteTermQuery);
+            
+            //Check if the selected term was deleted
+            if (termWasDeleted)
+            {
+                //Show message indicating that the selected term was deleted
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Term was successfully deleted");
+                alertMessage.showAndWait();
+                
+                // Close the window, so that when user clicks on "Manage Your Terms" only the remaining existing terms appear
+                Stage stage = (Stage) rootPane.getScene().getWindow();
+                stage.close();
+            }
+            else
+            {
+                //Show message indicating that the term could not be deleted
+                Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Deleting Term Failed!");
+                alertMessage.showAndWait();
+            }
+        }
+        else
+        {
+            //Show message indicating that the term could not be deleted
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Deleting Term Failed!");
+            alertMessage.showAndWait();
+            System.out.println("Deleting Events and Rules associated with Selected Term Failed!!!");
+        }     
     }
     
 }
