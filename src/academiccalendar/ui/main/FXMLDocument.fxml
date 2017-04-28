@@ -155,14 +155,14 @@
                                     <Label alignment="CENTER" prefHeight="42.0" prefWidth="308.0" text="Color Manager:" />
                                     <VBox fx:id="colorRootPane" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="304.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="304.0" spacing="20.0">
+                                          <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="52.0" prefHeight="43.0" prefWidth="304.0" spacing="20.0">
                                              <children>
-                                                <Label text="Spring SEM: ">
+                                                <Label text="Fall SEM:">
                                                    <HBox.margin>
                                                       <Insets right="5.0" />
                                                    </HBox.margin>
                                                 </Label>
-                                                <JFXColorPicker fx:id="springSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
+                                                <JFXColorPicker fx:id="fallSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
                                                 <JFXCheckBox checkedColor="#777777" text=" visible?" />
                                              </children>
                                              <VBox.margin>
@@ -172,14 +172,14 @@
                                                 <Insets right="30.0" />
                                              </padding>
                                           </HBox>
-                                          <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="52.0" prefHeight="43.0" prefWidth="304.0" spacing="20.0">
+                                          <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="304.0" spacing="20.0">
                                              <children>
-                                                <Label text="Fall SEM:">
+                                                <Label text="Spring SEM: ">
                                                    <HBox.margin>
                                                       <Insets right="5.0" />
                                                    </HBox.margin>
                                                 </Label>
-                                                <JFXColorPicker fx:id="fallSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
+                                                <JFXColorPicker fx:id="springSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
                                                 <JFXCheckBox checkedColor="#777777" text=" visible?" />
                                              </children>
                                              <VBox.margin>
