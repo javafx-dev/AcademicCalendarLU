@@ -39,6 +39,7 @@ public class DBHandler {
                                     "FA 1st Half", "FA 2nd Half", "SP 1st Half", "SP 2nd Half",
                                     "Campus General", "Campus STC", "Campus BV",
                                     "Holiday"};
+    
     private static String defaultColor = "#000000";  //black is the default color
     
     //Variable that controls whether or not the tables have to be created and populated
@@ -172,7 +173,7 @@ public class DBHandler {
         } finally {
         }
     }
-    
+        
     //**************************  RULES Table  ***********************************************
     //Function that creates RULES Table
     void createRulesTable(){
@@ -658,6 +659,19 @@ public class DBHandler {
         
         
         return termColor;
+    }
+    
+    public void setTermColor(String term, String termRGB){
+     
+        String setTermColorAction = "UPDATE TERMS "
+                        + "SET TermColor ='" + termRGB + "' "
+                        + "WHERE TERMS.TermName LIKE " 
+                        + "'%" + term + "%'";
+        
+        System.out.println("Query to get related terms is: " + setTermColorAction);
+        
+        executeAction(setTermColorAction);
+    
     }
     
 }

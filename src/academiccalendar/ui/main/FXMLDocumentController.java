@@ -67,6 +67,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -107,6 +108,7 @@ public class FXMLDocumentController implements Initializable {
     DBHandler databaseHandler;
     @FXML
     private VBox colorRootPane;
+    // Color pickers
     @FXML
     private JFXColorPicker springSemCP;
     @FXML
@@ -514,6 +516,20 @@ public class FXMLDocumentController implements Initializable {
                         
                     });
                     
+                    // Get term color from term's table
+                    String eventRGB = databaseHandler.getTermColor(termID);
+                    
+                    // Parse for rgb values
+                    String[] colors = eventRGB.split("-");
+                    String red = colors[0];
+                    String green = colors[1];
+                    String blue = colors[2];
+                    
+                    System.out.println("Color; " + red + green + blue);
+                                      
+                    eventLbl.setStyle("-fx-background-color: rgb(" + red+ 
+                            ", " + green + ", " + blue + ", " + 1 + ");");
+                    
                     // Stretch to fill box
                     eventLbl.setMaxWidth(Double.MAX_VALUE);
                     
@@ -762,9 +778,46 @@ public class FXMLDocumentController implements Initializable {
             e.printStackTrace();
          }  
        }
+   
+    private String getRGB(Color c){
+        
+        String rgb = Integer.toString((int)(c.getRed() * 255)) + "-"
+                + Integer.toString((int)(c.getGreen() * 255)) + "-"
+                + Integer.toString((int)(c.getBlue() * 255));
+        
+        return rgb;       
+    }
     
     private void changeColors(){
         // Purpose - Update colors in database and calendar from color picker
+        
+        Color springSemColor = springSemCP.getValue();
+        String springSemRGB = getRGB(springSemColor);
+        databaseHandler.setTermColor("SP SEM", springSemRGB);
+        
+        Color fallSemColor = fallSemCP.getValue();
+        String fallSemRGB = getRGB(fallSemColor);
+        databaseHandler.setTermColor("FA SEM", fallSemRGB);
+        
+        Color allQtrColor = allQtrCP.getValue();
+        String allQtrRGB = getRGB(allQtrColor);
+        databaseHandler.setTermColor("QTR", allQtrRGB);
+        
+        Color allMbaColor = allMbaCP.getValue();
+        String allMbaRGB = getRGB(allMbaColor);
+        databaseHandler.setTermColor("MBA", allMbaRGB);
+        
+        Color allHalfColor = allHalfCP.getValue();
+        String allHalfRGB = getRGB(allHalfColor);
+        databaseHandler.setTermColor("Half", allHalfRGB);
+        
+        Color allCampusColor = allCampusCP.getValue();
+        String allCampusRGB = getRGB(allCampusColor);
+        databaseHandler.setTermColor("Campus", allCampusRGB);
+        
+        Color allHolidayColor = allHolidayCP.getValue();
+        String allHolidayRGB = getRGB(allHolidayColor);
+        databaseHandler.setTermColor("Holiday", allHolidayRGB);
         
     }
    
