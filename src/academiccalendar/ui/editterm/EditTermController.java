@@ -12,12 +12,15 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -55,15 +58,21 @@ public class EditTermController implements Initializable {
     
     private void autofill(){
         
-        // Retrieve old term data
-        String name = Model.getInstance().term_name;
-        String date = Model.getInstance().term_date;
-        
+        // Retrieve term name
+        String name = Model.getInstance().term_name;        
+        //Set name to TermLabel. show it ot the user
         termLabel.setText(name);
         
-        // Rodolfo - This is where I left out. I just need to
-        // autofill the data picker in the Edit Term window from
-        // a string that has the date.
+        //Retrieve date of start date selected term
+        String termStartDate = Model.getInstance().term_date;
+        String[] termDateParts = termStartDate.split("-");
+        int year = Integer.parseInt(termDateParts[0]);
+        int month = Integer.parseInt(termDateParts[1]);
+        int day = Integer.parseInt(termDateParts[2]);
+        
+        // Set default value for datepicker
+        termDatePicker.setValue(LocalDate.of(year, month, day));
+       
     }
     
     @Override
@@ -124,13 +133,93 @@ public class EditTermController implements Initializable {
     }
 
     @FXML
-    private void save(MouseEvent event) {
+    private void update(MouseEvent event) {
+        
+        updateTermDate();
+        
     }
 
     @FXML
     private void cancel(MouseEvent event) {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
+    }
+    
+    
+    
+    public void updateTermDate() {
+         
+        //Get the name of the term to be updated and it current starting date
+        String termName = Model.getInstance().term_name;
+        String currentTermDate = Model.getInstance().term_date;
+        
+        //Get the ID of the term to be updated
+        int termID = databaseHandler.getTermID(termName);
+        
+        //****  Get new starting date for the selected term  **********
+        
+        // Define date format
+        DateTimeFormatter myFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");        
+        
+        //Check if user actually selected a new starting date
+        if(termDatePicker.getValue() == null){
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Please select new starting date for the term");
+            alertMessage.showAndWait();
+            return;
+        }
+        
+        // Get the date value from the date picker
+        String newTermStartingDate = termDatePicker.getValue().format(myFormat);
+        
+        //Check if the new starting date is the same of the term's current start date
+        // If it is, do not perform the update and show the user a message
+        if(newTermStartingDate.equals(currentTermDate)){
+            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("New starting date is the same as current starting date. No update will be done.");
+            alertMessage.showAndWait();
+            return;
+        }
+        else  //If new stating date is different, then
+        {
+            //Query that will update the selected term's starting date
+            String updateTermDateQuery = "UPDATE TERMS"
+                                       + " SET "
+                                       + "TermStartDate='" + newTermStartingDate + "'"
+                                       + " WHERE "
+                                       + "TERMS.TermID=" + termID;
+        
+            System.out.println("************************************************");
+            System.out.println("query is: " + updateTermDateQuery);
+            System.out.println("************************************************");
+            
+            //Execute query in order to update starting date of the selected term
+            //Then, Check if the update of the term's starting date in the database was successful,
+            // and show message either if it was or not
+            if(databaseHandler.executeAction(updateTermDateQuery)) {
+                Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Term was updated successfully");
+                alertMessage.showAndWait();
+            
+                // Update list of terms in the table view to show new starting date
+                listController.loadData();
+            
+            }
+            else //if there is an error
+            {
+                Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+                alertMessage.setHeaderText(null);
+                alertMessage.setContentText("Updating Term Failed!");
+                alertMessage.showAndWait();
+            }
+            
+            // Close the window
+            Stage stage = (Stage) rootPane.getScene().getWindow();
+            stage.close();
+        }
     }
     
 }
