@@ -40,7 +40,7 @@ public class DBHandler {
                                     "Campus General", "Campus STC", "Campus BV",
                                     "Holiday"};
     
-    private static String defaultColor = "#000000";  //black is the default color
+    private static String defaultColor = "0-0-0";  //black is the default color
     
     //Variable that controls whether or not the tables have to be created and populated
     private static boolean tablesAlreadyExist = false;
