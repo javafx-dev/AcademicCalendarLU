@@ -310,13 +310,8 @@ public class ListRulesController implements Initializable {
             //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
             if (result.get() == buttonTypeYes){
                 deleteSelectedRule();
-            } 
-            else 
-            {
-                // Close the window
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                stage.close(); 
             }
+            
         }
         
     }
@@ -383,7 +378,8 @@ public class ListRulesController implements Initializable {
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Selected rule was successfully deleted");
             alertMessage.showAndWait();
-
+            
+            
             // Close the window, so that when user clicks on "Manage Rules" only the remaining existing rules appear
             Stage stage = (Stage) rootPane.getScene().getWindow();
             stage.close();
