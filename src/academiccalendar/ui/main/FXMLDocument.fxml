@@ -163,7 +163,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="fallSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -180,7 +180,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="springSemCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="Pick Color" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -197,7 +197,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="allQtrCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="a" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -214,7 +214,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="allMbaCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="a" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -231,7 +231,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="allHalfCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="a" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -248,7 +248,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="allCampusCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="a" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
@@ -265,7 +265,7 @@
                                                    </HBox.margin>
                                                 </Label>
                                                 <JFXColorPicker fx:id="allHolidayCP" accessibleRole="BUTTON" editable="true" prefHeight="24.0" prefWidth="50.0" promptText="a" />
-                                                <JFXCheckBox checkedColor="#777777" text=" visible?" />
+                                                <JFXCheckBox checkedColor="#777777" selected="true" text=" visible?" />
                                              </children>
                                              <VBox.margin>
                                                 <Insets top="10.0" />
