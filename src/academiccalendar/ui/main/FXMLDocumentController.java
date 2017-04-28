@@ -820,6 +820,60 @@ public class FXMLDocumentController implements Initializable {
         databaseHandler.setTermColor("Holiday", allHolidayRGB);
         
     }
+    
+    private void initalizeColorPicker(){
+        
+        String fallSemRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA SEM"));
+        String springSemRGB = databaseHandler.getTermColor(databaseHandler.getTermID("SP SEM"));
+        String mbaRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA I MBA"));
+        String qtrRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA QTR"));
+        String halfRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA 1st Half"));
+        String campusRGB = databaseHandler.getTermColor(databaseHandler.getTermID("Campus General"));        
+        String holidayRGB = databaseHandler.getTermColor(databaseHandler.getTermID("Holiday"));
+        
+        // Parse for rgb values for fall sem
+        String[] colors = fallSemRGB.split("-");
+        String red = colors[0]; String green = colors[1]; String blue = colors[2];
+        Color c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        fallSemCP.setValue(c);
+        
+        // Parse for rgb values for spring sem
+        colors = springSemRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        springSemCP.setValue(c);
+        
+        // Parse for rgb values for MBA
+        colors = mbaRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        allMbaCP.setValue(c);
+        
+        // Parse for rgb values for QTR
+        colors = qtrRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        allQtrCP.setValue(c);
+        
+        // Parse for rgb values for Half
+        colors = halfRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        allHalfCP.setValue(c);
+        
+        // Parse for rgb values for Campus
+        colors = campusRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        allCampusCP.setValue(c);
+        
+        // Parse for rgb values for Holiday
+        colors = holidayRGB.split("-");
+        red = colors[0]; green = colors[1]; blue = colors[2];
+        c = Color.rgb(Integer.parseInt(red),Integer.parseInt(green) ,Integer.parseInt(blue));
+        allHolidayCP.setValue(c);
+        
+    }
    
     public void initializeCalendarGrid(){
         
@@ -891,7 +945,7 @@ public class FXMLDocumentController implements Initializable {
     initializeCalendarGrid();
     initializeCalendarWeekdayHeader();
     initializeMonthSelector();
-    
+   
     
     // Set Depths
     JFXDepthManager.setDepth(scrollPane, 1);
@@ -900,6 +954,7 @@ public class FXMLDocumentController implements Initializable {
     databaseHandler = new DBHandler();
     //****************************************************
 
+     initalizeColorPicker();
     }    
     
     // Side - menu buttons 
@@ -936,6 +991,9 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void updateColors(MouseEvent event) {
         changeColors();
+        
+        if (Model.getInstance().calendar_name != null)
+            repaintView();
     }
 
     @FXML
