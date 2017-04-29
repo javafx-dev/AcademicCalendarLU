@@ -6,6 +6,13 @@ dist/
 nbdist/
 nbactions.xml
 nb-configuration.xml
+/.nb-gradle/
+
+# InteliJ specific #
+.idea/
+
+# Gradle specific #
+.gradle/
 
 # Class Files #
 *.class
@@ -14,3 +21,7 @@ nb-configuration.xml
 *.jar
 *.war
 *.ear
+
+# Derby #
+derby.log
+calendarDatabase/

@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "academiccalendar.ui.main.AcademicCalendar"
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    // The production code uses the SLF4J logging API at compile time
+    compile 'org.slf4j:slf4j-api:1.7.22'
+    compile files('lib/jfoenix.jar')
+
+    compile group: 'org.apache.poi', name: 'poi', version: '3.9'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
+    compile group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
+
+
+    testCompile 'junit:junit:4.12'
+}
+
