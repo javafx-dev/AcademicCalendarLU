@@ -1,11 +1,17 @@
+plugins {
+    id 'org.springframework.boot' version '1.5.3.RELEASE'
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
 
-mainClassName = "academiccalendar.ui.main.AcademicCalendar"
+mainClassName = "academiccalendar.App"
 version = '1.0'
 repositories {
     jcenter()
 }
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -17,7 +23,11 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.9'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
     compile group: 'org.apache.derby', name: 'derby', version: '10.13.1.1'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // Use MySQL Connector-J
+    compile 'mysql:mysql-connector-java'
 
     testCompile 'junit:junit:4.12'
 }

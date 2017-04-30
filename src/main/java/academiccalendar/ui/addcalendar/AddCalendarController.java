@@ -23,6 +23,8 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
@@ -33,21 +35,16 @@ import java.util.ResourceBundle;
  *
  * @author Karis
  */
+@Component
 public class AddCalendarController implements Initializable {
     
-    
-    //--------------------------------------------------------------------
-    //---------Database Object -------------------------------------------
-    DBHandler databaseHandler;
-    //--------------------------------------------------------------------
+    @Autowired
+    private DBHandler databaseHandler;
 
     // Controllers
-    private FXMLDocumentController mainController ;
+    @Autowired
+    private FXMLDocumentController mainController;
 
-    public void setMainController(FXMLDocumentController mainController) {
-        this.mainController = mainController ;
-    }
-    
     @FXML
     private Label topLabel;
     @FXML
@@ -102,20 +99,6 @@ public class AddCalendarController implements Initializable {
             String startingYear = Integer.toString(Model.getInstance().calendar_start);
             String endingYear = Integer.toString(Model.getInstance().calendar_end);
             String calName = calendarName.getText();
-            
-            // RODOLFO - This is where you can put the Calendar name, Starting Year, and Ending Year into the Database.
-            // You have the variables above (startingYear, endingYear, calName)
-            // Let me know if you need more/ different fields.
-            
-            //************************************************************************
-            //************************************************************************
-            //
-            //********  Inserting the new calendar data into the database  ***********
-            
-            
-            //*** Instantiate DBHandler object *******************
-            databaseHandler = new DBHandler();
-            //****************************************************
             
             // Query that inserts the new calendar into the database
             String calendarQuery = "INSERT INTO CALENDARS VALUES ("
