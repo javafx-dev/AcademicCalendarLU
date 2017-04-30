@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <AnchorPane fx:id="rootPane" prefHeight="249.0" prefWidth="340.0" stylesheets="@style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editevent.EditEventController">
    <children>
       <HBox id="header" prefHeight="35.0" prefWidth="345.0" AnchorPane.topAnchor="0.0">

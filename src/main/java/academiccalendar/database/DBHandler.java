@@ -5,6 +5,10 @@
  */
 package academiccalendar.database;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -14,9 +18,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javax.swing.JOptionPane;
 
 /**
  *

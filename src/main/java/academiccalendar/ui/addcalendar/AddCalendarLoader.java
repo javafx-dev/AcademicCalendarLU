@@ -6,7 +6,6 @@
 package academiccalendar.ui.addcalendar;
 
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
