@@ -236,8 +236,6 @@ public class ListRulesController implements Initializable {
         //Get list of rules from database and store it in an ArrayList variable
         ArrayList<String> listOfRules = databaseHandler.getListOfRules();
         
-        //Store number of rules (size of array list)
-        int listSize = listOfRules.size();
         //Variable that keeps track of the number of events created
         int auxEventsCreated = 0;
         
@@ -245,10 +243,10 @@ public class ListRulesController implements Initializable {
         if (!listOfRules.isEmpty())
         {
             //Loop that creates all events based on rules
-            for (int i=0; i < listSize; i++)
+            for (String rule: listOfRules)
             {
                 //Splits rule by EventDescription, TermID, and DaysFromStart
-                String[] auxRule = listOfRules.get(i).split("/");
+                String[] auxRule = rule.split("/");
                 //Create event based on this rule
                 boolean eventWasCreated = createEventFromRule(auxRule[0], Integer.parseInt(auxRule[1]), auxRule[2], auxCalName);
                 
@@ -328,7 +326,7 @@ public class ListRulesController implements Initializable {
                // Load root layout from fxml file.
                FXMLLoader editRuleLoader = new FXMLLoader();
                editRuleLoader.setLocation(getClass().getResource("/edit_rule.fxml"));
-               AnchorPane rootLayout = (AnchorPane) editRuleLoader.load();
+               AnchorPane rootLayout = editRuleLoader.load();
                Stage stage = new Stage(StageStyle.UNDECORATED);
                stage.initModality(Modality.APPLICATION_MODAL); 
 

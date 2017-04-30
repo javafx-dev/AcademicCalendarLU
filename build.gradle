@@ -2,10 +2,12 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 mainClassName = "academiccalendar.ui.main.AcademicCalendar"
-
+version = '1.0'
 repositories {
     jcenter()
 }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     // The production code uses the SLF4J logging API at compile time
@@ -18,5 +20,17 @@ dependencies {
 
 
     testCompile 'junit:junit:4.12'
+}
+
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Academic Calendar',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
 

@@ -87,7 +87,7 @@ public class ListTermsController implements Initializable {
                // Load root layout from fxml file.
                FXMLLoader editTermLoader = new FXMLLoader();
                editTermLoader.setLocation(getClass().getResource("/edit_term.fxml"));
-               AnchorPane rootLayout = (AnchorPane) editTermLoader.load();
+               AnchorPane rootLayout = editTermLoader.load();
                Stage stage = new Stage(StageStyle.UNDECORATED);
                stage.initModality(Modality.APPLICATION_MODAL); 
 

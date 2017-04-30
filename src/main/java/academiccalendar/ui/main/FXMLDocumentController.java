@@ -141,7 +141,7 @@ public class FXMLDocumentController implements Initializable {
                // Load root layout from fxml file.
                FXMLLoader loader = new FXMLLoader();
                loader.setLocation(getClass().getResource("/add_event.fxml"));
-               AnchorPane rootLayout = (AnchorPane) loader.load();
+               AnchorPane rootLayout = loader.load();
                Stage stage = new Stage(StageStyle.UNDECORATED);
                stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -173,7 +173,7 @@ public class FXMLDocumentController implements Initializable {
            // Load root layout from fxml file.
            FXMLLoader loader = new FXMLLoader();
            loader.setLocation(getClass().getResource("/edit_event.fxml"));
-           AnchorPane rootLayout = (AnchorPane) loader.load();
+           AnchorPane rootLayout = loader.load();
            Stage stage = new Stage(StageStyle.UNDECORATED);
            stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -195,7 +195,7 @@ public class FXMLDocumentController implements Initializable {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getClassLoader().getResource("add_calendar.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
+            AnchorPane rootLayout = loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -217,7 +217,7 @@ public class FXMLDocumentController implements Initializable {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/list_calendars.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
+            AnchorPane rootLayout = loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -240,7 +240,7 @@ public class FXMLDocumentController implements Initializable {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/list_terms.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
+            AnchorPane rootLayout = loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -262,7 +262,7 @@ public class FXMLDocumentController implements Initializable {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/list_rules.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
+            AnchorPane rootLayout = loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -284,7 +284,7 @@ public class FXMLDocumentController implements Initializable {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/add_rule.fxml"));
-            AnchorPane rootLayout = (AnchorPane) loader.load();
+            AnchorPane rootLayout = loader.load();
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL); 
 
@@ -548,7 +548,7 @@ public class FXMLDocumentController implements Initializable {
     
     public void exportCalendarPDF()
     {
-         TableView<Event> table = new TableView<Event>();
+         TableView<Event> table = new TableView<>();
          ObservableList<Event> data =FXCollections.observableArrayList();  
    
         
@@ -558,17 +558,17 @@ public class FXMLDocumentController implements Initializable {
         // set resize policy
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         // intialize columns
-        TableColumn<Event,String> term  = new TableColumn<Event,String>("Term");
-        TableColumn<Event,String> subject  = new TableColumn<Event,String>("Subject");
-        TableColumn<Event,String> date = new TableColumn<Event,String>("Date");
+        TableColumn<Event,String> term  = new TableColumn<>("Term");
+        TableColumn<Event,String> subject  = new TableColumn<>("Subject");
+        TableColumn<Event,String> date = new TableColumn<>("Date");
         // set width of columns
         term.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
         subject.setMaxWidth( 1f * Integer.MAX_VALUE * 60 ); // 50% width
         date.setMaxWidth( 1f * Integer.MAX_VALUE * 20 ); // 50% width
         // 
-        term.setCellValueFactory(new PropertyValueFactory<Event,String>("term"));
-        subject.setCellValueFactory( new PropertyValueFactory<Event,String>("subject"));
-        date.setCellValueFactory(new PropertyValueFactory<Event,String>("date"));
+        term.setCellValueFactory(new PropertyValueFactory<>("term"));
+        subject.setCellValueFactory( new PropertyValueFactory<>("subject"));
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
         
         // Add columns to the table
         table.getColumns().add(term);

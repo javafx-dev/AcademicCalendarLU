@@ -280,9 +280,9 @@ public class DBHandler {
                 if (!dataExistsInTable)
                 {
                     int id = 1;
-                    for(int i=0; i < terms.length; i++)
+                    for(String term: terms)
                     {
-                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + terms[i]+ "', '" + defaultColor +"', '2017-08-28')";
+                        String query2 = "INSERT INTO " + TableName + " VALUES(" + id + ", '" + term+ "', '" + defaultColor +"', '2017-08-28')";
                         stmt.execute(query2);
                         id++;
                     }
@@ -460,11 +460,11 @@ public class DBHandler {
         System.out.println("Observable list of terms is the following:  " + listOfTerms);
         System.out.println("-----------------------------------------------------");
         System.out.println("-----------------------------------------------------");
-        int arrayListSize = listOfTerms.size();
+
         int idTerm = 1;
-        for (int i=0; i < arrayListSize; i++)
+        for (String term: listOfTerms)
         {
-            System.out.println("ID: " + idTerm + " --- " + listOfTerms.get(i));
+            System.out.println("ID: " + idTerm + " --- " + term);
             idTerm++;
         }
         //*******************************************************************************************************
@@ -611,11 +611,10 @@ public class DBHandler {
         System.out.println("Array list of rules is the following:  ");//+ listOfRules);
         System.out.println("-----------------------------------------------------");
         System.out.println("-----------------------------------------------------");
-        int arrayListSize = listOfRules.size();
-        
-        for (int i=0; i < arrayListSize; i++)
+
+        for (String rule: listOfRules)
         {
-            System.out.println("Rule: " + listOfRules.get(i));
+            System.out.println("Rule: " + rule);
         }
         //*******************************************************************************************************
         //*******************************************************************************************************
