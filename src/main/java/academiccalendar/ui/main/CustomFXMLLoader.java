@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.URL;
 
 @Component
-public class CustomFXMLLoader {
+public class CustomFXMLLoader{
 
     @Autowired
     private ConfigurableApplicationContext applicationContext;

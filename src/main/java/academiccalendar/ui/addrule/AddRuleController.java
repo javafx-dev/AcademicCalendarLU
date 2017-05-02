@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package academiccalendar.ui.addrule;
 
-import academiccalendar.database.DBHandler;
+import academiccalendar.model.DbRule;
+import academiccalendar.model.DbTerm;
+import academiccalendar.service.RuleService;
+import academiccalendar.service.TermService;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -22,33 +19,24 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-/**
- * FXML Controller class
- *
- * @author Karis, Rodolfo, Paul, Darick
- */
+@Component
 public class AddRuleController implements Initializable {
-    
-    //--------------------------------------------------------------------
-    //---------Database Object -------------------------------------------
 
-    DBHandler databaseHandler = new DBHandler();
+    @Autowired
+    private RuleService ruleService;
 
+    @Autowired
+    private FXMLDocumentController mainController;
 
-    //--------------------------------------------------------------------
- 
-     // Controllers -------------------------------------------------------
-    private FXMLDocumentController mainController ;
-    
-    public void setMainController(FXMLDocumentController mainController) {
-        this.mainController = mainController ;
-    }
-    // -------------------------------------------------------------------
-    
+    @Autowired
+    private TermService termService;
+
     @FXML
     private Label topLabel;
     @FXML
@@ -63,28 +51,18 @@ public class AddRuleController implements Initializable {
     private JFXButton cancelButton;
     @FXML
     private AnchorPane rootPane;
-    
+
     // These fields are for mouse dragging of window
     private double xOffset;
     private double yOffset;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
-        ObservableList<String> terms = 
-        FXCollections.observableArrayList(
-           "FA SEM","SP SEM", "SU SEM", 
-           "FA I MBA", "FA II MBA", "SP I MBA", "SP II MBA", "SU MBA",
-           "FA QTR", "WIN QTR", "SP QTR", "SU QTR",
-           "FA 1st Half", "FA 2nd Half", "SP 1st Half", "SP 2nd Half",
-           "Campus General", "Campus STC", "Campus BV",
-           "Holiday"
-        );
-        
+        ObservableList<String> terms = termService.getListOfTerms();
         termSelect.setItems(terms);
-        
+
         // ******** Code below is for Draggable windows **********    
-        
+
         // Set up Mouse Dragging for the Event pop up window
         topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -112,7 +90,7 @@ public class AddRuleController implements Initializable {
                 scene.setCursor(Cursor.HAND); //Change cursor to hand
             }
         });
-        
+
         // Change cursor when hover over draggable area
         topLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
@@ -122,7 +100,7 @@ public class AddRuleController implements Initializable {
                 scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
             }
         });
-    }    
+    }
 
     @FXML
     private void exit(MouseEvent event) {
@@ -132,22 +110,22 @@ public class AddRuleController implements Initializable {
 
     @FXML
     private void save(MouseEvent event) {
-        
-         
-        if(eventDescript.getText().isEmpty()||termSelect.getSelectionModel().isEmpty()
-                ||daysFromStart.getText().isEmpty()){
+
+
+        if (eventDescript.getText().isEmpty() || termSelect.getSelectionModel().isEmpty()
+                || daysFromStart.getText().isEmpty()) {
             Alert alertMessage = new Alert(Alert.AlertType.ERROR);
             alertMessage.setHeaderText(null);
             alertMessage.setContentText("Please fill out all fields");
             alertMessage.showAndWait();
             return;
         }
-        
+
         // Get fields for rule
         String eventDescription = eventDescript.getText();
         int days = Integer.parseInt(daysFromStart.getText());
         String term = termSelect.getValue();
-        
+
 
         //*********************************************************************
         //Save rule into the database
@@ -164,39 +142,23 @@ public class AddRuleController implements Initializable {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }
-    
 
-    
-    public void saveRuleInDatabase(String eventDescription, String termName, int daysFromStart)
-    {
+
+    private void saveRuleInDatabase(String eventDescription, String termName, int daysFromStart) {
         //Get term ID for the term selected because it is needed to save the rule in the RULES table due int attribute called TermID
-        int termID = databaseHandler.getTermID(termName);
-        
-        //Query that will insert the rule into the RULES table in the database
-        String addRuleQuery = "INSERT INTO RULES VALUES ("
-                            + "'" + eventDescription + "', "
-                            + termID + ", "
-                            + daysFromStart
-                            + ")";
-        
-        //print query to check it is properly written
-        System.out.println(addRuleQuery);
-        
-        //save rule into the database and show message whether or not it was saved successfully
-        if(databaseHandler.executeAction(addRuleQuery)) {
-            Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
-            alertMessage.setHeaderText(null);
-            alertMessage.setContentText("Rule was added successfully");
-            alertMessage.showAndWait();
-        }
-        else //if there is an error
-        {
-            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
-            alertMessage.setHeaderText(null);
-            alertMessage.setContentText("Adding Rule Failed!");
-            alertMessage.showAndWait();
-        }
-        
+        DbTerm term = termService.findByName(termName);
+
+        DbRule rule = new DbRule();
+        rule.setTerm(term);
+        rule.setDayFromStart(daysFromStart);
+        rule.setDescription(eventDescription);
+        ruleService.save(rule);
+
+        Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
+        alertMessage.setHeaderText(null);
+        alertMessage.setContentText("Rule was added successfully");
+        alertMessage.showAndWait();
+
     }
 
 }

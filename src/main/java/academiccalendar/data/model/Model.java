@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package academiccalendar.data.model;
 
 /**
@@ -27,11 +22,10 @@ public class Model {
     public int viewing_month;
     public int viewing_year;
     
+
     // for the current calendar being worked on
-    public int calendar_start;
-    public int calendar_end;
-    public String calendar_start_date;
-    public String calendar_name;
+    public Long calendar_id;
+
     
     // for editing rules
     public int rule_days;

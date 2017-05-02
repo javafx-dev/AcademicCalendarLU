@@ -1,20 +1,13 @@
-
-
-/*
- * @Academic Calendar Version 1.0 3/7/2017
- * @owner and @author: FrumbSoftware
- * @Team Members: Paul Meyer, Karis Druckenmiller , Darick Cayton,Rudolfo Madriz
- */
 package academiccalendar.ui.main;
 
 import academiccalendar.data.model.Model;
-import academiccalendar.database.DBHandler;
-import academiccalendar.ui.addevent.AddEventController;
-import academiccalendar.ui.addrule.AddRuleController;
+import academiccalendar.model.DbCalendar;
+import academiccalendar.model.DbEvent;
+import academiccalendar.model.DbTerm;
+import academiccalendar.service.EventService;
+import academiccalendar.service.TermService;
+import academiccalendar.ui.controls.EventLabel;
 import academiccalendar.ui.editevent.EditEventController;
-import academiccalendar.ui.listcalendars.ListCalendarsController;
-import academiccalendar.ui.listrules.ListRulesController;
-import academiccalendar.ui.listterms.ListTermsController;
 import com.jfoenix.controls.JFXColorPicker;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -24,7 +17,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.print.PrinterJob;
@@ -61,18 +53,16 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -110,7 +100,13 @@ public class FXMLDocumentController implements Initializable {
     private CustomFXMLLoader loader;
 
     @Autowired
-    private DBHandler databaseHandler;
+    private TermService termService;
+
+    @Autowired
+    private EventService eventService;
+
+    @Autowired
+    private EditEventController editEventController;
 
     @FXML
     private VBox colorRootPane;
@@ -138,7 +134,6 @@ public class FXMLDocumentController implements Initializable {
 
             // Get the day label
             Label lbl = (Label) day.getChildren().get(0);
-            System.out.println(lbl.getText());
 
             // Store event day and month in data singleton
             Model.getInstance().event_day = Integer.parseInt(lbl.getText());
@@ -147,15 +142,9 @@ public class FXMLDocumentController implements Initializable {
 
             // When user clicks on any date in the calendar, event editor window opens
             try {
-                // Load root layout from fxml file.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/add_event.fxml"));
-                AnchorPane rootLayout = loader.load();
+                Parent rootLayout = loader.load(getClass().getClassLoader().getResource("add_event.fxml"));
                 Stage stage = new Stage(StageStyle.UNDECORATED);
                 stage.initModality(Modality.APPLICATION_MODAL);
-
-                AddEventController eventController = loader.getController();
-                eventController.setMainController(this);
                 // Show the scene containing the root layout.
                 Scene scene = new Scene(rootLayout);
                 stage.setScene(scene);
@@ -166,7 +155,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    private void editEvent(VBox day, String descript, String termID) {
+    private void editEvent(VBox day, String descript, String termID, DbEvent event) {
 
         // Store event day and month in data singleton
         Label dayLbl = (Label) day.getChildren().get(0);
@@ -180,14 +169,13 @@ public class FXMLDocumentController implements Initializable {
         // When user clicks on any date in the calendar, event editor window opens
         try {
             // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/edit_event.fxml"));
-            AnchorPane rootLayout = loader.load();
+            Parent rootLayout = loader.load(getClass().getResource("/edit_event.fxml"));
+            editEventController.setEvent(event);
+
+
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            EditEventController eventController = loader.getController();
-            eventController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -217,15 +205,10 @@ public class FXMLDocumentController implements Initializable {
     private void listCalendarsEvent() {
         // When the user clicks "New Calendar" pop up window that let's them enter dates
         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/list_calendars.fxml"));
-            AnchorPane rootLayout = loader.load();
+
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            ListCalendarsController listController = loader.getController();
-            listController.setMainController(this);
+            Parent rootLayout = loader.load(getClass().getResource("/list_calendars.fxml"));
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -240,15 +223,10 @@ public class FXMLDocumentController implements Initializable {
         // When the user clicks "Manage Term Dates" pop up window that let's 
         // them change starting dates for terms
         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/list_terms.fxml"));
-            AnchorPane rootLayout = loader.load();
+
+            Parent rootLayout = loader.load(getClass().getClassLoader().getResource("list_terms.fxml"));
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            ListTermsController listController = loader.getController();
-            listController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -263,14 +241,10 @@ public class FXMLDocumentController implements Initializable {
         // When the user clicks "Manage Rules" pop up window that let's them manage rules
         try {
             // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/list_rules.fxml"));
-            AnchorPane rootLayout = loader.load();
+            Parent rootLayout = loader.load(getClass().getClassLoader().getResource("list_rules.fxml"));
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
 
-            ListRulesController listController = loader.getController();
-            listController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -284,15 +258,9 @@ public class FXMLDocumentController implements Initializable {
     public void newRuleEvent() {
         // When the user clicks "New Rule" pop up window appears
         try {
-            // Load root layout from fxml file.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/add_rule.fxml"));
-            AnchorPane rootLayout = loader.load();
+            Parent rootLayout = loader.load(getClass().getResource("/add_rule.fxml"));
             Stage stage = new Stage(StageStyle.UNDECORATED);
             stage.initModality(Modality.APPLICATION_MODAL);
-
-            AddRuleController ruleController = loader.getController();
-            ruleController.setMainController(this);
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             stage.setScene(scene);
@@ -394,12 +362,13 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void calendarGenerate() {
+    public void calendarGenerate(DbCalendar dbCalendar) {
+        Model.getInstance().calendar_id = dbCalendar.getId();
 
         // Load year selection
         selectedYear.getItems().clear(); // Invokes our change listener
-        selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_start));
-        selectedYear.getItems().add(Integer.toString(Model.getInstance().calendar_end));
+        selectedYear.getItems().add(Integer.toString(dbCalendar.getStartYear()));
+        selectedYear.getItems().add(Integer.toString(dbCalendar.getEndYear()));
 
         // Select the first YEAR as default     
         selectedYear.getSelectionModel().selectFirst();
@@ -412,7 +381,6 @@ public class FXMLDocumentController implements Initializable {
         // Get a list of all the months (1-12) in a year
         DateFormatSymbols dateFormat = new DateFormatSymbols();
         String months[] = dateFormat.getMonths();
-        System.out.println("Length:" + months.length);
         String[] spliceMonths = Arrays.copyOfRange(months, 0, 12);
 
         // Load month selection
@@ -440,46 +408,33 @@ public class FXMLDocumentController implements Initializable {
 
     private void populateMonthWithEvents() {
 
-        String calendarName = Model.getInstance().calendar_name;
+        Long calendarId = Model.getInstance().calendar_id;
 
         String currentMonth = monthLabel.getText();
         int currentMonthIndex = Model.getInstance().getMonthIndex(currentMonth) + 1;
 
         int currentYear = Integer.parseInt(selectedYear.getValue());
 
-        // Query to get ALL Events from the selected calendar!!
-        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";
+        List<DbEvent> eventList = eventService.findEventsByCalendarId(calendarId);
+        for (DbEvent event : eventList) {
+            LocalDate localDate = event.getDate();
+            String eventDescript = event.getDescription();
+            Long eventTermID = event.getTerm().getId();
+            // Check for year we have selected
+            if (currentYear == localDate.getYear()) {
+                // Check for the month we already have selected (we are viewing)
+                if (currentMonthIndex == localDate.getMonthValue()) {
+                    // Get day for the month
+                    int day = localDate.getDayOfMonth();
 
-        // Store the results here
-        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
-
-        try {
-            while (result.next()) {
-
-                // Get date for the event
-                Date eventDate = result.getDate("EventDate");
-                String eventDescript = result.getString("EventDescription");
-                int eventTermID = result.getInt("TermID");
-
-                // Check for year we have selected
-                if (currentYear == eventDate.toLocalDate().getYear()) {
-                    // Check for the month we already have selected (we are viewing)
-                    if (currentMonthIndex == eventDate.toLocalDate().getMonthValue()) {
-
-                        // Get day for the month
-                        int day = eventDate.toLocalDate().getDayOfMonth();
-
-                        // Display decription of the event given it's day
-                        showDate(day, eventDescript, eventTermID);
-                    }
+                    // Display decription of the event given it's day
+                    showDate(day, eventDescript, eventTermID.intValue(), event);
                 }
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void showDate(int dayNumber, String descript, int termID) {
+    public void showDate(int dayNumber, String descript, int termID, DbEvent event) {
 
         Image img = new Image(getClass().getClassLoader().getResourceAsStream("icons/icon2.png"));
         ImageView imgView = new ImageView();
@@ -503,29 +458,26 @@ public class FXMLDocumentController implements Initializable {
                 if (currentNumber == dayNumber) {
 
                     // Add an event label with the given description
-                    Label eventLbl = new Label(descript);
+                    EventLabel eventLbl = new EventLabel(descript, event);
                     eventLbl.setGraphic(imgView);
                     eventLbl.getStyleClass().add("event-label");
 
                     // Save the term ID in accessible text
                     eventLbl.setAccessibleText(Integer.toString(termID));
-                    System.out.println(eventLbl.getAccessibleText());
 
                     eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
-                        editEvent((VBox) eventLbl.getParent(), eventLbl.getText(), eventLbl.getAccessibleText());
+                        editEvent((VBox) eventLbl.getParent(), eventLbl.getText(), eventLbl.getAccessibleText(), event);
 
                     });
 
                     // Get term color from term's table
-                    String eventRGB = databaseHandler.getTermColor(termID);
-
+                    DbTerm dbTerm = termService.findOne((long) termID);
+                    String eventRGB = dbTerm.getColor();
                     // Parse for rgb values
                     String[] colors = eventRGB.split("-");
                     String red = colors[0];
                     String green = colors[1];
                     String blue = colors[2];
-
-                    System.out.println("Color; " + red + green + blue);
 
                     eventLbl.setStyle("-fx-background-color: rgb(" + red +
                             ", " + green + ", " + blue + ", " + 1 + ");");
@@ -549,7 +501,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void exportCalendarPDF() {
+    private void exportCalendarPDF() {
         TableView<Event> table = new TableView<>();
         ObservableList<Event> data = FXCollections.observableArrayList();
 
@@ -577,64 +529,15 @@ public class FXMLDocumentController implements Initializable {
         table.getColumns().add(subject);
         table.getColumns().add(date);
 
-        String calendarName = Model.getInstance().calendar_name;
+        Long calendarId = Model.getInstance().calendar_id;
 
         // Query to get ALL Events from the selected calendar!!
-        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";
-
-        // Store the results here
-        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
-
-        try {
-
-            while (result.next()) {
-                //initalize temporarily strings
-                String tempTerm = "";
-
-
-                //***** Get term, Event Description and Date *****
-
-                //Get Event Description
-                String eventDescript = result.getString("EventDescription");
-                //Get Term ID for an event
-                int termID = result.getInt("TermID");
-
-                //Get Event Date and format it as day-month-year
-                Date dDate = result.getDate("EventDate");
-                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                String eventDate = df.format(dDate);
-
-                //Query that will get the term name based on a term ID
-                String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + "";
-                //Execute query to get TermName and store it in a ResultSet variable
-                ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
-
-
-                while (termResult.next()) {
-                    tempTerm = termResult.getString(1);
-                     /*
-                      while(programResult.next())
-                        {
-                           tempProgram = programResult.getString(1);
-                        }
-                      tempTerm+=" "+tempProgram;
-                    */
-                }
-
-
-                //Get Term Name for an event
-                //tempTerm = termResult.getString(1);
-
-
-                //Add event information in a row
-                data.add(new Event(tempTerm, eventDescript, eventDate));
-
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+        List<DbEvent> events = eventService.findEventsByCalendarId(calendarId);
+        for (DbEvent event : events) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String eventDate = df.format(event.getDate());
+            data.add(new Event(event.getTerm().getName(), event.getDescription(), eventDate));
         }
-
-
         table.getItems().setAll(data);
         // open dialog window and export table as pdf
         PrinterJob job = PrinterJob.createPrinterJob();
@@ -658,14 +561,14 @@ public class FXMLDocumentController implements Initializable {
 
         if (file != null) {
             createExcelSheet(file);
-            System.out.println("hi");
         }
     }
 
-    public void createExcelSheet(File file) {
-        String calendarName = Model.getInstance().calendar_name;
+    private void createExcelSheet(File file) {
+        Long calendarId = Model.getInstance().calendar_id;
+
         XSSFWorkbook wb = new XSSFWorkbook();
-        XSSFSheet sheet = wb.createSheet(calendarName);
+        XSSFSheet sheet = wb.createSheet("Calendar ID: " + calendarId);
 
         XSSFRow row = sheet.createRow(1);
         XSSFCell cell;
@@ -677,110 +580,31 @@ public class FXMLDocumentController implements Initializable {
         cell = row.createCell(3);
         cell.setCellValue("Date");
 
-        // Query to get ALL Events from the selected calendar!!
-        String getMonthEventsQuery = "SELECT * From EVENTS WHERE CalendarName='" + calendarName + "'";
-
-        // Store the results here
-        ResultSet result = databaseHandler.executeQuery(getMonthEventsQuery);
-
-        try {
-            int counter = 2;
-            while (result.next()) {
-
-                //initalize temporarily strings
-                String tempTerm = "";
-
-
-                //***** Get term, Event Description and Date *****
-
-                //Get Event Description
-                String eventDescript = result.getString("EventDescription");
-                //Get Term ID for an event
-                int termID = result.getInt("TermID");
-
-                //Get Event Date and format it as day-month-year
-                Date dDate = result.getDate("EventDate");
-                DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
-                String eventDate = df.format(dDate);
-
-                //Query that will get the term name based on a term ID
-                String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + "";
-                //Execute query to get TermName and store it in a ResultSet variable
-                ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
-                 
-                /* 
-                //initalize temporarily strings
-                 String tempTerm="";
-                 String tempProgram="";
-                 // Get term, program, Event Description and Date
-                 
-                 String eventDescript = result.getString("EventDescription");
-                 int termID = result.getInt("TermID");
-                 
-                 
-                 Date dDate=result.getDate("EventDate");
-                 DateFormat df = new SimpleDateFormat("dd MMMM yyyy");
-                 String eventDate = df.format(dDate);
-                 
-                 int programID = result.getInt("ProgramID");
-                 String getProgramQuery = "SELECT ProgramName FROM PROGRAMS WHERE ProgramID=" + programID + "";
-                 String getTermQuery = "SELECT TermName FROM TERMS WHERE TermID=" + termID + ""; 
-                 ResultSet termResult = databaseHandler.executeQuery(getTermQuery);
-                 ResultSet programResult = databaseHandler.executeQuery(getProgramQuery);
-                 */
-
-                while (termResult.next()) {
-                    tempTerm = termResult.getString(1);
-                     
-                      /*
-                      while(programResult.next())
-                        {
-                           tempProgram = programResult.getString(1);
-                        }
-                      tempTerm+=" "+tempProgram;
-                      */
-                }
-
-                //Get Term Name for an event
-                //tempTerm = termResult.getString("TermName");
-
-
-                row = sheet.createRow(counter);
-                cell = row.createCell(1);
-                cell.setCellValue(tempTerm);
-                cell = row.createCell(2);
-                cell.setCellValue(eventDescript);
-                cell = row.createCell(3);
-                cell.setCellValue(eventDate);
-                for (int i = 0; i < 3; i++) {
-                    sheet.autoSizeColumn(i);
-                }
-
-                counter++;
-
+        List<DbEvent> events = eventService.findEventsByCalendarId(calendarId);
+        int counter = 2;
+        for (DbEvent event : events) {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            String eventDate = df.format(event.getDate());
+            row = sheet.createRow(counter);
+            cell = row.createCell(1);
+            cell.setCellValue(event.getTerm().getName());
+            cell = row.createCell(2);
+            cell.setCellValue(event.getDescription());
+            cell = row.createCell(3);
+            cell.setCellValue(eventDate);
+            for (int i = 0; i < 3; i++) {
+                sheet.autoSizeColumn(i);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddEventController.class.getName()).log(Level.SEVERE, null, ex);
+            counter++;
         }
-        try {
-            FileOutputStream out = new FileOutputStream(file);
-            wb.write(out);
-            out.flush();
-            out.close();
 
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     private String getRGB(Color c) {
 
-        String rgb = Integer.toString((int) (c.getRed() * 255)) + "-"
+        return Integer.toString((int) (c.getRed() * 255)) + "-"
                 + Integer.toString((int) (c.getGreen() * 255)) + "-"
                 + Integer.toString((int) (c.getBlue() * 255));
-
-        return rgb;
     }
 
     private void changeColors() {
@@ -788,43 +612,43 @@ public class FXMLDocumentController implements Initializable {
 
         Color springSemColor = springSemCP.getValue();
         String springSemRGB = getRGB(springSemColor);
-        databaseHandler.setTermColor("SP SEM", springSemRGB);
+        termService.updateColorByTermName("SP SEM", springSemRGB);
 
         Color fallSemColor = fallSemCP.getValue();
         String fallSemRGB = getRGB(fallSemColor);
-        databaseHandler.setTermColor("FA SEM", fallSemRGB);
+        termService.updateColorByTermName("FA SEM", fallSemRGB);
 
         Color allQtrColor = allQtrCP.getValue();
         String allQtrRGB = getRGB(allQtrColor);
-        databaseHandler.setTermColor("QTR", allQtrRGB);
+        termService.updateColorByTermName("QTR", allQtrRGB);
 
         Color allMbaColor = allMbaCP.getValue();
         String allMbaRGB = getRGB(allMbaColor);
-        databaseHandler.setTermColor("MBA", allMbaRGB);
+        termService.updateColorByTermName("MBA", allMbaRGB);
 
         Color allHalfColor = allHalfCP.getValue();
         String allHalfRGB = getRGB(allHalfColor);
-        databaseHandler.setTermColor("Half", allHalfRGB);
+        termService.updateColorByTermName("Half", allHalfRGB);
 
         Color allCampusColor = allCampusCP.getValue();
         String allCampusRGB = getRGB(allCampusColor);
-        databaseHandler.setTermColor("Campus", allCampusRGB);
+        termService.updateColorByTermName("Campus", allCampusRGB);
 
         Color allHolidayColor = allHolidayCP.getValue();
         String allHolidayRGB = getRGB(allHolidayColor);
-        databaseHandler.setTermColor("Holiday", allHolidayRGB);
+        termService.updateColorByTermName("Holiday", allHolidayRGB);
 
     }
 
     private void initalizeColorPicker() {
 
-        String fallSemRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA SEM"));
-        String springSemRGB = databaseHandler.getTermColor(databaseHandler.getTermID("SP SEM"));
-        String mbaRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA I MBA"));
-        String qtrRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA QTR"));
-        String halfRGB = databaseHandler.getTermColor(databaseHandler.getTermID("FA 1st Half"));
-        String campusRGB = databaseHandler.getTermColor(databaseHandler.getTermID("Campus General"));
-        String holidayRGB = databaseHandler.getTermColor(databaseHandler.getTermID("Holiday"));
+        String fallSemRGB = termService.findByName("FA SEM").getColor();
+        String springSemRGB = termService.findByName("SP SEM").getColor();
+        String mbaRGB = termService.findByName("FA I MBA").getColor();
+        String qtrRGB = termService.findByName("FA QTR").getColor();
+        String halfRGB = termService.findByName("FA 1st Half").getColor();
+        String campusRGB = termService.findByName("Campus General").getColor();
+        String holidayRGB = termService.findByName("Holiday").getColor();
 
         // Parse for rgb values for fall sem
         String[] colors = fallSemRGB.split("-");
@@ -917,7 +741,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
 
-    public void initializeCalendarWeekdayHeader() {
+    private void initializeCalendarWeekdayHeader() {
 
         // 7 days in a week
         int weekdays = 7;
@@ -995,7 +819,7 @@ public class FXMLDocumentController implements Initializable {
     private void updateColors(MouseEvent event) {
         changeColors();
 
-        if (Model.getInstance().calendar_name != null)
+        if (Model.getInstance().calendar_id != null)
             repaintView();
     }
 
