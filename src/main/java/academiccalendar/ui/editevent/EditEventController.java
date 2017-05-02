@@ -5,22 +5,17 @@ import academiccalendar.model.DbEvent;
 import academiccalendar.model.DbTerm;
 import academiccalendar.service.EventService;
 import academiccalendar.service.TermService;
+import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -31,7 +26,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Component
-public class EditEventController implements Initializable {
+public class EditEventController extends AbstractDraggableController {
 
     @Autowired
     private FXMLDocumentController mainController;
@@ -45,19 +40,11 @@ public class EditEventController implements Initializable {
     private DbEvent event;
 
     @FXML
-    private Label topLabel;
-    @FXML
     private JFXTextField subject;
     @FXML
     private JFXComboBox<String> termSelect;
     @FXML
     private JFXDatePicker date;
-    @FXML
-    private AnchorPane rootPane;
-
-    // These fields are for mouse dragging of window
-    private double xOffset;
-    private double yOffset;
 
 
     private void autofillDatePicker() {
@@ -91,46 +78,7 @@ public class EditEventController implements Initializable {
 
         ObservableList<String> termsList = termService.getListOfTerms();
         termSelect.setItems(termsList);
-
-        // ************* Everything below is for Draggable Window ********
-
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
-        });
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
-        });
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.HAND); //Change cursor to hand
-            }
-        });
-
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
-            }
-        });
+        super.initialize(url, rb);
     }
 
     @FXML

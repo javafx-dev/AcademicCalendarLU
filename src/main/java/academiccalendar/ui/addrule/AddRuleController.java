@@ -4,20 +4,14 @@ import academiccalendar.model.DbRule;
 import academiccalendar.model.DbTerm;
 import academiccalendar.service.RuleService;
 import academiccalendar.service.TermService;
+import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.main.FXMLDocumentController;
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,7 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-public class AddRuleController implements Initializable {
+public class AddRuleController extends AbstractDraggableController {
 
     @Autowired
     private RuleService ruleService;
@@ -38,68 +32,17 @@ public class AddRuleController implements Initializable {
     private TermService termService;
 
     @FXML
-    private Label topLabel;
-    @FXML
     private JFXTextField eventDescript;
     @FXML
     private JFXComboBox<String> termSelect;
     @FXML
     private JFXTextField daysFromStart;
-    @FXML
-    private JFXButton saveButton;
-    @FXML
-    private JFXButton cancelButton;
-    @FXML
-    private AnchorPane rootPane;
-
-    // These fields are for mouse dragging of window
-    private double xOffset;
-    private double yOffset;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<String> terms = termService.getListOfTerms();
         termSelect.setItems(terms);
-
-        // ******** Code below is for Draggable windows **********    
-
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
-        });
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
-        });
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.HAND); //Change cursor to hand
-            }
-        });
-
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
-            }
-        });
+        super.initialize(url, rb);
     }
 
     @FXML

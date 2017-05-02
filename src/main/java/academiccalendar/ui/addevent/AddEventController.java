@@ -7,21 +7,16 @@ import academiccalendar.model.DbTerm;
 import academiccalendar.service.CalendarService;
 import academiccalendar.service.EventService;
 import academiccalendar.service.TermService;
+import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.main.FXMLDocumentController;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +27,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 @Component
-public class AddEventController implements Initializable {
+public class AddEventController extends AbstractDraggableController {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AddEventController.class);
 
@@ -47,12 +42,6 @@ public class AddEventController implements Initializable {
 
     @Autowired
     private TermService termService;
-
-    // Structure
-    @FXML
-    private Label topLabel;
-    @FXML
-    private AnchorPane rootPane;
 
     // Text fields
     @FXML
@@ -70,10 +59,6 @@ public class AddEventController implements Initializable {
     // Date picker
     @FXML
     private JFXDatePicker date;
-
-    // These fields are for mouse dragging of window
-    private double xOffset;
-    private double yOffset;
 
     @FXML
     void exit(MouseEvent event) {
@@ -151,50 +136,9 @@ public class AddEventController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         autofillDatePicker();
-        //Get terms from database and store them in the ObservableList variable "terms"
-
         ObservableList<String> terms = termService.getListOfTerms();
         termSelect.setItems(terms);
-        //**********************************************************************
-        // ************* Everything below is for Draggable Window ********
-
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                xOffset = stage.getX() - event.getScreenX();
-                yOffset = stage.getY() - event.getScreenY();
-            }
-        });
-        // Set up Mouse Dragging for the Event pop up window
-        topLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                stage.setX(event.getScreenX() + xOffset);
-                stage.setY(event.getScreenY() + yOffset);
-            }
-        });
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.HAND); //Change cursor to hand
-            }
-        });
-
-        // Change cursor when hover over draggable area
-        topLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Stage stage = (Stage) rootPane.getScene().getWindow();
-                Scene scene = stage.getScene();
-                scene.setCursor(Cursor.DEFAULT); //Change cursor to hand
-            }
-        });
+        super.initialize(url, rb);
     }
 
 }
