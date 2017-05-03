@@ -93,13 +93,14 @@ public class TermService {
     }
 
     @Transactional
-    public void updateTerm(String termName, LocalDate newTermStartingDate) {
+    public void updateTerm(String termName, LocalDate newTermStartingDate, Long colorGroupId) {
         DbTerm dbTerm = termRepository.findByName(termName);
         ZoneId z = ZoneId.systemDefault();
         ZonedDateTime zdt = newTermStartingDate.atStartOfDay(z);
         Instant instant = zdt.toInstant();
         java.util.Date d = java.util.Date.from(instant);
         dbTerm.setStartDate(d);
+        dbTerm.setColorGroup(colorGroupRepository.findOne(colorGroupId));
         termRepository.save(dbTerm);
     }
 

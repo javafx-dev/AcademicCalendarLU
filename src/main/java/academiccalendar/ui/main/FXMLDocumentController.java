@@ -203,7 +203,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void manageTermsEvent() {
-        // When the user clicks "Manage Term Dates" pop up window that let's 
+        // When the user clicks "Manage Terms" pop up window that let's
         // them change starting dates for terms
         try {
 
@@ -573,6 +573,8 @@ public class FXMLDocumentController implements Initializable {
 
 
     private void initializeColorPicker() {
+        colorRootPane.getChildren().clear();
+        colorRows.clear();
         List<DbColorGroup> colorGroups = colorGroupService.findAll();
         for (DbColorGroup colorGroup : colorGroups) {
             colorRows.add(new ColorRow(colorGroup));
@@ -694,9 +696,30 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void manageTermDates(MouseEvent event) {
+    private void manageTerms(MouseEvent event) {
         manageTermsEvent();
     }
 
+    @FXML
+    private void addNewColor(MouseEvent mouseEvent) {
+        LOGGER.info("Add new color");
+        try {
+            // Load root layout from fxml file.
+            Parent rootLayout = loader.load(getClass().getClassLoader().getResource("add_color.fxml"));
+            Stage stage = new Stage(StageStyle.UNDECORATED);
+            stage.initModality(Modality.APPLICATION_MODAL);
 
+            // Show the scene containing the root layout.
+            Scene scene = new Scene(rootLayout);
+            stage.setScene(scene);
+            stage.show();
+
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void loadColors() {
+        initializeColorPicker();
+    }
 }

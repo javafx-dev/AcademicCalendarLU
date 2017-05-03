@@ -1,15 +1,24 @@
-package academiccalendar.ui.editterm;
+package academiccalendar.ui.term;
 
 import academiccalendar.data.model.Model;
+import academiccalendar.model.DbColorGroup;
+import academiccalendar.service.ColorGroupService;
 import academiccalendar.service.TermService;
 import academiccalendar.ui.common.AbstractDraggableController;
-import academiccalendar.ui.listterms.ListTermsController;
+import academiccalendar.ui.main.FXMLDocumentController;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,10 +35,22 @@ public class EditTermController extends AbstractDraggableController {
 
     @Autowired
     private ListTermsController listController;
+
+    @Autowired
+    private ColorGroupService colorGroupService;
+
+    @Autowired
+    private FXMLDocumentController mainController;
+
     @FXML
     private Label termLabel;
     @FXML
     private JFXDatePicker termDatePicker;
+
+    @FXML
+    private JFXComboBox<DbColorGroup> colorSelector;
+
+    private ObservableList<DbColorGroup> colorGroupList;
 
     private void autofill() {
 
@@ -48,7 +69,44 @@ public class EditTermController extends AbstractDraggableController {
         // Set default value for datepicker
         termDatePicker.setValue(LocalDate.of(year, month, day));
 
+        colorGroupList = FXCollections.observableArrayList(colorGroupService.findAll());
+
+        colorSelector.setConverter(new StringConverter<DbColorGroup>() {
+            @Override
+            public String toString(DbColorGroup object) {
+                return object.getName();
+            }
+
+            @Override
+            public DbColorGroup fromString(String string) {
+                return colorGroupList.stream().filter((s) -> s.getName().equals(string)).findFirst().get();
+            }
+        });
+
+        Callback cellFactory = new Callback<ListView<DbColorGroup>, ListCell<DbColorGroup>>() {
+            @Override
+            public ListCell<DbColorGroup> call(ListView<DbColorGroup> l) {
+                return new ListCell<DbColorGroup>() {
+                    @Override
+                    protected void updateItem(DbColorGroup item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item == null || empty) {
+                            setGraphic(null);
+                        } else {
+                            setText(item.getId() + "    " + item.getName());
+                        }
+                    }
+                };
+            }
+        };
+
+        colorSelector.setButtonCell((ListCell) cellFactory.call(null));
+        colorSelector.setCellFactory(cellFactory);
+        colorSelector.setItems(colorGroupList);
+
+
     }
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -76,7 +134,7 @@ public class EditTermController extends AbstractDraggableController {
     }
 
 
-    public void updateTermDate() {
+    private void updateTermDate() {
 
         //Get the name of the term to be updated and it current starting date
         String termName = Model.getInstance().term_name;
@@ -89,7 +147,15 @@ public class EditTermController extends AbstractDraggableController {
             alertMessage.showAndWait();
             return;
         }
-        termService.updateTerm(termName, termDatePicker.getValue());
+        DbColorGroup newColorGroup = colorSelector.getValue();
+        if (colorSelector.getValue() == null){
+            Alert alertMessage = new Alert(Alert.AlertType.ERROR);
+            alertMessage.setHeaderText(null);
+            alertMessage.setContentText("Please select color group");
+            alertMessage.showAndWait();
+            return;
+        }
+        termService.updateTerm(termName, termDatePicker.getValue(),newColorGroup.getId());
         Alert alertMessage = new Alert(Alert.AlertType.INFORMATION);
         alertMessage.setHeaderText(null);
         alertMessage.setContentText("Term was updated successfully");
@@ -97,6 +163,7 @@ public class EditTermController extends AbstractDraggableController {
 
         // Update list of terms in the table view to show new starting date
         listController.loadData();
+        mainController.repaintView();
         // Close the window
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();

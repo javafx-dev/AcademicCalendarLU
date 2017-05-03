@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -10,7 +11,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<AnchorPane fx:id="rootPane" prefHeight="213.0" prefWidth="295.0" stylesheets="@style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.editterm.EditTermController">
+
+<AnchorPane fx:id="rootPane" prefHeight="284.0" prefWidth="350.0" stylesheets="@style/materialButtonStyle.css" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="academiccalendar.ui.term.EditTermController">
    <children>
       <HBox id="header" prefHeight="35.0" prefWidth="342.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -57,6 +59,12 @@
                </children>
             </HBox>
             <JFXDatePicker fx:id="termDatePicker" prefHeight="37.0" prefWidth="182.0" />
+            <HBox>
+               <children>
+                  <Label prefHeight="29.0" prefWidth="83.0" text="Color Group" />
+                  <JFXComboBox fx:id="colorSelector" prefHeight="37.0" prefWidth="182.0" />
+               </children>
+            </HBox>
          </children>
       </VBox>
       <HBox prefHeight="41.0" prefWidth="350.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">

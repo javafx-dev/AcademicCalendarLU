@@ -1,19 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package academiccalendar.ui.main;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class Term {
     private final SimpleStringProperty termName;
     private final SimpleStringProperty termDate;
+    private final ColoredTerm coloredTerm;
 
-    public Term(String termName, String termDate) {
+    public Term(String termName, String termDate, ColoredTerm coloredTerm) {
         this.termName = new SimpleStringProperty(termName);
         this.termDate = new SimpleStringProperty(termDate);
+        this.coloredTerm = coloredTerm;
     }
 
     public String getTermName() {
@@ -22,5 +21,9 @@ public class Term {
 
     public String getTermDate() {
         return termDate.get();
+    }
+
+    public ObjectProperty<ColoredTerm> getColoredTerm() {
+        return new SimpleObjectProperty<ColoredTerm>(coloredTerm) ;
     }
 }

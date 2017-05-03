@@ -1,9 +1,10 @@
-package academiccalendar.ui.listterms;
+package academiccalendar.ui.term;
 
 import academiccalendar.data.model.Model;
 import academiccalendar.model.DbTerm;
 import academiccalendar.service.TermService;
 import academiccalendar.ui.common.AbstractDraggableController;
+import academiccalendar.ui.main.ColoredTerm;
 import academiccalendar.ui.main.CustomFXMLLoader;
 import academiccalendar.ui.main.FXMLDocumentController;
 import academiccalendar.ui.main.Term;
@@ -14,13 +15,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -40,15 +44,12 @@ public class ListTermsController extends AbstractDraggableController {
     @FXML
     private TableView<Term> tableView;
     @FXML
-    private TableColumn<Term, String> termCol;
+    private TableColumn<Term, ColoredTerm> termCol;
     @FXML
     private TableColumn<Term, String> dateCol;
 
     @Autowired
     private CustomFXMLLoader loader;
-
-    @Autowired
-    private FXMLDocumentController mainController;
 
     @Autowired
     private TermService termService;
@@ -80,12 +81,44 @@ public class ListTermsController extends AbstractDraggableController {
         }
     }
 
-    public void initCol() {
-        termCol.setCellValueFactory(new PropertyValueFactory<>("termName"));
+    private void initCol() {
+        termCol.setCellValueFactory(term -> term.getValue().getColoredTerm());
         dateCol.setCellValueFactory(new PropertyValueFactory<>("termDate"));
+
+        termCol.setCellFactory(getTableColumnTableCellCallback());
     }
 
-    public void loadData() {
+    private Callback<TableColumn<Term, ColoredTerm>, TableCell<Term, ColoredTerm>> getTableColumnTableCellCallback() {
+        return column -> new TableCell<Term, ColoredTerm>() {
+
+
+            @Override
+            protected void updateItem(ColoredTerm item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    // Format date.
+                    setText(item.getName().getValue());
+                    String[] items = item.getColor().getValue().split("-");
+                    String color = "rgb(" + items[0] + "," + items[1] + "," + items[2] + ")";
+                    setTextFill(Color.web(color));
+                    setStyle("-fx-text-color: " + toRGBCode(Color.web(color)));
+                }
+            }
+        };
+    }
+
+    //TODO move somewhere else
+    private static String toRGBCode(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
+
+    void loadData() {
         ObservableList<Term> list = FXCollections.observableArrayList();
         // wipe current rules to add updates rules from database
         tableView.getItems().clear();
@@ -93,7 +126,7 @@ public class ListTermsController extends AbstractDraggableController {
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
 
         for (DbTerm dbTerm : dbTermList) {
-            list.add(new Term(dbTerm.getName(), dateFormat.format(dbTerm.getStartDate())));
+            list.add(new Term(dbTerm.getName(), dateFormat.format(dbTerm.getStartDate()), new ColoredTerm(dbTerm.getName(), dbTerm.getColorGroup().getColor())));
         }
         tableView.getItems().setAll(list);
     }

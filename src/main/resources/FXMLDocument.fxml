@@ -156,6 +156,14 @@
                                           <Insets top="15.0" />
                                        </VBox.margin>
                                     </HBox>
+                                    <HBox alignment="CENTER" prefHeight="42.0" prefWidth="304.0">
+                                       <children>
+                                          <com.jfoenix.controls.JFXButton id="menuButton" onMouseClicked="#addNewColor" prefHeight="39.0" prefWidth="180.0" text="Add New Color" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets top="15.0" />
+                                       </VBox.margin>
+                                    </HBox>
                                  </children>
                               </VBox>
                            </children>
@@ -194,7 +202,7 @@
                                           <Font size="12.0" />
                                        </font>
                                     </Label>
-                                    <com.jfoenix.controls.JFXButton id="menuButton" layoutX="30.0" layoutY="60.0" onMouseClicked="#manageTermDates" prefHeight="44.0" prefWidth="329.0" text="Manage Term Dates">
+                                    <com.jfoenix.controls.JFXButton id="menuButton" layoutX="30.0" layoutY="60.0" onMouseClicked="#manageTerms" prefHeight="44.0" prefWidth="329.0" text="Manage Terms">
                                        <font>
                                           <Font size="12.0" />
                                        </font>

@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -25,9 +26,17 @@ public class ColorGroupService {
     }
 
     private String getRGB(Color c) {
-
         return Integer.toString((int) (c.getRed() * 255)) + "-"
                 + Integer.toString((int) (c.getGreen() * 255)) + "-"
                 + Integer.toString((int) (c.getBlue() * 255));
+    }
+
+    @Transactional
+    public void save(String name, Color color) {
+        DbColorGroup dbColorGroup = new DbColorGroup();
+        dbColorGroup.setName(name);
+        dbColorGroup.setColor(getRGB(color));
+        dbColorGroup.setVisible(true);
+        colorGroupRepository.save(dbColorGroup);
     }
 }

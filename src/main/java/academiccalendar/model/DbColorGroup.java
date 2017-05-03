@@ -1,5 +1,8 @@
 package academiccalendar.model;
 
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +23,9 @@ public class DbColorGroup {
 
     @Column
     private String color;
+
+    @Column
+    private boolean visible;
 
     public Long getId() {
         return id;
@@ -43,5 +49,13 @@ public class DbColorGroup {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
