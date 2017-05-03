@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.Date;
@@ -19,8 +20,9 @@ public class DbTerm {
     private Long id;
     @Column
     private String name;
-    @Column
-    private String color;
+
+    @ManyToOne
+    private DbColorGroup colorGroup;
 
     @Column
     private Date startDate;
@@ -44,12 +46,12 @@ public class DbTerm {
         this.name = name;
     }
 
-    public String getColor() {
-        return color;
+    public DbColorGroup getColorGroup() {
+        return colorGroup;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setColorGroup(DbColorGroup colorGroup) {
+        this.colorGroup = colorGroup;
     }
 
     public List<DbEvent> getEvents() {

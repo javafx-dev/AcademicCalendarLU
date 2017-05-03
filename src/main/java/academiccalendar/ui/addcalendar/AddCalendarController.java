@@ -25,7 +25,7 @@ import java.util.Date;
 import java.util.ResourceBundle;
 
 @Component
-public class AddCalendarController extends AbstractDraggableController {
+class AddCalendarController extends AbstractDraggableController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AddCalendarController.class);
 

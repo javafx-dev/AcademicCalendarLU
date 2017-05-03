@@ -4,6 +4,7 @@ import academiccalendar.data.model.Model;
 import academiccalendar.model.DbCalendar;
 import academiccalendar.service.CalendarService;
 import academiccalendar.ui.common.AbstractDraggableController;
+import academiccalendar.ui.main.Calendar;
 import academiccalendar.ui.main.FXMLDocumentController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -26,7 +28,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Component
-public class ListCalendarsController extends AbstractDraggableController {
+class ListCalendarsController extends AbstractDraggableController {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ListCalendarsController.class);
 
@@ -37,15 +39,15 @@ public class ListCalendarsController extends AbstractDraggableController {
     private CalendarService calendarService;
 
     @FXML
-    private TableView<academiccalendar.ui.main.Calendar> tableView;
+    private TableView<Calendar> tableView;
     @FXML
     private AnchorPane rootPane;
     @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> nameCol;
+    private TableColumn<Calendar, String> nameCol;
     @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> springCol;
+    private TableColumn<Calendar, String> springCol;
     @FXML
-    private TableColumn<academiccalendar.ui.main.Calendar, String> fallCol;
+    private TableColumn<Calendar, String> fallCol;
 
 
     private void initCol() {
@@ -73,6 +75,17 @@ public class ListCalendarsController extends AbstractDraggableController {
         initCol();
         loadData();
         super.initialize(url, rb);
+
+        tableView.setRowFactory(tv -> {
+            TableRow<Calendar> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && (!row.isEmpty())) {
+                    Calendar rowData = row.getItem();
+                    openCalendar(rowData);
+                }
+            });
+            return row;
+        });
     }
 
     @FXML
@@ -84,12 +97,21 @@ public class ListCalendarsController extends AbstractDraggableController {
 
     @FXML
     private void openCalendar(MouseEvent event) {
-        // Get selected calendar from table
-        academiccalendar.ui.main.Calendar cal = tableView.getSelectionModel().getSelectedItem();
-        Model.getInstance().calendar_id = cal.getDbCalendar().getId();
+        if (tableView.getSelectionModel().getSelectedItem() == null){
+            LOGGER.warn("No calendar selected");
+        }
+        else {
+            // Get selected calendar from table
+            Calendar cal = tableView.getSelectionModel().getSelectedItem();
+            openCalendar(cal);
+        }
+    }
+
+    private void openCalendar(Calendar calendar) {
+        Model.getInstance().calendar_id = calendar.getDbCalendar().getId();
 
         // Load the calendar in the main window
-        mainController.calendarGenerate(cal.getDbCalendar());
+        mainController.calendarGenerate(calendar.getDbCalendar());
 
         // Close the window after opening and loading the selected calendar
         Stage stage = (Stage) rootPane.getScene().getWindow();

@@ -13,6 +13,7 @@ import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.editrule.EditRuleController;
 import academiccalendar.ui.main.CustomFXMLLoader;
 import academiccalendar.ui.main.FXMLDocumentController;
+import academiccalendar.utils.DateConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -280,7 +281,7 @@ public class ListRulesController extends AbstractDraggableController {
         DbEvent event = new DbEvent();
         event.setTerm(dbTerm);
         event.setDescription(evtDescription);
-        event.setDate(newEventDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        event.setDate(newEventDate);
         DbCalendar calendar = calendarService.findOne(calendarId);
         event.setCalendar(calendar);
         eventService.save(event);
@@ -291,7 +292,7 @@ public class ListRulesController extends AbstractDraggableController {
     private Date getNewEventDate(Date auxTermStartDate, int auxDays) {
         LocalDateTime localDateTime = auxTermStartDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         localDateTime.plusDays(auxDays);
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return DateConverter.localDateTimeToDate(localDateTime);
     }
     //**************************************************************************************************************************
     //************************************    End Of Auxiliary Functions    ****************************************************

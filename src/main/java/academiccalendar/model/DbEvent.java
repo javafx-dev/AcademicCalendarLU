@@ -7,7 +7,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import java.time.LocalDate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @Table(name = "EVENTS")
@@ -20,9 +22,9 @@ public class DbEvent {
     @Column
     private String description;
 
-    //TODO change to Date time as JPA doesn't support new Time API
     @Column
-    private LocalDate date;
+    @Temporal(TemporalType.DATE)
+    private Date date;
 
     @ManyToOne
     private DbTerm term;
@@ -46,11 +48,11 @@ public class DbEvent {
         this.description = description;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

@@ -35,36 +35,5 @@ public class Model {
     // for editing terms
     public String term_name;
     public String term_date;    
-    
-    public int getMonthIndex(String month){
-        switch (month)
-        {    
-            case "January":
-                return 0;
-            case "February":
-                return 1;
-            case "March":
-                return 2;
-            case "April":
-                return 3;
-            case "May":
-                return 4;
-            case "June":
-                return 5;
-            case "July":
-                return 6;
-            case "August":
-                return 7;
-            case "September":
-                return 8;
-            case "October":
-                return 9;
-            case "November":
-                return 10;
-            case "December":
-                return 11;
-        }
-        return 0;
-    }
-    
+
 }

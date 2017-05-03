@@ -9,6 +9,7 @@ import academiccalendar.service.EventService;
 import academiccalendar.service.TermService;
 import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.main.FXMLDocumentController;
+import academiccalendar.utils.DateConverter;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -27,7 +28,7 @@ import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 @Component
-public class AddEventController extends AbstractDraggableController {
+class AddEventController extends AbstractDraggableController {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(AddEventController.class);
 
@@ -101,7 +102,7 @@ public class AddEventController extends AbstractDraggableController {
 
         DbEvent dbEvent = new DbEvent();
         dbEvent.setDescription(eventSubject);
-        dbEvent.setDate(date.getValue());
+        dbEvent.setDate(DateConverter.localDateToDate(date.getValue()));
         dbEvent.setCalendar(calendar);
         dbEvent.setTerm(dbTerm);
         eventService.save(dbEvent);
@@ -122,7 +123,7 @@ public class AddEventController extends AbstractDraggableController {
     private void autofillDatePicker() {
         // Get selected day, month, and year and autofill date selection
         int day = Model.getInstance().event_day;
-        int month = Model.getInstance().event_month + 1;
+        int month = Model.getInstance().event_month;
         int year = Model.getInstance().event_year;
 
         // Set default value for datepicker

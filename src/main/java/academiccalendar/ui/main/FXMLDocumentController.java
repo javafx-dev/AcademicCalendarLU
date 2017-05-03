@@ -2,13 +2,17 @@ package academiccalendar.ui.main;
 
 import academiccalendar.data.model.Model;
 import academiccalendar.model.DbCalendar;
+import academiccalendar.model.DbColorGroup;
 import academiccalendar.model.DbEvent;
 import academiccalendar.model.DbTerm;
+import academiccalendar.service.ColorGroupService;
 import academiccalendar.service.EventService;
 import academiccalendar.service.TermService;
+import academiccalendar.ui.controls.ColorRow;
 import academiccalendar.ui.controls.EventLabel;
 import academiccalendar.ui.editevent.EditEventController;
-import com.jfoenix.controls.JFXColorPicker;
+import academiccalendar.utils.DateConverter;
+import academiccalendar.utils.Month;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.effects.JFXDepthManager;
@@ -32,14 +36,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -48,6 +50,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -56,10 +59,9 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -71,9 +73,7 @@ import java.util.logging.Logger;
 @Scope("singleton")
 public class FXMLDocumentController implements Initializable {
 
-    // Root pane
-    @FXML
-    private AnchorPane rootPane;
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(FXMLDocumentController.class);
 
     @FXML
     private Label monthLabel;
@@ -85,7 +85,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private JFXComboBox<String> selectedYear;
     @FXML
-    private JFXListView<String> monthSelect;
+    private JFXListView<Month> monthSelect;
 
     // Center area
     @FXML
@@ -106,25 +106,15 @@ public class FXMLDocumentController implements Initializable {
     private EventService eventService;
 
     @Autowired
+    private ColorGroupService colorGroupService;
+
+    @Autowired
     private EditEventController editEventController;
 
     @FXML
     private VBox colorRootPane;
-    // Color pickers
-    @FXML
-    private JFXColorPicker springSemCP;
-    @FXML
-    private JFXColorPicker fallSemCP;
-    @FXML
-    private JFXColorPicker allQtrCP;
-    @FXML
-    private JFXColorPicker allMbaCP;
-    @FXML
-    private JFXColorPicker allHalfCP;
-    @FXML
-    private JFXColorPicker allCampusCP;
-    @FXML
-    private JFXColorPicker allHolidayCP;
+
+    private final List<ColorRow> colorRows = new ArrayList<>();
 
     // Events
     private void addEvent(VBox day) {
@@ -137,7 +127,7 @@ public class FXMLDocumentController implements Initializable {
 
             // Store event day and month in data singleton
             Model.getInstance().event_day = Integer.parseInt(lbl.getText());
-            Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());
+            Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
             Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
 
             // When user clicks on any date in the calendar, event editor window opens
@@ -160,7 +150,7 @@ public class FXMLDocumentController implements Initializable {
         // Store event day and month in data singleton
         Label dayLbl = (Label) day.getChildren().get(0);
         Model.getInstance().event_day = Integer.parseInt(dayLbl.getText());
-        Model.getInstance().event_month = Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());
+        Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
         Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
 
         Model.getInstance().event_subject = descript;
@@ -272,9 +262,9 @@ public class FXMLDocumentController implements Initializable {
 
     private void initializeMonthSelector() {
         // Add event listener to each month list item, allowing user to change months
-        monthSelect.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        monthSelect.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Month>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends Month> observable, Month oldValue, Month newValue) {
 
                 // Note: The line of code "monthSelect.getItems().clear()" invokes this change listener
                 // and the newValue becomes NULL. When that happens, we will just skip the following instructions
@@ -282,10 +272,10 @@ public class FXMLDocumentController implements Initializable {
                 // See method calendarGenerate() for that call.
                 if (newValue != null) {
                     // Show selected/current month above calendar
-                    monthLabel.setText(newValue);
+                    monthLabel.setText(newValue.name());
 
                     // Update the VIEWING MONTH
-                    Model.getInstance().viewing_month = Model.getInstance().getMonthIndex(newValue);
+                    Model.getInstance().viewing_month = newValue.getMonthId();
 
                     repaintView();
                 }
@@ -378,21 +368,17 @@ public class FXMLDocumentController implements Initializable {
         // Enable year selection box
         selectedYear.setVisible(true);
 
-        // Get a list of all the months (1-12) in a year
-        DateFormatSymbols dateFormat = new DateFormatSymbols();
-        String months[] = dateFormat.getMonths();
-        String[] spliceMonths = Arrays.copyOfRange(months, 0, 12);
-
         // Load month selection
         monthSelect.getItems().clear();  // Note, this will invoke our change listener too
-        monthSelect.getItems().addAll(spliceMonths);
+        for(Month month: Month.values()) {
+            monthSelect.getItems().addAll(month);
+        }
 
-        // Select the first MONTH as default
         monthSelect.getSelectionModel().selectFirst();
-        monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem());
+        monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem().name());
         // Update the VIEWING MONTH
         Model.getInstance().viewing_month =
-                Model.getInstance().getMonthIndex(monthSelect.getSelectionModel().getSelectedItem());
+                monthSelect.getSelectionModel().getSelectedItem().getMonthId();
 
         repaintView();
     }
@@ -407,23 +393,20 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void populateMonthWithEvents() {
-
         Long calendarId = Model.getInstance().calendar_id;
-
-        String currentMonth = monthLabel.getText();
-        int currentMonthIndex = Model.getInstance().getMonthIndex(currentMonth) + 1;
-
         int currentYear = Integer.parseInt(selectedYear.getValue());
+        LOGGER.info("Populating month [{}] with events for year: {} - START", Model.getInstance().viewing_month, currentYear);
 
-        List<DbEvent> eventList = eventService.findEventsByCalendarId(calendarId);
+        List<DbEvent> eventList = eventService.findEventsByCalendarIdAndYearAndMonth(calendarId, currentYear, Model.getInstance().viewing_month);
+        LOGGER.info("Event List size: {}", eventList.size());
         for (DbEvent event : eventList) {
-            LocalDate localDate = event.getDate();
+            LocalDate localDate = DateConverter.dateToLocalDate((java.sql.Date)event.getDate());
             String eventDescript = event.getDescription();
             Long eventTermID = event.getTerm().getId();
             // Check for year we have selected
             if (currentYear == localDate.getYear()) {
                 // Check for the month we already have selected (we are viewing)
-                if (currentMonthIndex == localDate.getMonthValue()) {
+                if (Model.getInstance().viewing_month == localDate.getMonthValue()) {
                     // Get day for the month
                     int day = localDate.getDayOfMonth();
 
@@ -432,6 +415,7 @@ public class FXMLDocumentController implements Initializable {
                 }
             }
         }
+        LOGGER.info("Populating month with events - END");
     }
 
     public void showDate(int dayNumber, String descript, int termID, DbEvent event) {
@@ -472,7 +456,7 @@ public class FXMLDocumentController implements Initializable {
 
                     // Get term color from term's table
                     DbTerm dbTerm = termService.findOne((long) termID);
-                    String eventRGB = dbTerm.getColor();
+                    String eventRGB = dbTerm.getColorGroup().getColor();
                     // Parse for rgb values
                     String[] colors = eventRGB.split("-");
                     String red = colors[0];
@@ -600,115 +584,24 @@ public class FXMLDocumentController implements Initializable {
 
     }
 
-    private String getRGB(Color c) {
-
-        return Integer.toString((int) (c.getRed() * 255)) + "-"
-                + Integer.toString((int) (c.getGreen() * 255)) + "-"
-                + Integer.toString((int) (c.getBlue() * 255));
-    }
-
     private void changeColors() {
         // Purpose - Update colors in database and calendar from color picker
-
-        Color springSemColor = springSemCP.getValue();
-        String springSemRGB = getRGB(springSemColor);
-        termService.updateColorByTermName("SP SEM", springSemRGB);
-
-        Color fallSemColor = fallSemCP.getValue();
-        String fallSemRGB = getRGB(fallSemColor);
-        termService.updateColorByTermName("FA SEM", fallSemRGB);
-
-        Color allQtrColor = allQtrCP.getValue();
-        String allQtrRGB = getRGB(allQtrColor);
-        termService.updateColorByTermName("QTR", allQtrRGB);
-
-        Color allMbaColor = allMbaCP.getValue();
-        String allMbaRGB = getRGB(allMbaColor);
-        termService.updateColorByTermName("MBA", allMbaRGB);
-
-        Color allHalfColor = allHalfCP.getValue();
-        String allHalfRGB = getRGB(allHalfColor);
-        termService.updateColorByTermName("Half", allHalfRGB);
-
-        Color allCampusColor = allCampusCP.getValue();
-        String allCampusRGB = getRGB(allCampusColor);
-        termService.updateColorByTermName("Campus", allCampusRGB);
-
-        Color allHolidayColor = allHolidayCP.getValue();
-        String allHolidayRGB = getRGB(allHolidayColor);
-        termService.updateColorByTermName("Holiday", allHolidayRGB);
-
+        LOGGER.info("Updating colors");
+        for (ColorRow colorRow : colorRows) {
+            colorGroupService.updateColor(colorRow.getColorGroup().getId(), colorRow.getCurrentColor());
+        }
     }
 
-    private void initalizeColorPicker() {
 
-        String fallSemRGB = termService.findByName("FA SEM").getColor();
-        String springSemRGB = termService.findByName("SP SEM").getColor();
-        String mbaRGB = termService.findByName("FA I MBA").getColor();
-        String qtrRGB = termService.findByName("FA QTR").getColor();
-        String halfRGB = termService.findByName("FA 1st Half").getColor();
-        String campusRGB = termService.findByName("Campus General").getColor();
-        String holidayRGB = termService.findByName("Holiday").getColor();
-
-        // Parse for rgb values for fall sem
-        String[] colors = fallSemRGB.split("-");
-        String red = colors[0];
-        String green = colors[1];
-        String blue = colors[2];
-        Color c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        fallSemCP.setValue(c);
-
-        // Parse for rgb values for spring sem
-        colors = springSemRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        springSemCP.setValue(c);
-
-        // Parse for rgb values for MBA
-        colors = mbaRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        allMbaCP.setValue(c);
-
-        // Parse for rgb values for QTR
-        colors = qtrRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        allQtrCP.setValue(c);
-
-        // Parse for rgb values for Half
-        colors = halfRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        allHalfCP.setValue(c);
-
-        // Parse for rgb values for Campus
-        colors = campusRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        allCampusCP.setValue(c);
-
-        // Parse for rgb values for Holiday
-        colors = holidayRGB.split("-");
-        red = colors[0];
-        green = colors[1];
-        blue = colors[2];
-        c = Color.rgb(Integer.parseInt(red), Integer.parseInt(green), Integer.parseInt(blue));
-        allHolidayCP.setValue(c);
-
+    private void initializeColorPicker() {
+        List<DbColorGroup> colorGroups = colorGroupService.findAll();
+        for (DbColorGroup colorGroup : colorGroups) {
+            colorRows.add(new ColorRow(colorGroup));
+        }
+        colorRootPane.getChildren().addAll(colorRows);
     }
 
-    public void initializeCalendarGrid() {
+    private void initializeCalendarGrid() {
 
         // Go through each calendar grid location, or each "day" (7x6)
         int rows = 6;
@@ -781,7 +674,7 @@ public class FXMLDocumentController implements Initializable {
 
         // Set Depths
         JFXDepthManager.setDepth(scrollPane, 1);
-        initalizeColorPicker();
+        initializeColorPicker();
     }
 
     // Side - menu buttons 

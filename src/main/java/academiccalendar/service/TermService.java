@@ -1,5 +1,6 @@
 package academiccalendar.service;
 
+import academiccalendar.model.DbColorGroup;
 import academiccalendar.model.DbTerm;
 import com.google.common.collect.Lists;
 import javafx.collections.FXCollections;
@@ -36,6 +37,9 @@ public class TermService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private ColorGroupRepository colorGroupRepository;
+
     @PostConstruct
     private void init() {
         LOGGER.info("Inserting default terms");
@@ -43,9 +47,18 @@ public class TermService {
             if (termRepository.existsByName(term)) {
                 LOGGER.info("Term: [{}] already exists", term);
             } else {
+
+                DbColorGroup colorGroup = colorGroupRepository.findByColor(DEFAULT_COLOR);
+                if (colorGroup == null) {
+                    colorGroup = new DbColorGroup();
+                    colorGroup.setColor(DEFAULT_COLOR);
+                    colorGroup.setName("Default Group");
+                    colorGroupRepository.save(colorGroup);
+                }
+
                 DbTerm dbTerm = new DbTerm();
                 dbTerm.setName(term);
-                dbTerm.setColor(DEFAULT_COLOR);
+                dbTerm.setColorGroup(colorGroup);
                 dbTerm.setStartDate(new Date());
                 termRepository.save(dbTerm);
             }
@@ -88,12 +101,6 @@ public class TermService {
         java.util.Date d = java.util.Date.from(instant);
         dbTerm.setStartDate(d);
         termRepository.save(dbTerm);
-    }
-
-    public void updateColorByTermName(String termName, String newColor) {
-        DbTerm term = termRepository.findByName(termName);
-        term.setColor(newColor);
-        termRepository.save(term);
     }
 
     public DbTerm findOne(long termID) {

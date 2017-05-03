@@ -1,12 +1,12 @@
 package academiccalendar.ui.editevent;
 
-import academiccalendar.data.model.Model;
 import academiccalendar.model.DbEvent;
 import academiccalendar.model.DbTerm;
 import academiccalendar.service.EventService;
 import academiccalendar.service.TermService;
 import academiccalendar.ui.common.AbstractDraggableController;
 import academiccalendar.ui.main.FXMLDocumentController;
+import academiccalendar.utils.DateConverter;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
-import java.time.LocalDate;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -46,36 +45,11 @@ public class EditEventController extends AbstractDraggableController {
     @FXML
     private JFXDatePicker date;
 
-
-    private void autofillDatePicker() {
-        // Get selected day, month, and year and autofill date selection
-        int day = Model.getInstance().event_day;
-        int month = Model.getInstance().event_month + 1;
-        int year = Model.getInstance().event_year;
-        int termID = Model.getInstance().event_term_id;
-        String descript = Model.getInstance().event_subject;
-
-        DbTerm dbTerm = termService.findById((long) termID);
-
-        String chosenTermName = dbTerm.getName();
-
-        // Set default value for datepicker
-        date.setValue(LocalDate.of(year, month, day));
-
-        // Fill description field
-        subject.setText(descript);
-
-        termSelect.getSelectionModel().select(chosenTermName);
-    }
-
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        autofillDatePicker();
-
-
         ObservableList<String> termsList = termService.getListOfTerms();
         termSelect.setItems(termsList);
         super.initialize(url, rb);
@@ -130,7 +104,7 @@ public class EditEventController extends AbstractDraggableController {
 
         DbTerm dbTerm = termService.findByName(term);
         event.setDescription(newEventSubject);
-        event.setDate(date.getValue());
+        event.setDate(DateConverter.localDateToDate(date.getValue()));
         event.setTerm(dbTerm);
         eventService.save(event);
 
@@ -168,6 +142,13 @@ public class EditEventController extends AbstractDraggableController {
 
     public void setEvent(DbEvent event) {
         this.event = event;
+        autoFillDatePicker();
+    }
+
+    private void autoFillDatePicker() {
+        date.setValue(DateConverter.dateToLocalDate(event.getDate()));
+        subject.setText(event.getDescription());
+        termSelect.getSelectionModel().select(event.getTerm().getName());
     }
 
     public DbEvent getEvent() {

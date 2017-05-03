@@ -18,12 +18,12 @@ public class EventService {
     @Autowired
     private CalendarRepository calendarRepository;
 
-    public List<DbEvent> findEventsByCalendarName(String calendarName) {
-        return eventRepository.findByCalendarName(calendarName);
-    }
-
     public List<DbEvent> findEventsByCalendarId(Long calendarId) {
         return eventRepository.findByCalendarId(calendarId);
+    }
+
+    public List<DbEvent> findEventsByCalendarIdAndYearAndMonth(Long calendarId, int year, int month) {
+        return eventRepository.findByCalendarIdAndYearAndMonth(calendarId, year, month);
     }
 
     public void save(DbEvent event) {
@@ -34,7 +34,5 @@ public class EventService {
         eventRepository.delete(event);
     }
 
-    public List<DbEvent> findAllByCalendarName(String calendarName) {
-        return eventRepository.findByCalendarName(calendarName);
-    }
+
 }
