@@ -15,9 +15,7 @@ public class Model {
     public int event_day;
     public int event_month;
     public int event_year;
-    public int event_term_id;
-    public String event_subject;
-    
+
     // for the year and month the user has open, is "viewing"
     public int viewing_month;
     public int viewing_year;

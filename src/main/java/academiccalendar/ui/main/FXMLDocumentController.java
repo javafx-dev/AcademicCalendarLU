@@ -145,16 +145,9 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    private void editEvent(VBox day, String descript, String termID, DbEvent event) {
-
-        // Store event day and month in data singleton
-        Label dayLbl = (Label) day.getChildren().get(0);
-        Model.getInstance().event_day = Integer.parseInt(dayLbl.getText());
+    private void editEvent(DbEvent event) {
         Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
         Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
-
-        Model.getInstance().event_subject = descript;
-        Model.getInstance().event_term_id = Integer.parseInt(termID);
 
         // When user clicks on any date in the calendar, event editor window opens
         try {
@@ -245,7 +238,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
-    public void newRuleEvent() {
+    private void newRuleEvent() {
         // When the user clicks "New Rule" pop up window appears
         try {
             Parent rootLayout = loader.load(getClass().getResource("/add_rule.fxml"));
@@ -303,7 +296,7 @@ public class FXMLDocumentController implements Initializable {
 
         // Get the current VIEW
         int year = Model.getInstance().viewing_year;
-        int month = Model.getInstance().viewing_month;
+        int month = Model.getInstance().viewing_month - 1;
 
         // Note: Java's Gregorian Calendar class gives us the right
         // "first day of the month" for a given calendar & month
@@ -370,7 +363,7 @@ public class FXMLDocumentController implements Initializable {
 
         // Load month selection
         monthSelect.getItems().clear();  // Note, this will invoke our change listener too
-        for(Month month: Month.values()) {
+        for (Month month : Month.values()) {
             monthSelect.getItems().addAll(month);
         }
 
@@ -400,20 +393,13 @@ public class FXMLDocumentController implements Initializable {
         List<DbEvent> eventList = eventService.findEventsByCalendarIdAndYearAndMonth(calendarId, currentYear, Model.getInstance().viewing_month);
         LOGGER.info("Event List size: {}", eventList.size());
         for (DbEvent event : eventList) {
-            LocalDate localDate = DateConverter.dateToLocalDate((java.sql.Date)event.getDate());
+            LocalDate localDate = DateConverter.dateToLocalDate((java.sql.Date) event.getDate());
             String eventDescript = event.getDescription();
             Long eventTermID = event.getTerm().getId();
-            // Check for year we have selected
-            if (currentYear == localDate.getYear()) {
-                // Check for the month we already have selected (we are viewing)
-                if (Model.getInstance().viewing_month == localDate.getMonthValue()) {
-                    // Get day for the month
-                    int day = localDate.getDayOfMonth();
-
-                    // Display decription of the event given it's day
-                    showDate(day, eventDescript, eventTermID.intValue(), event);
-                }
-            }
+            // Get day for the month
+            int day = localDate.getDayOfMonth();
+            // Display decription of the event given it's day
+            showDate(day, eventDescript, eventTermID.intValue(), event);
         }
         LOGGER.info("Populating month with events - END");
     }
@@ -449,10 +435,7 @@ public class FXMLDocumentController implements Initializable {
                     // Save the term ID in accessible text
                     eventLbl.setAccessibleText(Integer.toString(termID));
 
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
-                        editEvent((VBox) eventLbl.getParent(), eventLbl.getText(), eventLbl.getAccessibleText(), event);
-
-                    });
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> editEvent(event));
 
                     // Get term color from term's table
                     DbTerm dbTerm = termService.findOne((long) termID);
@@ -470,13 +453,9 @@ public class FXMLDocumentController implements Initializable {
                     eventLbl.setMaxWidth(Double.MAX_VALUE);
 
                     // Mouse effects
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_ENTERED, (e) -> {
-                        eventLbl.getScene().setCursor(Cursor.HAND);
-                    });
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_ENTERED, (e) -> eventLbl.getScene().setCursor(Cursor.HAND));
 
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_EXITED, (e) -> {
-                        eventLbl.getScene().setCursor(Cursor.DEFAULT);
-                    });
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_EXITED, (e) -> eventLbl.getScene().setCursor(Cursor.DEFAULT));
 
                     // Add label to calendar
                     day.getChildren().add(eventLbl);
@@ -532,7 +511,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
 
-    public void exportCalendarExcel() {
+    private void exportCalendarExcel() {
 
         FileChooser fileChooser = new FileChooser();
 
@@ -614,9 +593,7 @@ public class FXMLDocumentController implements Initializable {
                 vPane.getStyleClass().add("calendar_pane");
                 vPane.setMinWidth(weekdayHeader.getPrefWidth() / 7);
 
-                vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
-                    addEvent(vPane);
-                });
+                vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> addEvent(vPane));
 
                 GridPane.setVgrow(vPane, Priority.ALWAYS);
 

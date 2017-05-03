@@ -146,7 +146,7 @@ public class EditEventController extends AbstractDraggableController {
     }
 
     private void autoFillDatePicker() {
-        date.setValue(DateConverter.dateToLocalDate(event.getDate()));
+        date.setValue(DateConverter.dateToLocalDate((java.sql.Date)event.getDate()));
         subject.setText(event.getDescription());
         termSelect.getSelectionModel().select(event.getTerm().getName());
     }
