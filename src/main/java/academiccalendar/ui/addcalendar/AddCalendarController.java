@@ -57,8 +57,6 @@ class AddCalendarController extends AbstractDraggableController {
 
             DbCalendar dbCalendar = new DbCalendar();
             dbCalendar.setName(calName);
-            dbCalendar.setStartYear(2017);
-            dbCalendar.setEndYear(2018);
             dbCalendar.setStartDate(startDate);
             calendarService.save(dbCalendar);
 

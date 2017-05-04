@@ -12,10 +12,10 @@ public class Calendar {
 
     private final DbCalendar dbCalendar;
 
-    public Calendar(String name, String startYear, String endYear, String startingDate, DbCalendar calendar) {
+    public Calendar(String name, String startingDate, DbCalendar calendar) {
         this.name = new SimpleStringProperty(name);
-        this.startYear = new SimpleStringProperty(startYear);
-        this.endYear = new SimpleStringProperty(endYear);
+        this.startYear = new SimpleStringProperty(startingDate);
+        this.endYear = new SimpleStringProperty(startingDate);
         this.startDate = new SimpleStringProperty(startingDate);
         this.dbCalendar = calendar;
 

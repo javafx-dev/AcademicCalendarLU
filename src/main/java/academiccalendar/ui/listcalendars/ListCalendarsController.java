@@ -63,7 +63,7 @@ class ListCalendarsController extends AbstractDraggableController {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         for (DbCalendar calendar : calendars) {
             String date = sdf.format(calendar.getStartDate());
-            list.add(new academiccalendar.ui.main.Calendar(calendar.getName(), Integer.toString(calendar.getStartYear()), Integer.toString(calendar.getEndYear()), date, calendar));
+            list.add(new academiccalendar.ui.main.Calendar(calendar.getName(), date, calendar));
         }
         tableView.getItems().setAll(list);
         LOGGER.info("Loading calendars end");

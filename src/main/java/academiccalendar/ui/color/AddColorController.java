@@ -43,12 +43,14 @@ class AddColorController extends AbstractDraggableController {
 
     @FXML
     private void exit(MouseEvent mouseEvent) {
-
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
     private void cancel(MouseEvent mouseEvent) {
-
+        Stage stage = (Stage) rootPane.getScene().getWindow();
+        stage.close();
     }
 
 

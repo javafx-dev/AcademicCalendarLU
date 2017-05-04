@@ -68,6 +68,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.IntStream;
 
 @Component
 @Scope("singleton")
@@ -83,7 +84,7 @@ public class FXMLDocumentController implements Initializable {
 
     // Combo/Select Boxes
     @FXML
-    private JFXComboBox<String> selectedYear;
+    private JFXComboBox<Integer> selectedYear;
     @FXML
     private JFXListView<Month> monthSelect;
 
@@ -128,7 +129,7 @@ public class FXMLDocumentController implements Initializable {
             // Store event day and month in data singleton
             Model.getInstance().event_day = Integer.parseInt(lbl.getText());
             Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
-            Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
+            Model.getInstance().event_year = selectedYear.getValue();
 
             // When user clicks on any date in the calendar, event editor window opens
             try {
@@ -147,7 +148,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void editEvent(DbEvent event) {
         Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
-        Model.getInstance().event_year = Integer.parseInt(selectedYear.getValue());
+        Model.getInstance().event_year = selectedYear.getValue();
 
         // When user clicks on any date in the calendar, event editor window opens
         try {
@@ -277,14 +278,14 @@ public class FXMLDocumentController implements Initializable {
         });
 
         // Add event listener to each month list item, allowing user to change months
-        selectedYear.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        selectedYear.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Integer>() {
             @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
 
                 if (newValue != null) {
 
                     // Update the VIEWING YEAR
-                    Model.getInstance().viewing_year = Integer.parseInt(newValue);
+                    Model.getInstance().viewing_year = newValue;
 
                     repaintView();
                 }
@@ -350,13 +351,14 @@ public class FXMLDocumentController implements Initializable {
 
         // Load year selection
         selectedYear.getItems().clear(); // Invokes our change listener
-        selectedYear.getItems().add(Integer.toString(dbCalendar.getStartYear()));
-        selectedYear.getItems().add(Integer.toString(dbCalendar.getEndYear()));
+        int year = DateConverter.dateToLocalDate(dbCalendar.getStartDate()).getYear();
+        IntStream.range(year, year + 20).forEach(it -> selectedYear.getItems().add(it));
+
 
         // Select the first YEAR as default     
         selectedYear.getSelectionModel().selectFirst();
         // Update the VIEWING YEAR
-        Model.getInstance().viewing_year = Integer.parseInt(selectedYear.getSelectionModel().getSelectedItem());
+        Model.getInstance().viewing_year = selectedYear.getSelectionModel().getSelectedItem();
 
         // Enable year selection box
         selectedYear.setVisible(true);
@@ -387,7 +389,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void populateMonthWithEvents() {
         Long calendarId = Model.getInstance().calendar_id;
-        int currentYear = Integer.parseInt(selectedYear.getValue());
+        int currentYear = selectedYear.getValue();
         LOGGER.info("Populating month [{}] with events for year: {} - START", Model.getInstance().viewing_month, currentYear);
 
         List<DbEvent> eventList = eventService.findEventsByCalendarIdAndYearAndMonth(calendarId, currentYear, Model.getInstance().viewing_month);
