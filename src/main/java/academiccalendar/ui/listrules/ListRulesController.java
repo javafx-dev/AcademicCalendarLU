@@ -118,7 +118,7 @@ public class ListRulesController extends AbstractDraggableController {
             DbTerm dbTerm = termService.findByName(auxTermName);
 
             // Get the calendar name
-            Long calendarId = Model.getInstance().calendar_id;
+            Long calendarId = Model.getInstance().calendarId;
 
             //Create event based on selected rule
             boolean eventWasCreated = createEventFromRule(eventSubject, dbTerm, Integer.valueOf(rule.getDaysFromStart()), calendarId);
@@ -143,7 +143,7 @@ public class ListRulesController extends AbstractDraggableController {
     private void addAllRules(MouseEvent event) {
 
         // Get the calendar name
-        Long calendarId = Model.getInstance().calendar_id;
+        Long calendarId = Model.getInstance().calendarId;
 
         //Get list of rules from database and store it in an ArrayList variable
         List<DbRule> listOfRules = ruleService.getAllRules();
@@ -199,8 +199,8 @@ public class ListRulesController extends AbstractDraggableController {
             alert.setHeaderText("Rule Deletion");
             alert.setContentText("Are you sure you want to delete this rule?");
             //Customize the buttons in the confirmation dialog
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No");
+            ButtonType buttonTypeYes = ButtonType.YES;
+            ButtonType buttonTypeNo = ButtonType.NO;
             //Set buttons onto the confirmation dialog
             alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
@@ -208,7 +208,7 @@ public class ListRulesController extends AbstractDraggableController {
             Optional<ButtonType> result = alert.showAndWait();
 
             //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
-            if (result.get() == buttonTypeYes) {
+            if (result.isPresent() && result.get() == buttonTypeYes) {
                 deleteSelectedRule();
             }
 
@@ -223,9 +223,9 @@ public class ListRulesController extends AbstractDraggableController {
             academiccalendar.ui.main.Rule rule = tableView.getSelectionModel().getSelectedItem();
 
             // Store rule data
-            Model.getInstance().rule_term = rule.getTermID();
-            Model.getInstance().rule_descript = rule.getEventDescription();
-            Model.getInstance().rule_days = Integer.parseInt(rule.getDaysFromStart());
+            Model.getInstance().ruleTerm = rule.getTermID();
+            Model.getInstance().ruleDescript = rule.getEventDescription();
+            Model.getInstance().ruleDays = Integer.parseInt(rule.getDaysFromStart());
 
             // When user clicks on any date in the calendar, event editor window opens
             try {

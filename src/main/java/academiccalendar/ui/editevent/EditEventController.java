@@ -76,8 +76,8 @@ public class EditEventController extends AbstractDraggableController {
         alert.setHeaderText("Event Deletion");
         alert.setContentText("Are you sure you want to delete this event?");
         //Customize the buttons in the confirmation dialog
-        ButtonType buttonTypeYes = new ButtonType("Yes");
-        ButtonType buttonTypeNo = new ButtonType("No");
+        ButtonType buttonTypeYes = ButtonType.YES;
+        ButtonType buttonTypeNo = ButtonType.NO;
         //Set buttons onto the confirmation window
         alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
@@ -85,7 +85,7 @@ public class EditEventController extends AbstractDraggableController {
         Optional<ButtonType> result = alert.showAndWait();
 
         //If the user wants to delete the event, call the function that deletes the event. Otherwise, close the window
-        if (result.get() == buttonTypeYes) {
+        if (result.isPresent() && result.get() == buttonTypeYes) {
             deleteEvent();
         } else {
             // Close the window

@@ -19,10 +19,12 @@ public class EventService {
     private CalendarRepository calendarRepository;
 
     public List<DbEvent> findEventsByCalendarId(Long calendarId) {
+        LOGGER.info("Find event by Calendar id: [{}]", calendarId);
         return eventRepository.findByCalendarId(calendarId);
     }
 
     public List<DbEvent> findEventsByCalendarIdAndYearAndMonth(Long calendarId, int year, int month) {
+        LOGGER.info("FindEventsByCalendarIdAndYearAndMonth calendarId: {}, year: {}, month: {}", calendarId, year, month);
         return eventRepository.findByCalendarIdAndYearAndMonth(calendarId, year, month);
     }
 

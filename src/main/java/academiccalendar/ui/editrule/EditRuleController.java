@@ -53,9 +53,9 @@ public class EditRuleController extends AbstractDraggableController {
     private void autofill() {
 
         // Retrive rule data
-        String days = Integer.toString(Model.getInstance().rule_days);
-        String descript = Model.getInstance().rule_descript;
-        String term = Model.getInstance().rule_term;
+        String days = Integer.toString(Model.getInstance().ruleDays);
+        String descript = Model.getInstance().ruleDescript;
+        String term = Model.getInstance().ruleTerm;
 
         // Show current data
         eventDescript.setText(descript);

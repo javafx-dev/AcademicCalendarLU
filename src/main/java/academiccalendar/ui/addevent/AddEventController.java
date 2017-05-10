@@ -79,7 +79,7 @@ class AddEventController extends AbstractDraggableController {
     void save(MouseEvent event) {
         LOGGER.info("Save new event");
         // Get the calendar name
-        Long calendarId = Model.getInstance().calendar_id;
+        Long calendarId = Model.getInstance().calendarId;
 
         if (subject.getText().isEmpty() || termSelect.getSelectionModel().isEmpty()
                 || date.getValue() == null) {
@@ -122,9 +122,9 @@ class AddEventController extends AbstractDraggableController {
 
     private void autofillDatePicker() {
         // Get selected day, month, and year and autofill date selection
-        int day = Model.getInstance().event_day;
-        int month = Model.getInstance().event_month;
-        int year = Model.getInstance().event_year;
+        int day = Model.getInstance().eventDay;
+        int month = Model.getInstance().eventMonth;
+        int year = Model.getInstance().eventYear;
 
         // Set default value for datepicker
         date.setValue(LocalDate.of(year, month, day));

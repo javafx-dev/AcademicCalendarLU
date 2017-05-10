@@ -97,10 +97,9 @@ class ListCalendarsController extends AbstractDraggableController {
 
     @FXML
     private void openCalendar(MouseEvent event) {
-        if (tableView.getSelectionModel().getSelectedItem() == null){
+        if (tableView.getSelectionModel().getSelectedItem() == null) {
             LOGGER.warn("No calendar selected");
-        }
-        else {
+        } else {
             // Get selected calendar from table
             Calendar cal = tableView.getSelectionModel().getSelectedItem();
             openCalendar(cal);
@@ -108,7 +107,7 @@ class ListCalendarsController extends AbstractDraggableController {
     }
 
     private void openCalendar(Calendar calendar) {
-        Model.getInstance().calendar_id = calendar.getDbCalendar().getId();
+        Model.getInstance().calendarId = calendar.getDbCalendar().getId();
 
         // Load the calendar in the main window
         mainController.calendarGenerate(calendar.getDbCalendar());
@@ -136,7 +135,7 @@ class ListCalendarsController extends AbstractDraggableController {
         Optional<ButtonType> result = alert.showAndWait();
 
         //If the user wants to delete the calendar, call the function that deletes the calendar. Otherwise, close the window
-        if (result.get() == ButtonType.YES) {
+        if (result.isPresent() && result.get() == ButtonType.YES) {
             deleteSelectedCalendar();
         } else {
             // Close the window

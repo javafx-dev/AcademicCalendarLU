@@ -16,13 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 @Component
 class AddCalendarController extends AbstractDraggableController {
@@ -79,14 +77,6 @@ class AddCalendarController extends AbstractDraggableController {
         }
     }
 
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        super.initialize(url, rb);
-    }
 
     @FXML
     private void exit(MouseEvent event) {

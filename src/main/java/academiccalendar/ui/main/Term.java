@@ -24,6 +24,6 @@ public class Term {
     }
 
     public ObjectProperty<ColoredTerm> getColoredTerm() {
-        return new SimpleObjectProperty<ColoredTerm>(coloredTerm) ;
+        return new SimpleObjectProperty<>(coloredTerm) ;
     }
 }

@@ -8,6 +8,7 @@ import academiccalendar.ui.main.ColoredTerm;
 import academiccalendar.ui.main.CustomFXMLLoader;
 import academiccalendar.ui.main.FXMLDocumentController;
 import academiccalendar.ui.main.Term;
+import academiccalendar.utils.ColorConverter;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -62,8 +63,8 @@ public class ListTermsController extends AbstractDraggableController {
             Term term = tableView.getSelectionModel().getSelectedItem();
 
             // Store term data
-            Model.getInstance().term_name = term.getTermName();
-            Model.getInstance().term_date = term.getTermDate();
+            Model.getInstance().termName = term.getTermName();
+            Model.getInstance().termDate = term.getTermDate();
 
             // When user clicks on any date in the calendar, event editor window opens
             try {
@@ -104,18 +105,10 @@ public class ListTermsController extends AbstractDraggableController {
                     String[] items = item.getColor().getValue().split("-");
                     String color = "rgb(" + items[0] + "," + items[1] + "," + items[2] + ")";
                     setTextFill(Color.web(color));
-                    setStyle("-fx-text-color: " + toRGBCode(Color.web(color)));
+                    setStyle("-fx-text-color: " + ColorConverter.toRGBCode(Color.web(color)));
                 }
             }
         };
-    }
-
-    //TODO move somewhere else
-    private static String toRGBCode(Color color) {
-        return String.format("#%02X%02X%02X",
-                (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
     }
 
     void loadData() {
@@ -161,8 +154,8 @@ public class ListTermsController extends AbstractDraggableController {
             alert.setHeaderText("Term Deletion");
             alert.setContentText("WARNING!\nThis action cannot be undone!\nAre you sure you want to permanently delete this term?");
             //Customize the buttons in the confirmation dialog
-            ButtonType buttonTypeYes = new ButtonType("Yes");
-            ButtonType buttonTypeNo = new ButtonType("No");
+            ButtonType buttonTypeYes = ButtonType.YES;
+            ButtonType buttonTypeNo = ButtonType.NO;
             //Set buttons onto the confirmation dialog
             alert.getButtonTypes().setAll(buttonTypeYes, buttonTypeNo);
 
@@ -170,7 +163,7 @@ public class ListTermsController extends AbstractDraggableController {
             Optional<ButtonType> result = alert.showAndWait();
 
             //If the user wants to delete the rule, call the function that deletes the rule. Otherwise, close the window
-            if (result.get() == buttonTypeYes) {
+            if (result.isPresent() && result.get() == buttonTypeYes) {
                 deleteSelectedTerm();
             } else {
                 // Close the window

@@ -127,9 +127,9 @@ public class FXMLDocumentController implements Initializable {
             Label lbl = (Label) day.getChildren().get(0);
 
             // Store event day and month in data singleton
-            Model.getInstance().event_day = Integer.parseInt(lbl.getText());
-            Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
-            Model.getInstance().event_year = selectedYear.getValue();
+            Model.getInstance().eventDay = Integer.parseInt(lbl.getText());
+            Model.getInstance().eventMonth = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
+            Model.getInstance().eventYear = selectedYear.getValue();
 
             // When user clicks on any date in the calendar, event editor window opens
             try {
@@ -147,8 +147,8 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void editEvent(DbEvent event) {
-        Model.getInstance().event_month = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
-        Model.getInstance().event_year = selectedYear.getValue();
+        Model.getInstance().eventMonth = monthSelect.getSelectionModel().getSelectedItem().getMonthId();
+        Model.getInstance().eventYear = selectedYear.getValue();
 
         // When user clicks on any date in the calendar, event editor window opens
         try {
@@ -269,7 +269,7 @@ public class FXMLDocumentController implements Initializable {
                     monthLabel.setText(newValue.name());
 
                     // Update the VIEWING MONTH
-                    Model.getInstance().viewing_month = newValue.getMonthId();
+                    Model.getInstance().viewingMonth = newValue.getMonthId();
 
                     repaintView();
                 }
@@ -285,7 +285,7 @@ public class FXMLDocumentController implements Initializable {
                 if (newValue != null) {
 
                     // Update the VIEWING YEAR
-                    Model.getInstance().viewing_year = newValue;
+                    Model.getInstance().viewingYear = newValue;
 
                     repaintView();
                 }
@@ -296,8 +296,8 @@ public class FXMLDocumentController implements Initializable {
     private void loadCalendarLabels() {
 
         // Get the current VIEW
-        int year = Model.getInstance().viewing_year;
-        int month = Model.getInstance().viewing_month - 1;
+        int year = Model.getInstance().viewingYear;
+        int month = Model.getInstance().viewingMonth - 1;
 
         // Note: Java's Gregorian Calendar class gives us the right
         // "first day of the month" for a given calendar & month
@@ -347,7 +347,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     public void calendarGenerate(DbCalendar dbCalendar) {
-        Model.getInstance().calendar_id = dbCalendar.getId();
+        Model.getInstance().calendarId = dbCalendar.getId();
 
         // Load year selection
         selectedYear.getItems().clear(); // Invokes our change listener
@@ -358,7 +358,7 @@ public class FXMLDocumentController implements Initializable {
         // Select the first YEAR as default     
         selectedYear.getSelectionModel().selectFirst();
         // Update the VIEWING YEAR
-        Model.getInstance().viewing_year = selectedYear.getSelectionModel().getSelectedItem();
+        Model.getInstance().viewingYear = selectedYear.getSelectionModel().getSelectedItem();
 
         // Enable year selection box
         selectedYear.setVisible(true);
@@ -372,7 +372,7 @@ public class FXMLDocumentController implements Initializable {
         monthSelect.getSelectionModel().selectFirst();
         monthLabel.setText(monthSelect.getSelectionModel().getSelectedItem().name());
         // Update the VIEWING MONTH
-        Model.getInstance().viewing_month =
+        Model.getInstance().viewingMonth =
                 monthSelect.getSelectionModel().getSelectedItem().getMonthId();
 
         repaintView();
@@ -388,11 +388,11 @@ public class FXMLDocumentController implements Initializable {
     }
 
     private void populateMonthWithEvents() {
-        Long calendarId = Model.getInstance().calendar_id;
+        Long calendarId = Model.getInstance().calendarId;
         int currentYear = selectedYear.getValue();
-        LOGGER.info("Populating month [{}] with events for year: {} - START", Model.getInstance().viewing_month, currentYear);
+        LOGGER.info("Populating month [{}] with events for year: {} - START", Model.getInstance().viewingMonth, currentYear);
 
-        List<DbEvent> eventList = eventService.findEventsByCalendarIdAndYearAndMonth(calendarId, currentYear, Model.getInstance().viewing_month);
+        List<DbEvent> eventList = eventService.findEventsByCalendarIdAndYearAndMonth(calendarId, currentYear, Model.getInstance().viewingMonth);
         LOGGER.info("Event List size: {}", eventList.size());
         for (DbEvent event : eventList) {
             LocalDate localDate = DateConverter.dateToLocalDate((java.sql.Date) event.getDate());
@@ -437,7 +437,7 @@ public class FXMLDocumentController implements Initializable {
                     // Save the term ID in accessible text
                     eventLbl.setAccessibleText(Integer.toString(termID));
 
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> editEvent(event));
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_PRESSED, e -> editEvent(event));
 
                     // Get term color from term's table
                     DbTerm dbTerm = termService.findOne((long) termID);
@@ -455,9 +455,9 @@ public class FXMLDocumentController implements Initializable {
                     eventLbl.setMaxWidth(Double.MAX_VALUE);
 
                     // Mouse effects
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_ENTERED, (e) -> eventLbl.getScene().setCursor(Cursor.HAND));
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> eventLbl.getScene().setCursor(Cursor.HAND));
 
-                    eventLbl.addEventHandler(MouseEvent.MOUSE_EXITED, (e) -> eventLbl.getScene().setCursor(Cursor.DEFAULT));
+                    eventLbl.addEventHandler(MouseEvent.MOUSE_EXITED, e -> eventLbl.getScene().setCursor(Cursor.DEFAULT));
 
                     // Add label to calendar
                     day.getChildren().add(eventLbl);
@@ -494,7 +494,7 @@ public class FXMLDocumentController implements Initializable {
         table.getColumns().add(subject);
         table.getColumns().add(date);
 
-        Long calendarId = Model.getInstance().calendar_id;
+        Long calendarId = Model.getInstance().calendarId;
 
         // Query to get ALL Events from the selected calendar!!
         List<DbEvent> events = eventService.findEventsByCalendarId(calendarId);
@@ -525,12 +525,12 @@ public class FXMLDocumentController implements Initializable {
         File file = fileChooser.showSaveDialog(new Stage());
 
         if (file != null) {
-            createExcelSheet(file);
+            createExcelSheet();
         }
     }
 
-    private void createExcelSheet(File file) {
-        Long calendarId = Model.getInstance().calendar_id;
+    private void createExcelSheet() {
+        Long calendarId = Model.getInstance().calendarId;
 
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Calendar ID: " + calendarId);
@@ -597,7 +597,7 @@ public class FXMLDocumentController implements Initializable {
                 vPane.getStyleClass().add("calendar_pane");
                 vPane.setMinWidth(weekdayHeader.getPrefWidth() / 7);
 
-                vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> addEvent(vPane));
+                vPane.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> addEvent(vPane));
 
                 GridPane.setVgrow(vPane, Priority.ALWAYS);
 
@@ -693,7 +693,7 @@ public class FXMLDocumentController implements Initializable {
     private void updateColors(MouseEvent event) {
         changeColors();
 
-        if (Model.getInstance().calendar_id != null)
+        if (Model.getInstance().calendarId != null)
             repaintView();
     }
 

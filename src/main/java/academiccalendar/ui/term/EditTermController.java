@@ -55,12 +55,12 @@ public class EditTermController extends AbstractDraggableController {
     private void autofill() {
 
         // Retrieve term name
-        String name = Model.getInstance().term_name;
+        String name = Model.getInstance().termName;
         //Set name to TermLabel. show it ot the user
         termLabel.setText(name);
 
         //Retrieve date of start date selected term
-        String termStartDate = Model.getInstance().term_date;
+        String termStartDate = Model.getInstance().termDate;
         String[] termDateParts = termStartDate.split("-");
         int year = Integer.parseInt(termDateParts[0]);
         int month = Integer.parseInt(termDateParts[1]);
@@ -79,7 +79,7 @@ public class EditTermController extends AbstractDraggableController {
 
             @Override
             public DbColorGroup fromString(String string) {
-                return colorGroupList.stream().filter((s) -> s.getName().equals(string)).findFirst().get();
+                return colorGroupList.stream().filter(s -> s.getName().equals(string)).findFirst().get();
             }
         });
 
@@ -137,7 +137,7 @@ public class EditTermController extends AbstractDraggableController {
     private void updateTermDate() {
 
         //Get the name of the term to be updated and it current starting date
-        String termName = Model.getInstance().term_name;
+        String termName = Model.getInstance().termName;
 
         //Check if user actually selected a new starting date
         if (termDatePicker.getValue() == null) {
